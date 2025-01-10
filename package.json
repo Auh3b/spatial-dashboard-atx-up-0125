@@ -27,6 +27,7 @@
     "@mui/material": "^6.3.0",
     "@mui/x-data-grid": "^7.23.5",
     "@turf/turf": "^7.1.0",
+    "@types/mapbox__mapbox-gl-draw": "^1.4.8",
     "@vitejs/plugin-react": "^4.3.4",
     "axios": "^1.7.7",
     "bootstrap": "^5.3.3",
