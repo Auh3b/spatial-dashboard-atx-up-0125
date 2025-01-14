@@ -63,10 +63,10 @@ function BasemapChanger() {
     <FormControl>
       <FormLabel>Switch Basemap</FormLabel>
       <Select value={basemapUrl} fullWidth onChange={handleChange}>
-        {/* <MenuItem value="satellite-streets-v11">Satellite Streets</MenuItem> */}
+        <MenuItem value="satellite-streets-v11">Satellite Streets</MenuItem>
         <MenuItem value="light-v10">Light</MenuItem>
         <MenuItem value="dark-v10">Dark</MenuItem>
-        {/* <MenuItem value="satellite-v9">Satellite</MenuItem> */}
+        <MenuItem value="satellite-v9">Satellite</MenuItem>
       </Select>
     </FormControl>
   );
