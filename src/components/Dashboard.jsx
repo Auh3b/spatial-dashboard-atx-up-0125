@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Box,
   Button,
@@ -119,10 +119,10 @@ function Dashboard({
             onSwitchStyle(`mapbox://styles/mapbox/${event.target.value}`)
           }
           sx={{ backgroundColor: "white", color: "black" }}>
-          <MenuItem value="satellite-streets-v11">Satellite Streets</MenuItem>
+          {/* <MenuItem value="satellite-streets-v11">Satellite Streets</MenuItem> */}
           <MenuItem value="light-v10">Light</MenuItem>
           <MenuItem value="dark-v10">Dark</MenuItem>
-          <MenuItem value="satellite-v9">Satellite</MenuItem>
+          {/* <MenuItem value="satellite-v9">Satellite</MenuItem> */}
         </Select>
       </Box>
 
