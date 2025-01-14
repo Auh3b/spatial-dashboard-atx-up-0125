@@ -23,7 +23,7 @@ export default function DrawControl({ onGeometrySet }) {
     setPopupInfo(info);
   };
 
-  const onCreate = useCallback(
+  const onDraw = useCallback(
     (e) => {
       const feature = getFeature(e);
       console.log(feature);
@@ -38,19 +38,19 @@ export default function DrawControl({ onGeometrySet }) {
       map.on("draw.selectionchange", onShapeClick);
     },
     ({ map }) => {
-      map.on("draw.create", onCreate);
+      map.on("draw.create", onDraw);
     },
     ({ map }) => {
-      map.on("draw.update", onCreate);
+      map.on("draw.update", onDraw);
     },
     ({ map }) => {
       map.off("draw.selectionchange", onShapeClick);
     },
     ({ map }) => {
-      map.off("draw.create", onCreate);
+      map.off("draw.create", onDraw);
     },
     ({ map }) => {
-      map.off("draw.update", onCreate);
+      map.off("draw.update", onDraw);
     },
     {
       position: drawProps.position,
@@ -79,7 +79,7 @@ export default function DrawControl({ onGeometrySet }) {
 function getFeature(value, index = 0) {
   if (!value) return null;
   if (!value.features.length) return null;
-
+  console.log(value.features);
   const feature = value.features[index];
   return feature;
 }
@@ -87,7 +87,7 @@ function getFeature(value, index = 0) {
 function getFeaturePopupInfo(value) {
   const feature = getFeature(value);
 
-  if (feature.type === "Point")
+  if (feature.geometry.type === "Point")
     return {
       longitude: feature.geometry.coordinates[0],
       latitude: feature.geometry.coordinates[1],
