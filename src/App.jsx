@@ -1,17 +1,21 @@
 import "./App.css";
 import React from "react";
-import MapWrapper from "./components/MapWrapper";
 import { Provider } from "react-redux";
 import { store } from "./store";
+import Dashboard from "./components/UI/Dashboard";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "./styles/theme";
 
 function App() {
   return (
     <Provider store={store}>
-      <div
-        className="app-container"
-        style={{ width: "100vw", height: "100vh" }}>
-        <MapWrapper />
-      </div>
+      <ThemeProvider theme={theme}>
+        <div
+          className="app-container"
+          style={{ width: "100vw", height: "100vh" }}>
+          <Dashboard />
+        </div>
+      </ThemeProvider>
     </Provider>
   );
 }
