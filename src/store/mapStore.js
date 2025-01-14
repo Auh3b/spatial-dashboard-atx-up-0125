@@ -11,6 +11,7 @@ const initialState = {
   viewState: INITIAL_VIEW_STATE,
   layers: {},
   country: "",
+  popup: null,
 };
 
 const mapStore = createSlice({
@@ -39,6 +40,12 @@ const mapStore = createSlice({
       const country = action.payload;
       state.country = country;
     },
+    setPopup: (state, action) => {
+      state.popup = action.payload;
+    },
+    removePopup: (state) => {
+      state.popup = null;
+    },
   },
 });
 
@@ -57,9 +64,19 @@ export const removeLayer = (payload) => ({
   type: "map/removeLayer",
   payload,
 });
+
 export const updateLayer = (payload) => ({
   type: "map/updateLayer",
   payload,
+});
+
+export const setPopup = (payload) => ({
+  type: "map/setPopup",
+  payload,
+});
+
+export const removePopup = () => ({
+  type: "map/removePopup",
 });
 
 // Accessors
@@ -70,6 +87,10 @@ export const getViewState = (state) => {
 
 export const getLayers = (state) => {
   return state.map.layers;
+};
+
+export const getPopup = (state) => {
+  return state.map.popup;
 };
 
 export default mapStore.reducer;
