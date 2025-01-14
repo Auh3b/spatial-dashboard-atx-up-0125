@@ -2,11 +2,11 @@ import React, { useEffect, useState, useRef } from "react";
 import Map, { Source, Layer, Popup, NavigationControl } from "react-map-gl";
 // import DeckGL from "@deck.gl/react";
 import { AmbientLight, PointLight, LightingEffect } from "@deck.gl/core";
-import { PolygonLayer } from "@deck.gl/layers";
+import { PolygonLayer, GeoJsonLayer } from "@deck.gl/layers";
 import { HexagonLayer } from "@deck.gl/aggregation-layers";
 import { IconLayer } from "@deck.gl/layers";
 import "mapbox-gl/dist/mapbox-gl.css";
-import * as turf from "@turf/turf";
+import { center } from "@turf/turf";
 
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import Dashboard from "./Dashboard";
@@ -31,7 +31,7 @@ const INITIAL_VIEW_STATE = {
   longitude: -122.46940656246574,
   latitude: 37.7723322256912,
   zoom: 5,
-  // pitch: 35,
+  pitch: 0,
 };
 
 const eventsData = [
@@ -85,21 +85,22 @@ function MapWrapper() {
     fetchHeatmapData();
   }, []);
 
-  const polygonLayer = new PolygonLayer({
+  // Change Polygon to geojson Layer
+  // It easily handles multiple feature types
+  const polygonLayer = new GeoJsonLayer({
     id: "polygon-layer",
-    data: geojsonData ? geojsonData.features : [],
-    getPolygon: (d) => d.geometry.coordinates[0],
+    data: geojsonData,
     getFillColor: [200, 0, 0, 200],
     getLineColor: [255, 255, 255],
     getLineWidth: 2,
     extruded: false,
     pickable: true,
     onClick: ({ object }) => {
+      const centerPoint = center(object);
       setPopupInfo({
-        longitude: object.geometry.coordinates[0][0][0],
-        latitude: object.geometry.coordinates[0][0][1],
-        name: object.properties.name,
-        coordinates: object.geometry.coordinates[0],
+        longitude: centerPoint.geometry.coordinates[0],
+        latitude: centerPoint.geometry.coordinates[1],
+        name: object.properties["NAME_EN"],
       });
     },
   });
@@ -170,7 +171,7 @@ function MapWrapper() {
         <DrawControl />
         <NavigationControl position="top-right" />
         <DeckGLOverlay layers={layers} />
-        {geojsonData && (
+        {/* {geojsonData && (
           <Source type="geojson" data={geojsonData}>
             <Layer
               id="countries-layer"
@@ -181,7 +182,7 @@ function MapWrapper() {
               }}
             />
           </Source>
-        )}
+        )} */}
         {popupInfo && (
           <Popup
             longitude={popupInfo.longitude}
