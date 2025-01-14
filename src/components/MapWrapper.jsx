@@ -30,8 +30,8 @@ const lightingEffect = new LightingEffect({ ambientLight, pointLight });
 const INITIAL_VIEW_STATE = {
   longitude: -122.46940656246574,
   latitude: 37.7723322256912,
-  zoom: 11,
-  pitch: 35,
+  zoom: 5,
+  // pitch: 35,
 };
 
 const eventsData = [
@@ -53,16 +53,16 @@ function MapWrapper() {
 
   useEffect(() => {
     const fetchGeoJSON = async () => {
-      const response = await fetch("/data/countries.geojson");
+      const response = await fetch("src/data/countries.geojson");
       const data = await response.json();
-      const correctedGeoJson = {
-        ...data,
-        features: data.features.map((feature) => {
-          feature.geometry = turf.rewind(feature.geometry, { reverse: true });
-          return feature;
-        }),
-      };
-      setGeojsonData(correctedGeoJson);
+      // const correctedGeoJson = {
+      //   ...data,
+      //   features: data.features.map((feature) => {
+      //     feature.geometry = turf.rewind(feature.geometry, { reverse: true });
+      //     return feature;
+      //   }),
+      // };
+      setGeojsonData(data);
     };
     fetchGeoJSON();
   }, []);
@@ -243,8 +243,6 @@ function ViewStateViewer({ viewState, items }) {
 }
 
 export default MapWrapper;
-
-
 
 // import React, { useEffect, useState } from 'react'
 // import Map, { Source, Layer, Popup, NavigationControl } from 'react-map-gl'
@@ -459,4 +457,3 @@ export default MapWrapper;
 // }
 
 // export default MapWrapper
-
