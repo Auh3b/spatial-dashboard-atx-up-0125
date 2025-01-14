@@ -1,4 +1,4 @@
-import React, { Fragment, useMemo } from "react";
+import React, { useMemo } from "react";
 import { useSelector } from "react-redux";
 import { getLayers } from "../../../store/mapStore";
 import { Box, Divider, Grid2, Typography } from "@mui/material";
@@ -18,12 +18,13 @@ export default function DashboardLayersUI() {
 
 function LayerUI({ id, name, legend }) {
   return (
-    <Box sx={{ mb: 2 }}>
+    <Box>
       <Grid2 container direction={"column"}>
-        <Divider variant="vertical" flexItem />
-        <Typography variant={"caption"}>{name}</Typography>
-        <Divider variant="vertical" flexItem />
+        <Typography variant={"overline"} sx={{ pl: 1, fontSize: "0.65rem" }}>
+          {name}
+        </Typography>
         <Legend {...legend} />
+        <Divider variant="vertical" flexItem />
       </Grid2>
     </Box>
   );

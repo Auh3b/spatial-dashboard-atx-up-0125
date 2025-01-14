@@ -12,6 +12,7 @@ import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
 import TableChartOutlinedIcon from "@mui/icons-material/TableChartOutlined";
 import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 import SettingsApplicationsOutlinedIcon from "@mui/icons-material/SettingsApplicationsOutlined";
+import OtherHousesOutlinedIcon from "@mui/icons-material/OtherHousesOutlined";
 import DashboardTable from "./DashboardTable";
 import DashboardUpload from "./DashboardUpload";
 import DashboardLayersUI from "./DashboardLayersUI";
@@ -77,6 +78,7 @@ function PanelContent({ title, children }) {
 function PanelTabs(props) {
   return (
     <Tabs {...props} orientation="vertical">
+      <CustomTab icon={<OtherHousesOutlinedIcon />} value={0} />
       <CustomTab icon={<LayersOutlinedIcon />} value={1} />
       <CustomTab icon={<TableChartOutlinedIcon />} value={2} />
       <CustomTab icon={<UploadFileOutlinedIcon />} value={3} />
