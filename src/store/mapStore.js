@@ -12,6 +12,7 @@ const initialState = {
   layers: {},
   country: "",
   popup: null,
+  basemapUrl: "dark-v10",
 };
 
 const mapStore = createSlice({
@@ -29,8 +30,7 @@ const mapStore = createSlice({
     },
     removeLayer: (state, action) => {
       const { id, value } = action.payload;
-      if (!state.layers[id]) return true;
-      delete state.layers[id];
+      if (state.layers[id]) delete state.layers[id];
     },
     updateLayer: (state, action) => {
       const { id, value } = action.payload;
@@ -45,6 +45,9 @@ const mapStore = createSlice({
     },
     removePopup: (state) => {
       state.popup = null;
+    },
+    setBasemapUrl: (state, action) => {
+      state.basemapUrl = action.payload;
     },
   },
 });
@@ -79,6 +82,11 @@ export const removePopup = () => ({
   type: "map/removePopup",
 });
 
+export const setBasemapUrl = (payload) => ({
+  type: "map/setBasemapUrl",
+  payload,
+});
+
 // Accessors
 
 export const getViewState = (state) => {
@@ -91,6 +99,10 @@ export const getLayers = (state) => {
 
 export const getPopup = (state) => {
   return state.map.popup;
+};
+
+export const getBasemapUrl = (state) => {
+  return state.map.basemapUrl;
 };
 
 export default mapStore.reducer;

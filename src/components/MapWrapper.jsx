@@ -7,7 +7,7 @@ import DeckGLOverlay from "./maps/DeckGLOverlay";
 import DrawControl from "./mapControls/DrawControl";
 import { Box, Paper, Typography } from "@mui/material";
 import layers from "./layers";
-import { getPopup, removePopup } from "../store/mapStore";
+import { getBasemapUrl, getPopup, removePopup } from "../store/mapStore";
 import { useDispatch, useSelector } from "react-redux";
 
 const INITIAL_VIEW_STATE = {
@@ -19,7 +19,10 @@ const INITIAL_VIEW_STATE = {
 
 function MapWrapper() {
   const dispatch = useDispatch();
-  const [mapStyle, setMapStyle] = useState("mapbox://styles/mapbox/light-v10");
+  // const [mapStyle, setMapStyle] = useState("mapbox://styles/mapbox/light-v10");
+  const basemapUrl = useSelector(
+    (state) => `mapbox://styles/mapbox/${getBasemapUrl(state)}`,
+  );
   const popupInfo = useSelector((state) => getPopup(state));
 
   const [overlayGeometry, setOverlayGeometry] = useState(null);
@@ -36,7 +39,7 @@ function MapWrapper() {
     <div style={{ flexGrow: 1 }}>
       <Map
         initialViewState={INITIAL_VIEW_STATE}
-        mapStyle={mapStyle}
+        mapStyle={basemapUrl}
         mapboxAccessToken={import.meta.env.VITE_MAPBOX_API_TOKEN}
         // onMove={onViewStateChange}
       >
