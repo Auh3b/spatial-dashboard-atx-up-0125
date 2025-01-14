@@ -31,11 +31,14 @@ export default function HexAggLayer() {
     dispatch(
       addLayer({
         id,
-        name,
-        legend: {
-          type,
-          colors,
-          labels,
+        value: {
+          id,
+          name,
+          legend: {
+            type,
+            colors,
+            labels,
+          },
         },
       }),
     );

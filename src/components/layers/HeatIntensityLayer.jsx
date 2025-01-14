@@ -9,9 +9,9 @@ const url =
 
 const id = "heat-map-layer";
 const name = "Heat Map Layer";
-const colors = ["red"];
-const labels = ["Heat Map"];
-const type = "category";
+const colors = ["yellow", "red"];
+const labels = ["Low", "High"];
+const type = "ramp";
 
 export default function HeatIntensityLayer() {
   const dispatch = useDispatch();
@@ -30,11 +30,14 @@ export default function HeatIntensityLayer() {
     dispatch(
       addLayer({
         id,
-        name,
-        legend: {
-          type,
-          colors,
-          labels,
+        value: {
+          id,
+          name,
+          legend: {
+            type,
+            colors,
+            labels,
+          },
         },
       }),
     );

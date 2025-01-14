@@ -1,40 +1,56 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { getLayers } from "../../../store/mapStore";
 import { Box, Divider, Grid2, Typography } from "@mui/material";
 import { zip } from "d3";
 
 export default function DashboardLayersUI() {
-  const layers = useSelector((state) => getLayers(state));
-
-  return <Box></Box>;
-}
-
-function LayerUI({ name }) {
+  const _layers = useSelector((state) => getLayers(state));
+  const layers = useMemo(() => Object.values(_layers), [_layers]);
+  console.log(layers);
   return (
     <Box>
+      {Boolean(layers.length) &&
+        layers.map((d) => <LayerUI key={d.id} {...d} />)}
+    </Box>
+  );
+}
+
+function LayerUI({ id, name, legend }) {
+  return (
+    <Box sx={{ mb: 2 }}>
       <Grid2 container direction={"column"}>
+        <Divider variant="vertical" flexItem />
         <Typography variant={"caption"}>{name}</Typography>
         <Divider variant="vertical" flexItem />
+        <Legend {...legend} />
       </Grid2>
     </Box>
   );
 }
 
-function Legend({ type, colors, label }) {
+const LegendTypeUI = {
+  category: CategoryLegend,
+  ramp: RampLegend,
+};
+
+function Legend({ type, colors, labels }) {
+  const LegendVisual = useMemo(() => LegendTypeUI[type], [type]);
   return (
-    <Box>
-      <Typography>Key</Typography>
+    <Box p={1}>
+      <Typography variant="caption">Key</Typography>
+      <LegendVisual type={type} colors={colors} labels={labels} />
     </Box>
   );
 }
 
 function CategoryLegend({ colors, labels }) {
-  const values = zip([colors, labels]);
+  const values = zip(labels, colors);
+  console.log(values);
   return (
     <Grid2 container direction={"column"}>
-      {values.map(([color, label]) => (
-        <Grid2 container gap={2} key={label}>
+      {values.map(([label, color]) => (
+        <Grid2 container gap={2} key={label} alignItems={"center"}>
           <Box
             sx={{
               backgroundColor: color,
@@ -42,25 +58,26 @@ function CategoryLegend({ colors, labels }) {
               height: "10px",
               borderRadius: "50%",
             }}></Box>
-          <Typography>{label}</Typography>
+          <Typography variant="caption">{label}</Typography>
         </Grid2>
       ))}
     </Grid2>
   );
 }
 
-function RampLegend({ colors, label }) {
+function RampLegend({ colors, labels }) {
   return (
     <Grid2 container direction={"column"}>
       <Grid2 container justifyContent={"space-between"}>
-        {label.map((d) => (
-          <Typography>d</Typography>
+        {labels.map((d) => (
+          <Typography variant="caption">{d}</Typography>
         ))}
       </Grid2>
       <Box
         width={"100%"}
+        height={"10px"}
         sx={{
-          backgroundColor: `linear-gradient(to right, ${colors[0]}, ${colors[1]})`,
+          background: `linear-gradient(to right, ${colors[0]}, ${colors[1]})`,
         }}></Box>
     </Grid2>
   );

@@ -28,11 +28,14 @@ export default function CountriesLayer() {
     dispatch(
       addLayer({
         id,
-        name,
-        legend: {
-          type,
-          colors,
-          labels,
+        value: {
+          id,
+          name,
+          legend: {
+            type,
+            colors,
+            labels,
+          },
         },
       }),
     );
