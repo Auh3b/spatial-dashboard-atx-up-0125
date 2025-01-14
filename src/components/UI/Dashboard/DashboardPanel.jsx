@@ -11,9 +11,11 @@ import React, { useMemo, useState } from "react";
 import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
 import TableChartOutlinedIcon from "@mui/icons-material/TableChartOutlined";
 import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
+import SettingsApplicationsOutlinedIcon from "@mui/icons-material/SettingsApplicationsOutlined";
 import DashboardTable from "./DashboardTable";
 import DashboardUpload from "./DashboardUpload";
 import DashboardLayersUI from "./DashboardLayersUI";
+import DashboardSetting from "./DashboardSetting";
 
 const contentData = {
   0: {
@@ -31,6 +33,10 @@ const contentData = {
   3: {
     title: "File upload",
     content: <DashboardUpload />,
+  },
+  4: {
+    title: "Settings",
+    content: <DashboardSetting />,
   },
 };
 
@@ -74,6 +80,7 @@ function PanelTabs(props) {
       <CustomTab icon={<LayersOutlinedIcon />} value={1} />
       <CustomTab icon={<TableChartOutlinedIcon />} value={2} />
       <CustomTab icon={<UploadFileOutlinedIcon />} value={3} />
+      <CustomTab icon={<SettingsApplicationsOutlinedIcon />} value={4} />
     </Tabs>
   );
 }
