@@ -4,10 +4,10 @@ import HeatIntensityLayer from "./HeatIntensityLayer";
 import HexAggLayer from "./HexAggLayer";
 
 const layers = () => [
-  HexAggLayer(),
+  CountriesLayer(),
   HeatIntensityLayer(),
   EventsLayer(),
-  CountriesLayer(),
+  HexAggLayer(),
 ];
 
 export default layers;

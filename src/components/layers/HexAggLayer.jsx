@@ -2,11 +2,20 @@ import { load } from "@loaders.gl/core";
 import { CSVLoader } from "@loaders.gl/csv";
 import { HexagonLayer } from "deck.gl";
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { addLayer, removeLayer } from "../../store/mapStore";
 
 const url =
   "https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/3d-heatmap/heatmap-data.csv";
 
+const id = "hex-layer";
+const name = "Hexgon Layer";
+const colors = ["blue", "red"];
+const labels = ["Low", "High"];
+const type = "ramp";
+
 export default function HexAggLayer() {
+  const dispatch = useDispatch();
   const [data, setData] = useState(null);
   const fetchData = async () => {
     const res = await load(url, CSVLoader);
@@ -16,6 +25,22 @@ export default function HexAggLayer() {
   };
   useEffect(() => {
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    dispatch(
+      addLayer({
+        id,
+        name,
+        legend: {
+          type,
+          colors,
+          labels,
+        },
+      }),
+    );
+
+    return () => dispatch(removeLayer(id));
   }, []);
 
   if (data)

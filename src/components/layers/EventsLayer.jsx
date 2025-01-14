@@ -1,4 +1,7 @@
 import { IconLayer } from "deck.gl";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { addLayer, removeLayer } from "../../store/mapStore";
 
 const eventsData = [
   { name: "Event 1", coordinates: [-122.4, 37.74], entries: 5, exits: 2 },
@@ -6,7 +9,30 @@ const eventsData = [
   { name: "Event 3", coordinates: [-122.5, 37.76], entries: 10, exits: 5 },
 ];
 
+const id = "events-layer";
+const name = "Events Layer";
+const colors = ["yellow"];
+const labels = ["Events"];
+const type = "category";
+
 export default function EventsLayer() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(
+      addLayer({
+        id,
+        name,
+        legend: {
+          type,
+          colors,
+          labels,
+        },
+      }),
+    );
+
+    return () => dispatch(removeLayer(id));
+  }, []);
+
   return new IconLayer({
     id: "events-layer",
     data: eventsData,
