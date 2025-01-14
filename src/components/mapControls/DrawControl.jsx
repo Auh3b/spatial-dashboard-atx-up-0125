@@ -1,9 +1,9 @@
 import { Popup, useControl } from "react-map-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
-import { Fragment, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 import { center } from "@turf/turf";
 
-export default function DrawControl() {
+export default function DrawControl({ onGeometrySet }) {
   const [popupInfo, setPopupInfo] = useState(null);
   const drawProps = {
     position: "top-right",
@@ -23,13 +23,34 @@ export default function DrawControl() {
     setPopupInfo(info);
   };
 
-  useControl(
+  const onCreate = useCallback(
+    (e) => {
+      const feature = getFeature(e);
+      console.log(feature);
+      onGeometrySet(feature);
+    },
+    [onGeometrySet],
+  );
+
+  const draw = useControl(
     () => new MapboxDraw(drawProps),
     ({ map }) => {
       map.on("draw.selectionchange", onShapeClick);
     },
     ({ map }) => {
+      map.on("draw.create", onCreate);
+    },
+    ({ map }) => {
+      map.on("draw.update", onCreate);
+    },
+    ({ map }) => {
       map.off("draw.selectionchange", onShapeClick);
+    },
+    ({ map }) => {
+      map.off("draw.create", onCreate);
+    },
+    ({ map }) => {
+      map.off("draw.update", onCreate);
     },
     {
       position: drawProps.position,
@@ -55,12 +76,16 @@ export default function DrawControl() {
   );
 }
 
-function getFeaturePopupInfo(value) {
+function getFeature(value, index = 0) {
   if (!value) return null;
   if (!value.features.length) return null;
-  if (value.features.length > 1) return null;
 
-  const feature = value.features[0];
+  const feature = value.features[index];
+  return feature;
+}
+
+function getFeaturePopupInfo(value) {
+  const feature = getFeature(value);
 
   if (feature.type === "Point")
     return {
