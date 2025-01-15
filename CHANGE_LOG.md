@@ -23,7 +23,7 @@
 ### Testing and Optimisation
 
 - Change Polygon layer to GeoJson which is better at handle geojson formatted data
-- Resolved package compatibility issues. Upgrade map packages to latest version.
+- Resolved package compatibility issues. Upgrade map packages to latest version. If any trouble try delete the "node_modules" folder and "package-lock.json" file
 - Reorganised UI components, destructuring into granular components.
 - Testing and Polishing is ongoing
 
