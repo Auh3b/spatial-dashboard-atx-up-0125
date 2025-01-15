@@ -1,12 +1,4 @@
-import {
-  Box,
-  Grid2,
-  Paper,
-  Tab,
-  Typography,
-  Tabs,
-  Divider,
-} from "@mui/material";
+import { Box, Grid2, Tab, Typography, Tabs, Divider } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
 import TableChartOutlinedIcon from "@mui/icons-material/TableChartOutlined";
@@ -17,27 +9,23 @@ import DashboardTable from "./DashboardTable";
 import DashboardUpload from "./DashboardUpload";
 import DashboardLayersUI from "./DashboardLayersUI";
 import DashboardSetting from "./DashboardSetting";
+import DashboardHome from "./DashboardHome";
 
 const contentData = {
   0: {
     title: "Dashboard",
-    content: <Box sx={{ p: 1 }}>Welcome to this Dashboard!😁 '</Box>,
   },
   1: {
     title: "layers",
-    content: <DashboardLayersUI />,
   },
   2: {
     title: "table",
-    content: <DashboardTable />,
   },
   3: {
     title: "File upload",
-    content: <DashboardUpload />,
   },
   4: {
     title: "Settings",
-    content: <DashboardSetting />,
   },
 };
 
@@ -46,16 +34,19 @@ export default function DashboardPanel() {
   const handlePanelSelect = (_e, value) => {
     setSelectedPanel(value);
   };
-  const { title, content } = useMemo(
-    () => contentData[selectedPanel],
-    [selectedPanel],
-  );
+  const { title } = useMemo(() => contentData[selectedPanel], [selectedPanel]);
   return (
     <Box height={"100%"}>
       <Grid2 container sx={{ height: "100%" }}>
         <PanelTabs value={selectedPanel} onChange={handlePanelSelect} />
         <Divider orientation="vertical" flexItem />
-        <PanelContent title={title}>{content}</PanelContent>
+        <PanelContent title={title}>
+          <DashboardHome selected={selectedPanel} index={0} />
+          <DashboardLayersUI selected={selectedPanel} index={1} />
+          <DashboardTable selected={selectedPanel} index={2} />
+          <DashboardUpload selected={selectedPanel} index={3} />
+          <DashboardSetting selected={selectedPanel} index={4} />
+        </PanelContent>
       </Grid2>
     </Box>
   );

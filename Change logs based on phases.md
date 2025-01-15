@@ -9,7 +9,7 @@
 
 ### Phase 2: Hexagon Layer
 
-- Optimise Hexagon layer. Currently using demo
+- Optimise Hexagon layer. Currently using demo data
 
 ### Phase 3: Heatmap Layer
 

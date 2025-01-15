@@ -10,19 +10,23 @@ import {
   Typography,
   useColorScheme,
 } from "@mui/material";
-import React, { useCallback, useEffect } from "react";
+import React, { Fragment, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDarkMode, setDarkMode } from "../../../store/appStore";
 import { getBasemapUrl, setBasemapUrl } from "../../../store/mapStore";
 
-export default function DashboardSetting() {
+export default function DashboardSetting({ selected, index }) {
   return (
-    <Box p={2}>
-      <Grid2 container direction={"column"} gap={2}>
-        <DarkModeToggleSwitch />
-        <BasemapChanger />
-      </Grid2>
-    </Box>
+    <Fragment>
+      {selected === index && (
+        <Box p={2}>
+          <Grid2 container direction={"column"} gap={2}>
+            <DarkModeToggleSwitch />
+            <BasemapChanger />
+          </Grid2>
+        </Box>
+      )}
+    </Fragment>
   );
 }
 
