@@ -1,13 +1,13 @@
-import { Popup, useControl } from "react-map-gl";
+import { useControl } from "react-map-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
-import { Fragment, useCallback, useState } from "react";
+import { useCallback } from "react";
 import { center } from "@turf/turf";
 import { useDispatch } from "react-redux";
-import { setDrawingProps } from "../../store/mapStore";
+import { setPopup } from "../../store/mapStore";
 
+// This Draw Control will be replace by custom draw tools
 export default function DrawControl() {
   const dispatch = useDispatch();
-  const [popupInfo, setPopupInfo] = useState(null);
   const drawProps = {
     position: "top-right",
     displayControlsDefault: false,
@@ -23,12 +23,11 @@ export default function DrawControl() {
 
   const onShapeClick = (e) => {
     const info = getFeaturePopupInfo(e);
-    setPopupInfo(info);
+    dispatch(setPopup({ show: true, ...info }));
   };
 
   const onDraw = useCallback((e) => {
     const feature = getFeature(e);
-    dispatch(setDrawingProps({ feature }));
   }, []);
 
   const draw = useControl(
@@ -36,43 +35,27 @@ export default function DrawControl() {
     ({ map }) => {
       map.on("draw.selectionchange", onShapeClick);
     },
-    ({ map }) => {
-      map.on("draw.create", onDraw);
-    },
-    ({ map }) => {
-      map.on("draw.update", onDraw);
-    },
+    // ({ map }) => {
+    //   map.on("draw.create", onDraw);
+    // },
+    // ({ map }) => {
+    //   map.on("draw.update", onDraw);
+    // },
     ({ map }) => {
       map.off("draw.selectionchange", onShapeClick);
     },
-    ({ map }) => {
-      map.off("draw.create", onDraw);
-    },
-    ({ map }) => {
-      map.off("draw.update", onDraw);
-    },
+    // ({ map }) => {
+    //   map.off("draw.create", onDraw);
+    // },
+    // ({ map }) => {
+    //   map.off("draw.update", onDraw);
+    // },
     {
       position: drawProps.position,
     },
   );
 
-  return (
-    <Fragment>
-      {/* {popupInfo && (
-        <Popup
-          style={{
-            padding: "8px",
-            color: "black",
-          }}
-          anchor="top"
-          onClose={() => setPopupInfo(null)}
-          latitude={popupInfo.latitude}
-          longitude={popupInfo.longitude}>
-          {popupInfo.info}
-        </Popup>
-      )} */}
-    </Fragment>
-  );
+  return null;
 }
 
 function getFeature(value, index = 0) {
@@ -89,7 +72,7 @@ function getFeaturePopupInfo(value) {
     return {
       longitude: feature.geometry.coordinates[0],
       latitude: feature.geometry.coordinates[1],
-      info: feature.geometry.type,
+      content: feature.geometry.type,
     };
 
   const centerPoint = center(feature);
@@ -97,6 +80,6 @@ function getFeaturePopupInfo(value) {
   return {
     longitude: centerPoint.geometry.coordinates[0],
     latitude: centerPoint.geometry.coordinates[1],
-    info: feature.geometry.type,
+    content: feature.geometry.type,
   };
 }
