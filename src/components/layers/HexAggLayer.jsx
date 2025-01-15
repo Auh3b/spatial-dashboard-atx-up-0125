@@ -10,7 +10,7 @@ const url =
 
 const id = "hex-layer";
 const name = "Hexgon Layer";
-const colors = ["blue", "red"];
+const colors = ["#0198bd", "#d1374e"];
 const labels = ["Low", "High"];
 const type = "ramp";
 
