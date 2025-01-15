@@ -66,31 +66,31 @@ export default function useDrawing() {
 
   const { current: map } = useMap();
 
-  useEffect(() => {
-    if (mode && map) {
-      const canvas = map.getCanvas();
-      canvas.setAttribute("cursor", "crosshar");
-      canvas.addEventListener("mousedown", (event) => {
-        const minX = event.clientX;
-        const minY = event.clientY;
-        const { lat, lng } = map.unproject([minX, minY]);
-        setStartPoint([lng, lat]);
-      });
-      canvas.addEventListener("mousemove", (event) => {
-        const maxX = event.clientX;
-        const maxY = event.clientY;
-        const { lat, lng } = map.unproject([maxX, maxY]);
-        setCurrentPoint([lng, lat]);
-      });
-      canvas.addEventListener("mouseup", (event) => {
-        const maxX = event.clientX;
-        const maxY = event.clientY;
-        const { lat, lng } = map.unproject([maxX, maxY]);
-        setCurrentPoint([lng, lat]);
-        stopDrawing();
-      });
-    }
-  }, [mode, map]);
+  // useEffect(() => {
+  //   if (mode && map) {
+  //     const canvas = map.getCanvas();
+  //     canvas.setAttribute("cursor", "crosshar");
+  //     canvas.addEventListener("mousedown", (event) => {
+  //       const minX = event.clientX;
+  //       const minY = event.clientY;
+  //       const { lat, lng } = map.unproject([minX, minY]);
+  //       setStartPoint([lng, lat]);
+  //     });
+  //     canvas.addEventListener("mousemove", (event) => {
+  //       const maxX = event.clientX;
+  //       const maxY = event.clientY;
+  //       const { lat, lng } = map.unproject([maxX, maxY]);
+  //       setCurrentPoint([lng, lat]);
+  //     });
+  //     canvas.addEventListener("mouseup", (event) => {
+  //       const maxX = event.clientX;
+  //       const maxY = event.clientY;
+  //       const { lat, lng } = map.unproject([maxX, maxY]);
+  //       setCurrentPoint([lng, lat]);
+  //       stopDrawing();
+  //     });
+  //   }
+  // }, [mode, map]);
 
   useEffect(() => {
     if (startPoint && currentPoint)
