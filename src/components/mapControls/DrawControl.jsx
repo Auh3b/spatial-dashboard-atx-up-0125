@@ -2,8 +2,11 @@ import { Popup, useControl } from "react-map-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import { Fragment, useCallback, useState } from "react";
 import { center } from "@turf/turf";
+import { useDispatch } from "react-redux";
+import { setDrawingProps } from "../../store/mapStore";
 
-export default function DrawControl({ onGeometrySet }) {
+export default function DrawControl() {
+  const dispatch = useDispatch();
   const [popupInfo, setPopupInfo] = useState(null);
   const drawProps = {
     position: "top-right",
@@ -23,14 +26,10 @@ export default function DrawControl({ onGeometrySet }) {
     setPopupInfo(info);
   };
 
-  const onDraw = useCallback(
-    (e) => {
-      const feature = getFeature(e);
-      console.log(feature);
-      onGeometrySet(feature);
-    },
-    [onGeometrySet],
-  );
+  const onDraw = useCallback((e) => {
+    const feature = getFeature(e);
+    dispatch(setDrawingProps({ feature }));
+  }, []);
 
   const draw = useControl(
     () => new MapboxDraw(drawProps),
@@ -59,7 +58,7 @@ export default function DrawControl({ onGeometrySet }) {
 
   return (
     <Fragment>
-      {popupInfo && (
+      {/* {popupInfo && (
         <Popup
           style={{
             padding: "8px",
@@ -71,7 +70,7 @@ export default function DrawControl({ onGeometrySet }) {
           longitude={popupInfo.longitude}>
           {popupInfo.info}
         </Popup>
-      )}
+      )} */}
     </Fragment>
   );
 }
@@ -79,7 +78,6 @@ export default function DrawControl({ onGeometrySet }) {
 function getFeature(value, index = 0) {
   if (!value) return null;
   if (!value.features.length) return null;
-  console.log(value.features);
   const feature = value.features[index];
   return feature;
 }
