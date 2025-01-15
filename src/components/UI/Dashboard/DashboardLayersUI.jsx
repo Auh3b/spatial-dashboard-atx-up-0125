@@ -7,7 +7,6 @@ import { zip } from "d3";
 export default function DashboardLayersUI({ selected, index }) {
   const _layers = useSelector((state) => getLayers(state));
   const layers = useMemo(() => Object.values(_layers), [_layers]);
-  console.log(layers);
   return (
     <Fragment>
       {selected === index && (
