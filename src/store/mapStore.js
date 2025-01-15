@@ -11,8 +11,25 @@ const initialState = {
   viewState: INITIAL_VIEW_STATE,
   layers: {},
   country: "",
-  popup: null,
+  interactivity: {
+    scrollZoom: true,
+    boxZoom: true,
+    dragRotate: true,
+    dragPan: true,
+    keyboard: true,
+    doubleClickZoom: true,
+    touchZoomRotate: true,
+    touchPitch: true,
+  },
+  popup: {
+    show: false,
+    latitude: INITIAL_VIEW_STATE.latitude,
+    longitude: INITIAL_VIEW_STATE.longitude,
+    content: "",
+  },
   basemapUrl: "dark-v10",
+  drawMode: "",
+  drawingProps: null,
 };
 
 const mapStore = createSlice({
@@ -41,13 +58,31 @@ const mapStore = createSlice({
       state.country = country;
     },
     setPopup: (state, action) => {
-      state.popup = action.payload;
+      state.popup = {
+        ...state.popup,
+        ...action.payload,
+      };
     },
     removePopup: (state) => {
-      state.popup = null;
+      state.popup.show = false;
     },
     setBasemapUrl: (state, action) => {
       state.basemapUrl = action.payload;
+    },
+    setDrawMode: (state, action) => {
+      state.drawMode = action.payload;
+    },
+    setDrawingProps: (state, action) => {
+      if (state.drawMode) {
+        state.drawingProps = action.payload;
+      }
+    },
+
+    setInteractivity: (state, action) => {
+      state.interactivity = {
+        ...state.interactivity,
+        ...action.payload,
+      };
     },
   },
 });
@@ -87,6 +122,21 @@ export const setBasemapUrl = (payload) => ({
   payload,
 });
 
+export const setDrawMode = (payload) => ({
+  type: "map/setDrawMode",
+  payload,
+});
+
+export const setDrawingProps = (payload) => ({
+  type: "map/setDrawingProps",
+  payload,
+});
+
+export const setInteractivity = (payload) => ({
+  type: "map/setInteractivity",
+  payload,
+});
+
 // Accessors
 
 export const getViewState = (state) => {
@@ -103,6 +153,18 @@ export const getPopup = (state) => {
 
 export const getBasemapUrl = (state) => {
   return state.map.basemapUrl;
+};
+
+export const getDrawMode = (state) => {
+  return state.map.drawMode;
+};
+
+export const getDrawingProps = (state) => {
+  return state.map.drawingProps;
+};
+
+export const getInteractivity = (state) => {
+  return state.map.interactivity;
 };
 
 export default mapStore.reducer;
