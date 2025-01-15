@@ -6,6 +6,7 @@ import Dashboard from "./components/UI/Dashboard";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./styles/theme";
 import { CssBaseline } from "@mui/material";
+import Feedback from "./components/UI/Feedback";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
             className="app-container"
             style={{ width: "100vw", height: "100vh" }}>
             <Dashboard />
+            <Feedback />
           </div>
         </CssBaseline>
       </ThemeProvider>
