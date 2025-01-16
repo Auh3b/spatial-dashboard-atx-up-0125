@@ -1,6 +1,6 @@
 import { CompositeLayer, PolygonLayer, ScatterplotLayer } from "deck.gl";
 import { useSelector } from "react-redux";
-import { getDrawingProps, getDrawMode } from "../../store/mapStore";
+import { getDrawingProps } from "../../store/mapStore";
 
 function makePolygon(value) {
   const [a, b] = value;
@@ -9,23 +9,24 @@ function makePolygon(value) {
 
 class CustomDrawLayer extends CompositeLayer {
   renderLayers() {
-    const data = makePolygon(this.props.data.feature);
+    const data = this.props.data.feature;
+    // const data = makePolygon(this.props.data.feature);
     return [
       new ScatterplotLayer({
         id: "draw-layer-point",
-        data: data,
+        data: data[0],
         getPosition: (d) => d,
-        getRadius: 10,
+        getRadius: 5,
         getFillColor: [252, 94, 3],
-        getLineColor: [0, 0, 0],
-        getLineWidth: 1,
+        getLineColor: [255, 255, 255],
+        getLineWidth: 10,
         radiusUnits: "pixels",
         lineWidthUnits: "pixels",
         pickable: true,
       }),
       new PolygonLayer({
         id: "draw-layer-polygon",
-        data: [[data]],
+        data: data,
         getPolygon: (d) => {
           return d;
         },
@@ -40,7 +41,6 @@ class CustomDrawLayer extends CompositeLayer {
 
 export default function DrawLayer() {
   const data = useSelector((state) => getDrawingProps(state));
-
   if (data)
     return new CustomDrawLayer({
       data,

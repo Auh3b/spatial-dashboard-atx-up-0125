@@ -1,7 +1,11 @@
 import DeckGLOverlay from "./maps/DeckGLOverlay";
 import DrawControl from "./mapControls/DrawControl";
 import layers from "./layers";
-import { getBasemapUrl, getInteractivity } from "../store/mapStore";
+import {
+  getBasemapUrl,
+  getDrawMode,
+  getInteractivity,
+} from "../store/mapStore";
 import { useSelector } from "react-redux";
 import DrawTools from "./UI/DrawTools";
 import MapPopup from "./UI/MapPopup";
@@ -12,6 +16,10 @@ import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import { fetchGADMData } from "./Api";
 import * as turf from "@turf/turf";
 import Dashboard from "./Dashboard";
+import usePointHandler from "./hooks/drawHandlers/usePointHandler";
+import { DRAW_MODES } from "../utils/drawingUtils";
+import useCircleHandler from "./hooks/drawHandlers/useCircleHandler";
+import useDrawing from "./hooks/useDrawing";
 
 const INITIAL_VIEW_STATE = {
   longitude: -122.46940656246574,
@@ -22,13 +30,14 @@ const INITIAL_VIEW_STATE = {
 
 function MapWrapper() {
   const basemapUrl = useSelector(
-    (state) => `mapbox://styles/mapbox/${getBasemapUrl(state)}`
+    (state) => `mapbox://styles/mapbox/${getBasemapUrl(state)}`,
   );
   const interactivity = useSelector((state) => getInteractivity(state));
+  const { mode, startDrawing, stopDrawing, handlers } = useDrawing();
   const [popupInfo, setPopupInfo] = useState(null);
   const [geojsonData, setGeojsonData] = useState(null);
   const [mapStyle, setMapStyle] = useState(
-    "mapbox://styles/mapbox/satellite-streets-v9"
+    "mapbox://styles/mapbox/satellite-streets-v9",
   );
 
   // Fetch GADM data dynamically
@@ -57,7 +66,7 @@ function MapWrapper() {
     const drawnPolygon = e.features[0];
     const centroid = turf.centroid(drawnPolygon.geometry).geometry.coordinates;
     console.log(
-      `Polygon centroid: Latitude ${centroid[1]}, Longitude ${centroid[0]}`
+      `Polygon centroid: Latitude ${centroid[1]}, Longitude ${centroid[0]}`,
     );
     setPopupInfo({
       longitude: centroid[0],
@@ -65,26 +74,27 @@ function MapWrapper() {
       message: "Polygon drawn!",
     });
   };
-
+  const eventHandlers = handlers[mode];
   return (
     <div style={{ flexGrow: 1 }}>
       <Map
         initialViewState={INITIAL_VIEW_STATE}
         {...interactivity}
+        {...eventHandlers}
         mapStyle={basemapUrl}
         mapboxAccessToken={import.meta.env.VITE_MAPBOX_API_TOKEN}
-        onClick={handleMapClick}
+        // onClick={handleMapClick}
       >
-        <DrawTools />
+        <DrawTools mode={mode} onStart={startDrawing} onStop={stopDrawing} />
         <DrawControl />
-        <NavigationControl position='top-right' />
+        <NavigationControl position="top-right" />
         <DeckGLOverlay layers={layers()} interleaved />
         <MapPopup />
         {geojsonData && (
-          <Source type='geojson' data={geojsonData}>
+          <Source type="geojson" data={geojsonData}>
             <Layer
-              id='gadm-layer'
-              type='fill'
+              id="gadm-layer"
+              type="fill"
               paint={{
                 "fill-color": "rgba(0, 123, 255, 0.5)",
                 "fill-outline-color": "#000",
@@ -99,8 +109,7 @@ function MapWrapper() {
             latitude={popupInfo.latitude}
             closeButton={true}
             closeOnClick={false}
-            anchor='top'
-          >
+            anchor="top">
             <div>
               <h3>Information</h3>
               <p>{popupInfo.message || "Location info displayed here."}</p>
