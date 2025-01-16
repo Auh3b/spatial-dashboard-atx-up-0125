@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { DRAW_MODES } from "../utils/drawingUtils";
 
 const INITIAL_VIEW_STATE = {
   longitude: -122.46940656246574,
@@ -28,7 +29,8 @@ const initialState = {
     content: "",
   },
   basemapUrl: "dark-v10",
-  drawMode: "",
+  drawMode: DRAW_MODES.FREE,
+  cursor: "default",
   drawingProps: null,
 };
 
@@ -73,9 +75,7 @@ const mapStore = createSlice({
       state.drawMode = action.payload;
     },
     setDrawingProps: (state, action) => {
-      if (state.drawMode) {
-        state.drawingProps = action.payload;
-      }
+      state.drawingProps = action.payload;
     },
 
     setInteractivity: (state, action) => {
@@ -83,6 +83,9 @@ const mapStore = createSlice({
         ...state.interactivity,
         ...action.payload,
       };
+    },
+    setCursor: (state, action) => {
+      state.cursor = action.payload;
     },
   },
 });
@@ -137,6 +140,11 @@ export const setInteractivity = (payload) => ({
   payload,
 });
 
+export const setCursor = (payload) => ({
+  type: "map/setCursor",
+  payload,
+});
+
 // Accessors
 
 export const getViewState = (state) => {
@@ -165,6 +173,10 @@ export const getDrawingProps = (state) => {
 
 export const getInteractivity = (state) => {
   return state.map.interactivity;
+};
+
+export const getCursor = (state) => {
+  return state.map.cursor;
 };
 
 export default mapStore.reducer;
