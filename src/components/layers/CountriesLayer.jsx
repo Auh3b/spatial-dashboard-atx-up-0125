@@ -37,7 +37,7 @@ export default function CountriesLayer() {
             labels,
           },
         },
-      }),
+      })
     );
 
     return () => dispatch(removeLayer(id));
@@ -53,7 +53,6 @@ export default function CountriesLayer() {
     lineWidthUnits: "pixels",
     pickable: true,
     onClick: ({ coordinate, object }) => {
-      console.log(coordinate);
       const [longitude, latitude] = coordinate;
       dispatch(
         setPopup({
@@ -63,7 +62,7 @@ export default function CountriesLayer() {
           content:
             object.properties["NAME_EN"] ||
             "If your seeing this, change the field value 😉",
-        }),
+        })
       );
     },
     // updateTriggers: {

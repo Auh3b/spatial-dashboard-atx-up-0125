@@ -1,60 +1,56 @@
-import axios from 'axios' // Import axios for making HTTP requests
+import axios from 'axios'
 
 // Axios instance setup for your backend
 const api = axios.create({
-  baseURL: 'http://localhost:5001', // Update with your backend URL
+  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api', // Use VITE_ for Vite
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
-// Fetch event data
-export const getEvents = async () => {
+// Fetch GADM data via Proxy
+export const fetchGADMData = async (countryCode, detailLevel) => {
+  const url = `http://localhost:5001/proxy/geojson?country=${countryCode}&detail=${detailLevel}`
   try {
-    const response = await api.get('/events') // Adjust the URL for your events endpoint
-    return response.data // Return the event data
+    const response = await axios.get(url)
+    return response.data // This will include the GeoJSON data
   } catch (error) {
-    console.error('Error fetching events data:', error)
-    throw error // Rethrow error so the caller can handle it
-  }
-}
-
-// Fetch historical MAID data
-export const getMaidHistory = async (device_id, start_date, end_date) => {
-  try {
-    const response = await api.post('/maid/history', {
-      device_id,
-      start_date,
-      end_date,
-    })
-    return response.data // Return the data from the response
-  } catch (error) {
-    console.error('Error fetching MAID history:', error)
-    throw error // Rethrow error so the caller can handle it
-  }
-}
-
-/**
- * Fetch GeoJSON data from the proxy server.
- * @param {string} country - The 3-letter country code (e.g., "USA", "CAN").
- * @param {number} detail - The detail level (0 = country borders, 1 = states, 2 = counties, etc.).
- * @returns {Promise<Object>} The GeoJSON data as a JavaScript object.
- * @throws Will throw an error if the API request fails.
- */
-export const getGeoJSON = async (country, detail) => {
-  try {
-    // Make a GET request to the proxy server
-    const response = await axios.get(
-      `http://localhost:5001/proxy/geojson?country=${country}&detail=${detail}`
+    console.error(
+      `Error fetching GADM data for country: ${countryCode}, level: ${detailLevel}`,
+      error
     )
-
-    // Return the GeoJSON data from the response
-    return response.data
-  } catch (error) {
-    // Log the error for debugging purposes
-    console.error('Error fetching GeoJSON data through proxy:', error)
-
-    // Rethrow the error so it can be handled by the caller
     throw error
   }
 }
+
+// Fetch event data
+export const getEvents = async () => {
+  try {
+    const response = await api.get('/events')
+    return response.data
+  } catch (error) {
+    console.error('Error fetching events data:', error)
+    throw error
+  }
+}
+
+// Example Usage in Your Component:
+// import { fetchGADMData } from "./Api";
+// const gadmData = await fetchGADMData("USA", 1); // Fetch US State Data
+// console.log("GADM GeoJSON Data: ", gadmData);
+
+// // Fetch GeoNames data
+// export const fetchGeoNamesData = async (latitude, longitude) => {
+//   const username = import.meta.env.VITE_GEONAMES_USERNAME || "tabbybg"; // Use VITE_ for Vite
+//   const url = `https://secure.geonames.org/countrySubdivisionJSON?lat=${latitude}&lng=${longitude}&username=${username}`;
+//   try {
+//     const response = await axios.get(url);
+//     return response.data;
+//   } catch (error) {
+//     console.error(
+//       `Error fetching GeoNames data for lat: ${latitude}, lng: ${longitude}`,
+//       error
+//     );
+//     throw error;
+//   }
+// };

@@ -21,7 +21,8 @@ export default function index() {
         position: "absolute",
         top: (theme) => theme.spacing(2),
         left: (theme) => theme.spacing(2),
-      }}>
+      }}
+    >
       <Paper>
         <Tabs
           value={mode}
@@ -31,25 +32,26 @@ export default function index() {
               display: "none",
             },
           }}
-          orientation="vertical">
+          orientation='vertical'
+        >
           <CustomTab
-            icon={<PanToolOutlinedIcon fontSize="small" />}
+            icon={<PanToolOutlinedIcon fontSize='small' />}
             value={""}
           />
           <CustomTab
-            icon={<PlaceOutlinedIcon fontSize="small" />}
+            icon={<PlaceOutlinedIcon fontSize='small' />}
             value={"point"}
           />
           <CustomTab
-            icon={<CircleOutlinedIcon fontSize="small" />}
+            icon={<CircleOutlinedIcon fontSize='small' />}
             value={"polygon"}
           />
           <CustomTab
-            icon={<CropSquareOutlinedIcon fontSize="small" />}
+            icon={<CropSquareOutlinedIcon fontSize='small' />}
             value={"circle"}
           />
           <CustomTab
-            icon={<TimelineOutlinedIcon fontSize="small" />}
+            icon={<TimelineOutlinedIcon fontSize='small' />}
             value={"linestring"}
           />
         </Tabs>
