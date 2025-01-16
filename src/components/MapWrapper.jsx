@@ -1,11 +1,6 @@
 import DeckGLOverlay from "./maps/DeckGLOverlay";
-import DrawControl from "./mapControls/DrawControl";
 import layers from "./layers";
-import {
-  getBasemapUrl,
-  getDrawMode,
-  getInteractivity,
-} from "../store/mapStore";
+import { getBasemapUrl, getInteractivity } from "../store/mapStore";
 import { useSelector } from "react-redux";
 import DrawTools from "./UI/DrawTools";
 import MapPopup from "./UI/MapPopup";
@@ -15,10 +10,6 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import { fetchGADMData } from "./Api";
 import * as turf from "@turf/turf";
-import Dashboard from "./Dashboard";
-import usePointHandler from "./hooks/drawHandlers/usePointHandler";
-import { DRAW_MODES } from "../utils/drawingUtils";
-import useCircleHandler from "./hooks/drawHandlers/useCircleHandler";
 import useDrawing from "./hooks/useDrawing";
 
 const INITIAL_VIEW_STATE = {
@@ -86,8 +77,7 @@ function MapWrapper() {
         // onClick={handleMapClick}
       >
         <DrawTools mode={mode} onStart={startDrawing} onStop={stopDrawing} />
-        <DrawControl />
-        <NavigationControl position="top-right" />
+        <NavigationControl style={{}} position="top-right" />
         <DeckGLOverlay layers={layers()} interleaved />
         <MapPopup />
         {geojsonData && (
@@ -102,7 +92,7 @@ function MapWrapper() {
             />
           </Source>
         )}
-
+        {/* use MapPopup Element above */}
         {popupInfo && (
           <Popup
             longitude={popupInfo.longitude}
@@ -117,12 +107,6 @@ function MapWrapper() {
           </Popup>
         )}
       </Map>
-      {/* Move to Panel */}
-      {/* <Dashboard
-        onAddLayer={(url) => console.log("Layer added:", url)}
-        onSwitchStyle={(newStyle) => setMapStyle(newStyle)}
-        onLayerSelect={(layerType) => console.log("Layer selected:", layerType)}
-      /> */}
     </div>
   );
 }

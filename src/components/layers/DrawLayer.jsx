@@ -14,7 +14,7 @@ class CustomDrawLayer extends CompositeLayer {
     return [
       new ScatterplotLayer({
         id: "draw-layer-point",
-        data: data[0],
+        data: data,
         getPosition: (d) => d,
         getRadius: 5,
         getFillColor: [252, 94, 3],
@@ -26,7 +26,7 @@ class CustomDrawLayer extends CompositeLayer {
       }),
       new PolygonLayer({
         id: "draw-layer-polygon",
-        data: data,
+        data: [data],
         getPolygon: (d) => {
           return d;
         },

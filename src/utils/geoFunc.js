@@ -32,8 +32,8 @@ export function makeCircle(center, radius) {
 }
 
 export function extractCoordinate(value) {
-  if (value.type === "Feature") return value.geometry.coordinates;
-  return value.features.map(({ geometry }) => geometry.coordinates);
+  if (value.type === "Feature") return value.geometry.coordinates[0];
+  return value.features.map(({ geometry }) => geometry.coordinates)[0];
 }
 
 /**
