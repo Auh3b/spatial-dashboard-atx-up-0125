@@ -1,16 +1,24 @@
 import DeckGLOverlay from "./maps/DeckGLOverlay";
 import layers from "./layers";
-import { getBasemapUrl, getInteractivity } from "../store/mapStore";
-import { useSelector } from "react-redux";
+import {
+  getBasemapUrl,
+  getInteractivity,
+  getViewState,
+  setViewState,
+} from "../store/mapStore";
+import { useDispatch, useSelector } from "react-redux";
 import DrawTools from "./UI/DrawTools";
 import MapPopup from "./UI/MapPopup";
 import React, { useState, useEffect } from "react";
-import Map, { Source, Layer, Popup, NavigationControl } from "react-map-gl";
+import Map, { Source, Layer, Popup } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css";
 import { fetchGADMData } from "./Api";
 import * as turf from "@turf/turf";
 import useDrawing from "./hooks/useDrawing";
+import MapNav from "./UI/MapNav";
+
+const ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_API_TOKEN;
 
 const INITIAL_VIEW_STATE = {
   longitude: -122.46940656246574,
@@ -20,6 +28,8 @@ const INITIAL_VIEW_STATE = {
 };
 
 function MapWrapper() {
+  const dispatch = useDispatch();
+  const viewState = useSelector((state) => getViewState(state));
   const basemapUrl = useSelector(
     (state) => `mapbox://styles/mapbox/${getBasemapUrl(state)}`,
   );
@@ -66,18 +76,21 @@ function MapWrapper() {
     });
   };
   const eventHandlers = handlers[mode];
+  const handleViewStateChange = ({ viewState }) => {
+    dispatch(setViewState(viewState));
+  };
   return (
     <div style={{ flexGrow: 1 }}>
       <Map
         initialViewState={INITIAL_VIEW_STATE}
+        {...viewState}
         {...interactivity}
         {...eventHandlers}
+        onMove={handleViewStateChange}
         mapStyle={basemapUrl}
-        mapboxAccessToken={import.meta.env.VITE_MAPBOX_API_TOKEN}
-        // onClick={handleMapClick}
-      >
+        mapboxAccessToken={ACCESS_TOKEN}>
         <DrawTools mode={mode} onStart={startDrawing} onStop={stopDrawing} />
-        <NavigationControl style={{}} position="top-right" />
+        <MapNav />
         <DeckGLOverlay layers={layers()} interleaved />
         <MapPopup />
         {geojsonData && (
