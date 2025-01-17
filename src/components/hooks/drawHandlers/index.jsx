@@ -4,6 +4,7 @@ import useCircleHandler from "./useCircleHandler";
 import useLineHandler from "./useLineHandler";
 import useRectangleHandler from "./useRectangleHandler";
 import useFreeHandler from "./useFreeHandler";
+import usePolygonHandler from "./usePolygonHandler";
 
 export default function useDrawHandlers() {
   const handlers = {
@@ -12,6 +13,7 @@ export default function useDrawHandlers() {
     [DRAW_MODES.CIRCLE]: useCircleHandler(),
     [DRAW_MODES.RECTANGLE]: useRectangleHandler(),
     [DRAW_MODES.LINE]: useLineHandler(),
+    [DRAW_MODES.POLYGON]: usePolygonHandler(),
   };
   return handlers;
 }
