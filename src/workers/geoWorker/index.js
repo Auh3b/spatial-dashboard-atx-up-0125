@@ -1,14 +1,13 @@
 import { wrap } from "comlink";
 
-const worker = new Worker("workers/geoWorker/worker.js", {
+const worker = new Worker(new URL("./worker.js", import.meta.url), {
   name: "geoWorker",
   type: "module",
 });
 
-const { executeWorker } = wrap(worker);
+const { executeMethod } = wrap(worker);
 
-export default async function ({ name, params }) {
-  const result = await executeWorker(name, params);
-
+export default async function geoWorker({ name, params }) {
+  const result = await executeMethod(name, params);
   return result;
 }

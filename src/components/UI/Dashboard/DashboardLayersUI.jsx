@@ -7,6 +7,7 @@ import { zip } from "d3";
 export default function DashboardLayersUI({ selected, index }) {
   const _layers = useSelector((state) => getLayers(state));
   const layers = useMemo(() => Object.values(_layers), [_layers]);
+  console.log(layers);
   return (
     <Fragment>
       {selected === index && (
@@ -27,7 +28,7 @@ function LayerUI({ id, name, legend }) {
           {name}
         </Typography>
         <Legend {...legend} />
-        <Divider variant='vertical' flexItem />
+        <Divider variant="vertical" flexItem />
       </Grid2>
     </Box>
   );
@@ -42,7 +43,7 @@ function Legend({ type, colors, labels }) {
   const LegendVisual = useMemo(() => LegendTypeUI[type], [type]);
   return (
     <Box p={1}>
-      <Typography variant='caption'>Key</Typography>
+      <Typography variant="caption">Key</Typography>
       <LegendVisual type={type} colors={colors} labels={labels} />
     </Box>
   );
@@ -60,9 +61,8 @@ function CategoryLegend({ colors, labels }) {
               width: "10px",
               height: "10px",
               borderRadius: "50%",
-            }}
-          ></Box>
-          <Typography variant='caption'>{label}</Typography>
+            }}></Box>
+          <Typography variant="caption">{label}</Typography>
         </Grid2>
       ))}
     </Grid2>
@@ -74,7 +74,7 @@ function RampLegend({ colors, labels }) {
     <Grid2 container direction={"column"}>
       <Grid2 container justifyContent={"space-between"}>
         {labels.map((d) => (
-          <Typography key={d} variant='caption'>
+          <Typography key={d} variant="caption">
             {d}
           </Typography>
         ))}
@@ -84,8 +84,7 @@ function RampLegend({ colors, labels }) {
         height={"10px"}
         sx={{
           background: `linear-gradient(to right, ${colors[0]}, ${colors[1]})`,
-        }}
-      ></Box>
+        }}></Box>
     </Grid2>
   );
 }

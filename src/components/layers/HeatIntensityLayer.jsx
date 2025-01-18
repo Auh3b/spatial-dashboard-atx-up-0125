@@ -1,30 +1,25 @@
-import { load } from "@loaders.gl/core";
-import { CSVLoader } from "@loaders.gl/csv";
 import { HeatmapLayer } from "deck.gl";
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { addLayer, removeLayer } from "../../store/mapStore";
-import { useDispatch } from "react-redux";
-const url =
-  "https://raw.githubusercontent.com/visgl/deck.gl-data/master/examples/3d-heatmap/heatmap-data.csv";
+import { useDispatch, useSelector } from "react-redux";
+import useGeoWorker from "../hooks/useGeoWorker";
+import { getData } from "../../store/appStore";
+import { METHOD_NAMES } from "../../workers/geoWorker/methods/methodUtils";
 
 const id = "heat-map-layer";
 const name = "Heat Map Layer";
 const colors = ["yellow", "red"];
 const labels = ["Low", "High"];
 const type = "ramp";
+const datasetName = "united_kindom_clustering";
 
 export default function HeatIntensityLayer() {
   const dispatch = useDispatch();
-  const [data, setData] = useState(null);
-  const fetchData = async () => {
-    const res = await load(url, CSVLoader);
-    const data = res.data;
-    // @ts-ignore
-    setData(data);
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const dataSet = useSelector((state) => getData(state, datasetName)) || {};
+  const { data } = useGeoWorker({
+    name: METHOD_NAMES.GET_DATA,
+    params: dataSet,
+  });
 
   useEffect(() => {
     dispatch(

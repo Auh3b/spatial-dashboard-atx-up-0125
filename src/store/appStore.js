@@ -6,6 +6,7 @@ const initialState = {
     status: "",
     message: "",
   },
+  data: {},
 };
 
 const appStore = createSlice({
@@ -17,6 +18,17 @@ const appStore = createSlice({
     },
     setFeedback: (state, action) => {
       state.feedback = action.payload;
+    },
+    setData: (state, action) => {
+      const { name, value } = action.payload;
+      state.data[name] = value;
+    },
+    setBatchData: (state, action) => {
+      const data = action.payload;
+      if (data)
+        data.forEach((d) => {
+          state.data[d.name] = d;
+        });
     },
   },
 });
@@ -30,7 +42,18 @@ export const setFeedback = (payload) => ({
   payload,
 });
 
+export const setData = (payload) => ({
+  type: "app/setData",
+  payload,
+});
+
+export const setBatchData = (payload) => ({
+  type: "app/setBatchData",
+  payload,
+});
+
 export const getDarkMode = (state) => state.app.darkMode;
 export const getFeedback = (state) => state.app.feedback;
+export const getData = (state, name) => state.app.data[name];
 
 export default appStore.reducer;

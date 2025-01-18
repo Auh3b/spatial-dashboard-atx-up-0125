@@ -1,10 +1,10 @@
 import { Box, Grid2, Tab, Typography, Tabs, Divider } from "@mui/material";
 import React, { useMemo, useState } from "react";
-import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
-import TableChartOutlinedIcon from "@mui/icons-material/TableChartOutlined";
-import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
-import SettingsApplicationsOutlinedIcon from "@mui/icons-material/SettingsApplicationsOutlined";
-import OtherHousesOutlinedIcon from "@mui/icons-material/OtherHousesOutlined";
+import HomeIcon from "@mui/icons-material/Home";
+import LayersIcon from "@mui/icons-material/Layers";
+import TableChartIcon from "@mui/icons-material/TableChart";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import SettingsIcon from "@mui/icons-material/Settings";
 import DashboardTable from "./DashboardTable";
 import DashboardUpload from "./DashboardUpload";
 import DashboardLayersUI from "./DashboardLayersUI";
@@ -69,11 +69,11 @@ function PanelContent({ title, children }) {
 function PanelTabs(props) {
   return (
     <Tabs {...props} orientation="vertical">
-      <CustomTab icon={<OtherHousesOutlinedIcon />} value={0} />
-      <CustomTab icon={<LayersOutlinedIcon />} value={1} />
-      <CustomTab icon={<TableChartOutlinedIcon />} value={2} />
-      <CustomTab icon={<UploadFileOutlinedIcon />} value={3} />
-      <CustomTab icon={<SettingsApplicationsOutlinedIcon />} value={4} />
+      <CustomTab icon={<HomeIcon />} value={0} />
+      <CustomTab icon={<LayersIcon />} value={1} />
+      <CustomTab icon={<TableChartIcon />} value={2} />
+      <CustomTab icon={<FileUploadIcon />} value={3} />
+      <CustomTab icon={<SettingsIcon />} value={4} />
     </Tabs>
   );
 }
