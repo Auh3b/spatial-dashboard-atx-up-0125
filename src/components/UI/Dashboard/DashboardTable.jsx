@@ -7,7 +7,6 @@ import {
   CircularProgress,
   Paper,
   Link,
-  Divider,
 } from "@mui/material";
 import React, { Fragment, useMemo, useState } from "react";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
@@ -19,6 +18,7 @@ import useGeoWorker from "../../hooks/useGeoWorker";
 import { METHOD_NAMES } from "../../../workers/geoWorker/methods/methodUtils";
 import { DataGrid } from "@mui/x-data-grid";
 import { format } from "d3";
+import { tabulationHandlers } from "../../../utils/dataTable";
 
 export default function DashboardTable({ selected, index }) {
   const [selectedSource, setSelectedSource] = useState(null);
@@ -64,7 +64,6 @@ export default function DashboardTable({ selected, index }) {
 function DataViewModel({ source, dataset, onClose }) {
   const d = useMemo(() => dataset[source], [source, dataset]);
   const open = Boolean(source);
-  console.log(source, d.title);
   return (
     <Modal open={open}>
       <Grid2
@@ -79,42 +78,26 @@ function DataViewModel({ source, dataset, onClose }) {
               <CloseIcon />
             </IconButton>
           </Grid2>
-          <DataView source={source} type={d.type} />
+          <DataView source={source} type={d.type} schema={d.schema} />
         </Paper>
       </Grid2>
     </Modal>
   );
 }
 
-function DataView({ source, type }) {
+function DataView({ source, type, schema }) {
   const { isLoading, data } = useGeoWorker({
     name: METHOD_NAMES.GET_DATA,
     params: { name: source },
   });
-  console.log(isLoading, data);
-  const columns = [
-    {
-      field: "id",
-      headerName: "ID",
-      width: 90,
-    },
-    {
-      field: "lat",
-      headerName: "Latitude",
-      width: 90,
-    },
-    {
-      field: "lng",
-      headerName: "Longitude",
-      width: 90,
-    },
-  ];
+  const handler = tabulationHandlers[type];
+  const columns = schema.map((d) => ({ field: d, fieldName: d, width: 100 }));
   return (
     <Box>
       {!isLoading && data ? (
         <DataGrid
           density={"compact"}
-          rows={data}
+          rows={handler(data)}
           columns={columns}
           initialState={{
             pagination: {

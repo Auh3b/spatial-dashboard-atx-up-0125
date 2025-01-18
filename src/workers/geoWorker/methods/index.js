@@ -53,7 +53,13 @@ function addIds(data, type) {
   if (type === LOADER_TYPE.GEOJSON) {
     return {
       ...data,
-      features: data.features.map((d) => ({ ...d, id: v4() })),
+      features: data.features.map((d) => ({
+        ...d,
+        properties: {
+          ...d.properties,
+          id: v4(),
+        },
+      })),
     };
   }
   return data.data.map((d) => ({ ...d, id: v4() }));
