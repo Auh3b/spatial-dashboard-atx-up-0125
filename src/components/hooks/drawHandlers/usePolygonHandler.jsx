@@ -13,21 +13,6 @@ export default function usePolygonHandler() {
   return {
     onClick: (e) => {},
     onMouseMove: () => {},
-    // onMouseMove: useCallback(
-    //   (e) => {
-    //     if (!drawingProps) return;
-    //     const { lng, lat } = e.lngLat;
-    //     const feature = drawingProps.feature;
-    //     const last_coord = feature.at(-1);
-
-    //     dispatch(
-    //       setDrawingProps({
-    //         feature: [...feature, [[last_coord, [lng, lat]]]],
-    //       }),
-    //     );
-    //   },
-    //   [drawingProps],
-    // ),
     onMouseDown: () => undefined,
     onMouseUp: useCallback(
       (e) => {

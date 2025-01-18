@@ -23,7 +23,6 @@ export default function DashboardSetting({ selected, index }) {
           <Grid2 container direction={"column"} gap={2}>
             <DarkModeToggleSwitch />
             <BasemapChanger />
-            {/* <DrawingToggleSwitch /> */}
           </Grid2>
         </Box>
       )}
@@ -76,25 +75,3 @@ function BasemapChanger() {
     </FormControl>
   );
 }
-
-// function DrawingToggleSwitch() {
-//   const dispatch = useDispatch();
-//   const isDrawing = useSelector((state) => getDrawing(state));
-//   const label = isDrawing ? "on" : "off";
-
-//   const handleToggle = useCallback(() => {
-//     dispatch(setDrawing(!isDrawing));
-//   }, [isDrawing]);
-
-//   return (
-//     <FormControl>
-//       <FormLabel>Drawing</FormLabel>
-//       <FormControlLabel
-//         control={<Switch onChange={handleToggle} checked={isDrawing} />}
-//         label={
-//           <Typography sx={{ textTransform: "uppercase" }}>{label}</Typography>
-//         }
-//       />
-//     </FormControl>
-//   );
-// }

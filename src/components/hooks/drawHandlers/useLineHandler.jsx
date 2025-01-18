@@ -5,7 +5,6 @@ import { getDrawingProps, setDrawingProps } from "../../../store/mapStore";
 export default function useLineHandler() {
   const dispatch = useDispatch();
   const drawingProps = useSelector((state) => getDrawingProps(state));
-  // const [start, setStart] = useState(null)
   return {
     onClick: (e) => {},
     onMouseMove: () => {},

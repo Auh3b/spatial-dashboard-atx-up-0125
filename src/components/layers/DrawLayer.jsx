@@ -10,7 +10,6 @@ function makePolygon(value) {
 class CustomDrawLayer extends CompositeLayer {
   renderLayers() {
     const data = this.props.data.feature;
-    // const data = makePolygon(this.props.data.feature);
     return [
       new ScatterplotLayer({
         id: "draw-layer-point",
