@@ -1,11 +1,15 @@
 import React, { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getDrawingProps, setDrawingProps } from "../../../store/mapStore";
+import {
+  getDrawingProps,
+  setDrawingProps,
+  setDrawMode,
+} from "../../../store/mapStore";
+import { DRAW_MODES } from "../../../utils/drawingUtils";
 
 export default function usePolygonHandler() {
   const dispatch = useDispatch();
   const drawingProps = useSelector((state) => getDrawingProps(state));
-  // const [start, setStart] = useState(null)
   return {
     onClick: (e) => {},
     onMouseMove: () => {},
@@ -34,7 +38,6 @@ export default function usePolygonHandler() {
         } else {
           feature = drawingProps.feature;
         }
-        console.log(feature);
         feature = [...feature, [lng, lat]];
         dispatch(setDrawingProps({ feature }));
       },
@@ -43,5 +46,19 @@ export default function usePolygonHandler() {
     onMouseEnter: (e) => {
       dispatch(setCursor("crosshair"));
     },
+    onDblClick: useCallback(
+      (e) => {
+        console.log("Double click");
+        if (!drawingProps?.feature) return;
+
+        const { lng, lat } = e.lngLat;
+        const feature = drawingProps.feature;
+        const lastPoint = feature[0];
+        const finalFeature = [...feature, [lng, lat], lastPoint];
+        dispatch(setDrawingProps({ feature: finalFeature }));
+        dispatch(setDrawMode(DRAW_MODES.FREE));
+      },
+      [drawingProps],
+    ),
   };
 }

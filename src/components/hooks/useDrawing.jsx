@@ -18,6 +18,7 @@ export default function useDrawing() {
   const cursor = useSelector((state) => getCursor(state));
   const handlers = useDrawHandlers();
   const disableInteraction = () => {
+    dispatch(setDrawingProps(null));
     dispatch(
       setInteractivity({
         scrollZoom: false,
