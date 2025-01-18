@@ -25,8 +25,6 @@ export default function useLineHandler() {
       },
       [drawingProps],
     ),
-    onMouseEnter: (e) => {
-      dispatch(setCursor("crosshair"));
-    },
+    onMouseEnter: (e) => {},
   };
 }

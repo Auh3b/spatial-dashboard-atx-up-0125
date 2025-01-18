@@ -1,9 +1,5 @@
 import { useDispatch } from "react-redux";
-import {
-  setCursor,
-  setDrawingProps,
-  setDrawMode,
-} from "../../../store/mapStore";
+import { setDrawingProps, setDrawMode } from "../../../store/mapStore";
 import { DRAW_MODES } from "../../../utils/drawingUtils";
 
 export default function usePointHandler() {
@@ -17,9 +13,6 @@ export default function usePointHandler() {
       dispatch(setDrawingProps({ feature: [[lng, lat]] }));
       dispatch(setDrawMode(DRAW_MODES.FREE));
     },
-    onMouseEnter: (e) => {
-      console.log(e.lngLat);
-      dispatch(setCursor("crosshair"));
-    },
+    onMouseEnter: (e) => {},
   };
 }

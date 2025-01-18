@@ -2,7 +2,7 @@ import { GeoJsonLayer } from "@deck.gl/layers";
 import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addLayer, removeLayer, setPopup } from "../../store/mapStore";
-import { booleanIntersects } from "@turf/turf";
+import { booleanIntersects, polygon } from "@turf/turf";
 
 const id = "country-layer";
 const name = "Country Layer";
@@ -13,16 +13,17 @@ const type = "category";
 export default function CountriesLayer() {
   const overlay = useSelector((state) => state.map.drawingProps);
   const dispatch = useDispatch();
-
-  // const getFilColor = useCallback(
-  //   (feature) => {
-  //     if (!overlay) return [200, 0, 0, 150];
-  //     const intersected = booleanIntersects(feature, overlay.feature);
-  //     if (!intersected) return [200, 0, 0, 150];
-  //     return [62, 132, 201, 150];
-  //   },
-  //   [overlay],
-  // );
+  // console.log(overlay);
+  const getFilColor = useCallback(
+    (feature) => {
+      if (!overlay) return [200, 0, 0, 150];
+      const overlayFeature = polygon([overlay.feature]);
+      const intersected = booleanIntersects(feature, overlayFeature);
+      if (!intersected) return [200, 0, 0, 150];
+      return [62, 132, 201, 150];
+    },
+    [overlay],
+  );
 
   useEffect(() => {
     dispatch(
@@ -37,7 +38,7 @@ export default function CountriesLayer() {
             labels,
           },
         },
-      })
+      }),
     );
 
     return () => dispatch(removeLayer(id));
@@ -46,8 +47,8 @@ export default function CountriesLayer() {
   return new GeoJsonLayer({
     id,
     data: "src/data/countries.geojson",
-    // getFillColor: (feature) => getFilColor(feature),
-    getFillColor: [200, 0, 0, 100],
+    getFillColor: (feature) => getFilColor(feature),
+    // getFillColor: [200, 0, 0, 100],
     getLineColor: [200, 0, 0],
     getLineWidth: 1,
     lineWidthUnits: "pixels",
@@ -62,11 +63,11 @@ export default function CountriesLayer() {
           content:
             object.properties["NAME_EN"] ||
             "If your seeing this, change the field value 😉",
-        })
+        }),
       );
     },
-    // updateTriggers: {
-    //   getFillColor: overlay,
-    // },
+    updateTriggers: {
+      getFillColor: overlay,
+    },
   });
 }

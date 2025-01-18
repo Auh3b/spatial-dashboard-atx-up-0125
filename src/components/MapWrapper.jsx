@@ -2,6 +2,7 @@ import DeckGLOverlay from "./maps/DeckGLOverlay";
 import layers from "./layers";
 import {
   getBasemapUrl,
+  getCursor,
   getInteractivity,
   getViewState,
   setViewState,
@@ -34,6 +35,7 @@ function MapWrapper() {
     (state) => `mapbox://styles/mapbox/${getBasemapUrl(state)}`,
   );
   const interactivity = useSelector((state) => getInteractivity(state));
+  const cursor = useSelector((state) => getCursor(state));
   const { mode, startDrawing, stopDrawing, handlers } = useDrawing();
   const [popupInfo, setPopupInfo] = useState(null);
   const [geojsonData, setGeojsonData] = useState(null);
@@ -83,6 +85,7 @@ function MapWrapper() {
     <div style={{ flexGrow: 1 }}>
       <Map
         initialViewState={INITIAL_VIEW_STATE}
+        cursor="pointer"
         {...viewState}
         {...interactivity}
         {...eventHandlers}

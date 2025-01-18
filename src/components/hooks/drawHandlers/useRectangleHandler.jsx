@@ -1,11 +1,7 @@
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { extractCoordinate, makeRectangle } from "../../../utils/geoFunc";
-import {
-  setCursor,
-  setDrawingProps,
-  setDrawMode,
-} from "../../../store/mapStore";
+import { setDrawingProps, setDrawMode } from "../../../store/mapStore";
 import { DRAW_MODES } from "../../../utils/drawingUtils";
 
 export default function useRectangleHandler() {
@@ -35,14 +31,12 @@ export default function useRectangleHandler() {
         const end = [lng, lat];
         const rectFeature = makeRectangle(start, end);
         const raw_coord = extractCoordinate(rectFeature);
+        setStart(null);
         dispatch(setDrawingProps({ feature: raw_coord }));
         dispatch(setDrawMode(DRAW_MODES.FREE));
-        dispatch(setCursor("grab"));
       },
       [start],
     ),
-    onMouseEnter: (e) => {
-      dispatch(setCursor("crosshair"));
-    },
+    onMouseEnter: (e) => {},
   };
 }

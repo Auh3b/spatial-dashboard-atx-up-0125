@@ -43,12 +43,9 @@ export default function usePolygonHandler() {
       },
       [drawingProps],
     ),
-    onMouseEnter: (e) => {
-      dispatch(setCursor("crosshair"));
-    },
+    onMouseEnter: (e) => {},
     onDblClick: useCallback(
       (e) => {
-        console.log("Double click");
         if (!drawingProps?.feature) return;
 
         const { lng, lat } = e.lngLat;

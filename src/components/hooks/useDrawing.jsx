@@ -49,10 +49,12 @@ export default function useDrawing() {
   };
 
   const setDrawingMode = (value) => {
+    dispatch(setCursor("crosshair"));
     dispatch(setDrawMode(value));
   };
 
   const startDrawing = (value) => {
+    dispatch(setCursor("auto"));
     setDrawingMode(value);
   };
 
@@ -61,6 +63,11 @@ export default function useDrawing() {
   };
 
   const { current: map } = useMap();
+  useEffect(() => {
+    if (map) {
+      console.log(map.getCursor());
+    }
+  }, [mode, map]);
 
   useEffect(() => {
     if (mode === DRAW_MODES.FREE) {
@@ -68,16 +75,7 @@ export default function useDrawing() {
     } else {
       disableInteraction();
     }
-  }, [mode, cursor]);
-
-  useEffect(() => {
-    if (map) {
-      map.getCanvas().style.cursor = cursor;
-    }
-    return () => {
-      dispatch(setCursor("grab"));
-    };
-  }, [map, cursor]);
+  }, [mode]);
 
   return { mode, startDrawing, stopDrawing, handlers };
 }

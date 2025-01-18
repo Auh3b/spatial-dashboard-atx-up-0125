@@ -5,11 +5,7 @@ import {
   makeCircle,
 } from "../../../utils/geoFunc";
 import { useDispatch } from "react-redux";
-import {
-  setCursor,
-  setDrawingProps,
-  setDrawMode,
-} from "../../../store/mapStore";
+import { setDrawingProps, setDrawMode } from "../../../store/mapStore";
 import { DRAW_MODES } from "../../../utils/drawingUtils";
 
 export default function useCircleHandler() {
@@ -44,12 +40,9 @@ export default function useCircleHandler() {
         setCenter(null);
         dispatch(setDrawingProps({ feature: raw_coord }));
         dispatch(setDrawMode(DRAW_MODES.FREE));
-        dispatch(setCursor("grab"));
       },
       [center],
     ),
-    onMouseEnter: (e) => {
-      dispatch(setCursor("crosshair"));
-    },
+    onMouseEnter: (e) => {},
   };
 }
