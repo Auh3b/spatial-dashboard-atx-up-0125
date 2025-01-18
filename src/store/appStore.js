@@ -55,5 +55,6 @@ export const setBatchData = (payload) => ({
 export const getDarkMode = (state) => state.app.darkMode;
 export const getFeedback = (state) => state.app.feedback;
 export const getData = (state, name) => state.app.data[name];
+export const getAllData = (state) => state.app.data;
 
 export default appStore.reducer;

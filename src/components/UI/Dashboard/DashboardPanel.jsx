@@ -19,7 +19,7 @@ const contentData = {
     title: "layers",
   },
   2: {
-    title: "table",
+    title: "tables",
   },
   3: {
     title: "File upload",

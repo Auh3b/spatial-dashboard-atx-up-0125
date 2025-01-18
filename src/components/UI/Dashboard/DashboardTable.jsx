@@ -1,58 +1,158 @@
-import { Box, Typography, Button, Modal } from "@mui/material";
-import React, { Fragment, useState } from "react";
-import DataTable from "../../DataTable";
+import {
+  Box,
+  Typography,
+  Modal,
+  Grid2,
+  IconButton,
+  CircularProgress,
+  Paper,
+  Link,
+  Divider,
+} from "@mui/material";
+import React, { Fragment, useMemo, useState } from "react";
+import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
+import CloseIcon from "@mui/icons-material/Close";
+import { useSelector } from "react-redux";
+import { getAllData } from "../../../store/appStore";
+import { isEmpty } from "lodash";
+import useGeoWorker from "../../hooks/useGeoWorker";
+import { METHOD_NAMES } from "../../../workers/geoWorker/methods/methodUtils";
+import { DataGrid } from "@mui/x-data-grid";
+import { format } from "d3";
 
 export default function DashboardTable({ selected, index }) {
-  const [openTable, setOpenTable] = useState(false);
-  const [tableData, setTableData] = useState([]);
-  // Open/Close DataTable Modal
-  const handleOpenTable = () => setOpenTable(true);
-  const handleCloseTable = () => setOpenTable(false);
+  const [selectedSource, setSelectedSource] = useState(null);
+  const _datasets = useSelector((state) => getAllData(state));
+  const data = useMemo(() => {
+    if (isEmpty(_datasets)) return false;
+    return Object.values(_datasets);
+  }, [_datasets]);
+
+  const handleOpen = (e) => {
+    setSelectedSource(e);
+  };
+  const handleClose = () => {
+    setSelectedSource(null);
+  };
+
   return (
     <Fragment>
       {selected === index && (
-        <Fragment>
-          <Box sx={{ p: 2 }}>
-            <Button
-              variant="contained"
-              color="info"
-              fullWidth
-              onClick={handleOpenTable}>
-              Open Tables
-            </Button>
-          </Box>
-
-          {/* Data Table Modal */}
-          <Modal open={openTable} onClose={handleCloseTable}>
-            <Box
-              sx={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: "80%",
-                height: "80%",
-                bgcolor: "background.paper",
-                boxShadow: 24,
-                p: 4,
-                borderRadius: 2,
-                overflowY: "auto",
-              }}>
-              <Typography id="datatable-modal-title" variant="h6" gutterBottom>
-                Data Table
-              </Typography>
-              <DataTable data={tableData} />
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={handleCloseTable}
-                sx={{ marginTop: 2, float: "right" }}>
-                Close
-              </Button>
-            </Box>
-          </Modal>
-        </Fragment>
+        <Box sx={{ p: 1 }}>
+          {data &&
+            data.map(({ name, ...rest }) => (
+              <DataItem
+                key={name}
+                source={name}
+                {...rest}
+                onOpen={handleOpen}
+              />
+            ))}
+          {selectedSource && data && (
+            <DataViewModel
+              source={selectedSource}
+              dataset={_datasets}
+              onClose={handleClose}
+            />
+          )}
+        </Box>
       )}
     </Fragment>
+  );
+}
+
+function DataViewModel({ source, dataset, onClose }) {
+  const d = useMemo(() => dataset[source], [source, dataset]);
+  const open = Boolean(source);
+  console.log(source, d.title);
+  return (
+    <Modal open={open}>
+      <Grid2
+        container
+        alignItems={"center"}
+        justifyContent={"center"}
+        sx={{ height: "100%" }}>
+        <Paper sx={{ p: 4, width: "650px" }}>
+          <Grid2 container justifyContent={"space-between"}>
+            <Typography variant="subtitle1">{d.title}</Typography>
+            <IconButton onClick={onClose}>
+              <CloseIcon />
+            </IconButton>
+          </Grid2>
+          <DataView source={source} type={d.type} />
+        </Paper>
+      </Grid2>
+    </Modal>
+  );
+}
+
+function DataView({ source, type }) {
+  const { isLoading, data } = useGeoWorker({
+    name: METHOD_NAMES.GET_DATA,
+    params: { name: source },
+  });
+  console.log(isLoading, data);
+  const columns = [
+    {
+      field: "id",
+      headerName: "ID",
+      width: 90,
+    },
+    {
+      field: "lat",
+      headerName: "Latitude",
+      width: 90,
+    },
+    {
+      field: "lng",
+      headerName: "Longitude",
+      width: 90,
+    },
+  ];
+  return (
+    <Box>
+      {!isLoading && data ? (
+        <DataGrid
+          density={"compact"}
+          rows={data}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 5 },
+            },
+          }}
+          pageSizeOptions={[5, 10]}
+        />
+      ) : (
+        <Box>
+          <CircularProgress />
+        </Box>
+      )}
+    </Box>
+  );
+}
+
+function DataItem({ title, source, loaded, volume, onOpen }) {
+  const handleOpen = () => {
+    onOpen(source);
+  };
+  return (
+    <Box sx={{ mb: 2 }}>
+      <Grid2 container justifyContent={"space-between"}>
+        <Grid2 container direction={"column"} alignItems={"start"}>
+          <Typography
+            sx={{ fontSize: "0.65rem", lineHeight: "1.25rem" }}
+            variant="overline">
+            {title}
+          </Typography>
+          <Typography variant={"caption"}>
+            {format(",")(volume)} Items
+          </Typography>
+        </Grid2>
+        <Link disabled={!loaded} onClick={handleOpen} color="inherit">
+          <ArrowOutwardIcon fontSize="small" />
+        </Link>
+      </Grid2>
+    </Box>
   );
 }
