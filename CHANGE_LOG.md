@@ -43,3 +43,15 @@
 - Optimised Layer styling.
 - Fix popup misalignment on countries layer.
 - Testing and Polishing is ongoing
+
+## 16/01/2025
+
+### GeoFence Drawing Tool
+
+- Optimised custom drawing tool to take account of different drawing states i.e. `free`, `point`, `circle`, `rectange`, and `polygon`
+
+### Testing and Optimisation
+
+- Added custom navigation item
+
+## 17/01/2025
