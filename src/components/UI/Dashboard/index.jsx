@@ -1,5 +1,4 @@
 import { Grid2 } from "@mui/material";
-import React from "react";
 import DashboardPanel from "./DashboardPanel";
 import MapWrapper from "../../MapWrapper";
 import useGeoWorker from "../../hooks/useGeoWorker";
@@ -25,7 +24,7 @@ export default function index() {
     dequal,
   );
   return (
-    <Grid2 container sx={{ width: "100%", height: "100%" }}>
+    <Grid2 container sx={{ flexGrow: 1 }}>
       <DashboardPanel />
       <MapWrapper />
     </Grid2>

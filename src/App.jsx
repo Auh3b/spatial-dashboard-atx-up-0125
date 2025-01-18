@@ -2,11 +2,11 @@ import "./App.css";
 import React from "react";
 import { Provider } from "react-redux";
 import { store } from "./store";
-import Dashboard from "./components/UI/Dashboard";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./styles/theme";
 import { CssBaseline } from "@mui/material";
 import Feedback from "./components/UI/Feedback";
+import Layout from "./components/Layout";
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
           <div
             className="app-container"
             style={{ width: "100vw", height: "100vh" }}>
-            <Dashboard />
+            <Layout />
             <Feedback />
           </div>
         </CssBaseline>

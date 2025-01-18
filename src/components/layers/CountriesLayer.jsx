@@ -55,7 +55,6 @@ export default function CountriesLayer() {
 
     return () => dispatch(removeLayer(id));
   }, []);
-  console.log(data);
 
   if (data)
     return new GeoJsonLayer({
