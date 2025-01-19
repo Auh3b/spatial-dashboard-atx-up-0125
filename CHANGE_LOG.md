@@ -55,3 +55,9 @@
 - Added custom navigation item
 
 ## 17/01/2025
+
+### Testing and Optimisation
+
+- Added worker for processing data and provide a single source of truth on different thread.
+- Implemented table view of loaded data
+- UI improvements
