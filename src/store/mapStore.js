@@ -10,6 +10,8 @@ const INITIAL_VIEW_STATE = {
 
 const initialState = {
   viewState: INITIAL_VIEW_STATE,
+  selectedLayer: null,
+  filteredData: null,
   layers: {},
   country: "",
   interactivity: {
@@ -30,8 +32,9 @@ const initialState = {
   },
   basemapUrl: "dark-v10",
   drawMode: DRAW_MODES.FREE,
-  cursor: "default",
+  isDrawing: false,
   drawingProps: null,
+  cursor: "default",
 };
 
 const mapStore = createSlice({
@@ -86,6 +89,21 @@ const mapStore = createSlice({
     },
     setCursor: (state, action) => {
       state.cursor = action.payload;
+    },
+    setSelectedLayer: (state, action) => {
+      state.selectedLayer = action.payload;
+    },
+    removeSelectedLayer: (state) => {
+      state.selectedLayer = null;
+    },
+    setIsDrawing: (state, action) => {
+      state.isDrawing = action.payload;
+    },
+    setFilteredData: (state, action) => {
+      state.filteredData = action.payload;
+    },
+    removeFilteredData: (state) => {
+      state.filteredData = null;
     },
   },
 });
@@ -145,6 +163,29 @@ export const setCursor = (payload) => ({
   payload,
 });
 
+export const setSelectedLayer = (payload) => ({
+  type: "map/setSelectedLayer",
+  payload,
+});
+
+export const removeSelectedLayer = () => ({
+  type: "map/removeSelectedLayer",
+});
+
+export const setIsDrawing = (payload) => ({
+  type: "map/setIsDrawing",
+  payload,
+});
+
+export const setFilteredData = (payload) => ({
+  type: "map/setFilteredData",
+  payload,
+});
+
+export const removeFilteredData = () => ({
+  type: "map/removeFilteredData",
+});
+
 // Accessors
 
 export const getViewState = (state) => {
@@ -177,6 +218,18 @@ export const getInteractivity = (state) => {
 
 export const getCursor = (state) => {
   return state.map.cursor;
+};
+
+export const getSelectedLayer = (state) => {
+  return state.map.selectedLayer;
+};
+
+export const getIsDrawing = (state) => {
+  return state.map.isDrawing;
+};
+
+export const getFilteredData = (state) => {
+  return state.map.filteredData;
 };
 
 export default mapStore.reducer;

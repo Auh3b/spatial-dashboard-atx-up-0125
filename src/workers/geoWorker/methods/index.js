@@ -1,6 +1,8 @@
 import { parse } from "@loaders.gl/core";
 import { LOADER_TYPE, loaders } from "./methodUtils";
 import { v4 } from "uuid";
+import { makePoint, makePolygon } from "../../../utils/geoFunc";
+import { booleanIntersects, featureCollection } from "@turf/turf";
 
 let datasets = {};
 
@@ -31,6 +33,15 @@ export function getData(params) {
     return new Promise((resolve) => resolve(datasets[name].data));
   }
   throw Error("Data not loaded");
+}
+
+export async function getFilteredData(params) {
+  const { source, isDrawing, feature } = params;
+  if (!datasets[source]) throw Error("Invalid selection");
+  if (isDrawing) throw Error("Please finish drawing");
+  if (!feature) throw Error("Please draw point or spatial boundary");
+  const filtered = applySpatialFilter(params);
+  return new Promise((resolve) => resolve(filtered));
 }
 
 function setData(params) {
@@ -77,4 +88,41 @@ function getDataSchema(data, type) {
     return Object.keys(data.features[0].properties);
   }
   return Object.keys(data[0]);
+}
+
+function applySpatialFilter(params) {
+  const { source, type, feature } = params;
+
+  const overlay = makePolygon([feature.feature]);
+  let target = datasets[source].data;
+  console.log(target);
+
+  if (type !== LOADER_TYPE.GEOJSON) {
+    target = featureCollection(target.map((d) => makePoint([d.lng, d.lat])));
+  }
+
+  let _output = [];
+  const features = target.features;
+
+  for (let i = 0; i < features.length; i++) {
+    const element = features[i];
+    if (booleanIntersects(element, overlay)) {
+      _output = [..._output, element];
+    }
+  }
+
+  const count = _output.length;
+
+  if (type === LOADER_TYPE.GEOJSON) {
+    return {
+      count,
+      data: featureCollection(_output),
+    };
+  }
+
+  const output = _output.map((d) => d.properties);
+  return {
+    count,
+    data: output,
+  };
 }

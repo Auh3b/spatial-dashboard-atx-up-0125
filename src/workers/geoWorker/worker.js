@@ -1,10 +1,11 @@
 import { expose } from "comlink";
 import { METHOD_NAMES } from "./methods/methodUtils";
-import { fetchData, getData } from "./methods";
+import { fetchData, getData, getFilteredData } from "./methods";
 
 const METHODS = {
   [METHOD_NAMES.FETCH_DATA]: fetchData,
   [METHOD_NAMES.GET_DATA]: getData,
+  [METHOD_NAMES.GET_FILTERED_DATA]: getFilteredData,
 };
 
 const executeMethod = async (methodName, params) => {

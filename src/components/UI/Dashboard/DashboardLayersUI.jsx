@@ -1,34 +1,66 @@
-import React, { Fragment, useMemo } from "react";
-import { useSelector } from "react-redux";
-import { getLayers } from "../../../store/mapStore";
+import React, { Fragment, useCallback, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getLayers,
+  getSelectedLayer,
+  removeSelectedLayer,
+  setSelectedLayer,
+} from "../../../store/mapStore";
 import { Box, Divider, Grid2, Typography } from "@mui/material";
 import { zip } from "d3";
 
 export default function DashboardLayersUI({ selected, index }) {
   const _layers = useSelector((state) => getLayers(state));
   const layers = useMemo(() => Object.values(_layers), [_layers]);
+  const selectedLayer = useSelector((state) => getSelectedLayer(state));
   return (
     <Fragment>
       {selected === index && (
         <Box>
           {Boolean(layers.length) &&
-            layers.map((d) => <LayerUI key={d.id} {...d} />)}
+            layers.map((d) => (
+              <LayerUI key={d.id} {...d} selected={selectedLayer} />
+            ))}
         </Box>
       )}
     </Fragment>
   );
 }
 
-function LayerUI({ id, name, legend }) {
+function LayerUI({ id, name, legend, selected }) {
+  const dispatch = useDispatch();
+  const handleClick = useCallback(() => {
+    if (selected !== id) {
+      dispatch(setSelectedLayer(id));
+      return;
+    }
+    dispatch(removeSelectedLayer());
+  }, [selected]);
+  const isSelected = selected === id;
   return (
-    <Box>
-      <Grid2 container direction={"column"}>
-        <Typography variant={"overline"} sx={{ pl: 1, fontSize: "0.65rem" }}>
-          {name}
-        </Typography>
-        <Legend {...legend} />
-        <Divider variant="vertical" flexItem />
+    <Box
+      sx={{
+        "&:hover": {
+          cursor: "pointer",
+        },
+      }}
+      onClick={handleClick}>
+      <Grid2 container>
+        <Grid2 container direction={"column"} sx={{ flexGrow: 1 }}>
+          <Typography variant={"overline"} sx={{ pl: 1, fontSize: "0.65rem" }}>
+            {name}
+          </Typography>
+          <Legend {...legend} />
+        </Grid2>
+        <Box
+          sx={{
+            width: 4,
+            backgroundColor: (theme) =>
+              isSelected ? theme.palette.primary.dark : "unset",
+          }}
+        />
       </Grid2>
+      <Divider variant="vertical" />
     </Box>
   );
 }
