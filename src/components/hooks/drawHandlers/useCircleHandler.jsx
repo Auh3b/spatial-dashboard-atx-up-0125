@@ -25,7 +25,9 @@ export default function useCircleHandler() {
         const radius = getDistance(center, end);
         const circleFeature = makeCircle(center, radius);
         const raw_coord = extractCoordinate(circleFeature);
-        dispatch(setDrawingProps({ feature: raw_coord }));
+        dispatch(
+          setDrawingProps({ feature: raw_coord, type: DRAW_MODES.CIRCLE }),
+        );
       },
       [center],
     ),
@@ -43,7 +45,9 @@ export default function useCircleHandler() {
         const circleFeature = makeCircle(center, radius);
         const raw_coord = extractCoordinate(circleFeature);
         setCenter(null);
-        dispatch(setDrawingProps({ feature: raw_coord }));
+        dispatch(
+          setDrawingProps({ feature: raw_coord, type: DRAW_MODES.CIRCLE }),
+        );
         dispatch(setIsDrawing(false));
         dispatch(setDrawMode(DRAW_MODES.FREE));
       },

@@ -7,6 +7,7 @@ import {
   CircularProgress,
   Paper,
   Link,
+  Divider,
 } from "@mui/material";
 import React, { Fragment, useMemo, useState } from "react";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
@@ -78,6 +79,7 @@ function DataViewModel({ source, dataset, onClose }) {
               <CloseIcon />
             </IconButton>
           </Grid2>
+          <Divider sx={{ mb: 2 }} />
           <DataView source={source} type={d.type} schema={d.schema} />
         </Paper>
       </Grid2>
@@ -101,10 +103,9 @@ function DataView({ source, type, schema }) {
           columns={columns}
           initialState={{
             pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
+              paginationModel: { page: 0, pageSize: 10 },
             },
           }}
-          pageSizeOptions={[5, 10]}
         />
       ) : (
         <Box>

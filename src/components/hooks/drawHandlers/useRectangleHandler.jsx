@@ -20,7 +20,9 @@ export default function useRectangleHandler() {
         const end = [lng, lat];
         const rectFeature = makeRectangle(start, end);
         const raw_coord = extractCoordinate(rectFeature);
-        dispatch(setDrawingProps({ feature: raw_coord }));
+        dispatch(
+          setDrawingProps({ feature: raw_coord, type: DRAW_MODES.RECTANGLE }),
+        );
       },
       [start],
     ),
@@ -37,7 +39,9 @@ export default function useRectangleHandler() {
         const rectFeature = makeRectangle(start, end);
         const raw_coord = extractCoordinate(rectFeature);
         setStart(null);
-        dispatch(setDrawingProps({ feature: raw_coord }));
+        dispatch(
+          setDrawingProps({ feature: raw_coord, type: DRAW_MODES.RECTANGLE }),
+        );
         dispatch(setIsDrawing(false));
         dispatch(setDrawMode(DRAW_MODES.FREE));
       },

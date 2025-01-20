@@ -61,3 +61,9 @@
 - Added worker for processing data and provide a single source of truth on different thread.
 - Implemented table view of loaded data
 - UI improvements
+
+## 20/01/2025
+
+## GeoFence Drawing Tool
+
+- Drawing tools can will highlight overlapping features. Only effective on polygon based layers.

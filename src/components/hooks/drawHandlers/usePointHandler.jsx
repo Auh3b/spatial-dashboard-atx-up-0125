@@ -16,7 +16,9 @@ export default function usePointHandler() {
     },
     onMouseUp: (e) => {
       const { lng, lat } = e.lngLat;
-      dispatch(setDrawingProps({ feature: [[lng, lat]] }));
+      dispatch(
+        setDrawingProps({ feature: [[lng, lat]], type: DRAW_MODES.POINT }),
+      );
       dispatch(setIsDrawing(false));
       dispatch(setDrawMode(DRAW_MODES.FREE));
     },

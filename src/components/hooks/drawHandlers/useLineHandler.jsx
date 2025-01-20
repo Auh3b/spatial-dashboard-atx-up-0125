@@ -1,6 +1,7 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getDrawingProps, setDrawingProps } from "../../../store/mapStore";
+import { DRAW_MODES } from "../../../utils/drawingUtils";
 
 export default function useLineHandler() {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ export default function useLineHandler() {
           feature = drawingProps.feature;
         }
         feature = [...feature, [lng, lat]];
-        dispatch(setDrawingProps({ feature }));
+        dispatch(setDrawingProps({ feature, type: DRAW_MODES.LINE }));
       },
       [drawingProps],
     ),

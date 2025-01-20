@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getLayers,
   getSelectedLayer,
+  removeFilteredData,
   removeSelectedLayer,
+  setDrawingProps,
   setSelectedLayer,
 } from "../../../store/mapStore";
 import { Box, Divider, Grid2, Typography } from "@mui/material";
@@ -34,6 +36,8 @@ function LayerUI({ id, name, legend, selected }) {
       dispatch(setSelectedLayer(id));
       return;
     }
+    dispatch(removeFilteredData());
+    dispatch(setDrawingProps(null));
     dispatch(removeSelectedLayer());
   }, [selected]);
   const isSelected = selected === id;

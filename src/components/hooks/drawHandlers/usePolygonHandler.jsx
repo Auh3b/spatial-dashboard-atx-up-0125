@@ -26,7 +26,7 @@ export default function usePolygonHandler() {
           feature = drawingProps.feature;
         }
         feature = [...feature, [lng, lat]];
-        dispatch(setDrawingProps({ feature }));
+        dispatch(setDrawingProps({ feature, type: DRAW_MODES.POLYGON }));
       },
       [drawingProps],
     ),
@@ -39,7 +39,9 @@ export default function usePolygonHandler() {
         const feature = drawingProps.feature;
         const lastPoint = feature[0];
         const finalFeature = [...feature, [lng, lat], lastPoint];
-        dispatch(setDrawingProps({ feature: finalFeature }));
+        dispatch(
+          setDrawingProps({ feature: finalFeature, type: DRAW_MODES.POLYGON }),
+        );
         dispatch(setIsDrawing(false));
         dispatch(setDrawMode(DRAW_MODES.FREE));
       },

@@ -4,8 +4,8 @@ import { bboxPolygon, circle, distance, point, polygon } from "@turf/turf";
  *
  * @param {Array<number>} value
  */
-export function makePoint(value) {
-  return point(value);
+export function makePoint(value, props = {}) {
+  return point(value, props);
 }
 
 /**

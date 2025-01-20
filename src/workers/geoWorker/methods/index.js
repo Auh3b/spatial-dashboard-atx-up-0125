@@ -3,6 +3,7 @@ import { LOADER_TYPE, loaders } from "./methodUtils";
 import { v4 } from "uuid";
 import { makePoint, makePolygon } from "../../../utils/geoFunc";
 import { booleanIntersects, featureCollection } from "@turf/turf";
+import { DRAW_MODES, featureHandler } from "../../../utils/drawingUtils";
 
 let datasets = {};
 
@@ -93,19 +94,32 @@ function getDataSchema(data, type) {
 function applySpatialFilter(params) {
   const { source, type, feature } = params;
 
-  const overlay = makePolygon([feature.feature]);
+  let overlay;
+
+  if (feature.type === DRAW_MODES.POINT) {
+    overlay = featureHandler[feature.type](feature.feature[0]);
+  } else {
+    overlay = featureHandler[feature.type]([feature.feature]);
+  }
+
   let target = datasets[source].data;
 
   if (type !== LOADER_TYPE.GEOJSON) {
-    target = featureCollection(target.map((d) => makePoint([d.lng, d.lat])));
+    target = featureCollection(
+      target.map((d) => {
+        if (d.lat && d.lng) {
+          return makePoint([d.lng, d.lat], { ...d });
+        }
+      }),
+    );
   }
 
   let _output = [];
   const features = target.features;
-
   for (let i = 0; i < features.length; i++) {
     const element = features[i];
-    if (booleanIntersects(element, overlay)) {
+
+    if (element && booleanIntersects(element, overlay)) {
       _output = [..._output, element];
     }
   }

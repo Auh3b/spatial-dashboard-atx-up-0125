@@ -25,8 +25,10 @@ export const getFilteredParams = (state) => {
     source,
     ...sourceDetails,
     isDrawing,
-    feature: {
-      ...coords,
-    },
+    feature: coords
+      ? {
+          ...coords,
+        }
+      : null,
   };
 };
