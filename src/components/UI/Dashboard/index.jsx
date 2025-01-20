@@ -8,6 +8,7 @@ import { dequal } from "dequal";
 import { useDispatch } from "react-redux";
 import { setBatchData } from "../../../store/appStore";
 import queue from "../../../data/queue";
+import MapActionContextUI from "../MapActionsUI";
 
 const name = METHOD_NAMES.FETCH_DATA;
 
@@ -26,7 +27,10 @@ export default function index() {
   return (
     <Grid2 container sx={{ flexGrow: 1 }}>
       <DashboardPanel />
-      <MapWrapper />
+      <Grid2 container direction={"column"} flexGrow={1}>
+        <MapActionContextUI />
+        <MapWrapper />
+      </Grid2>
     </Grid2>
   );
 }

@@ -18,6 +18,7 @@ import { fetchGADMData } from "./Api";
 import * as turf from "@turf/turf";
 import useDrawing from "./hooks/useDrawing";
 import MapNav from "./UI/MapNav";
+import MapActionContextUI from "./UI/MapActionsUI";
 
 const ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_API_TOKEN;
 
@@ -36,7 +37,7 @@ function MapWrapper() {
   );
   const interactivity = useSelector((state) => getInteractivity(state));
   const cursor = useSelector((state) => getCursor(state));
-  const { mode, startDrawing, stopDrawing, handlers } = useDrawing();
+  const { mode, handlers } = useDrawing();
   const [popupInfo, setPopupInfo] = useState(null);
   const [geojsonData, setGeojsonData] = useState(null);
   const [mapStyle, setMapStyle] = useState(
@@ -92,7 +93,7 @@ function MapWrapper() {
         onMove={handleViewStateChange}
         mapStyle={basemapUrl}
         mapboxAccessToken={ACCESS_TOKEN}>
-        <DrawTools mode={mode} onStart={startDrawing} onStop={stopDrawing} />
+        {/* <DrawTools mode={mode} onStart={startDrawing} onStop={stopDrawing} /> */}
         <MapNav />
         <DeckGLOverlay layers={layers()} interleaved />
         <MapPopup />
