@@ -66,4 +66,4 @@
 
 ## GeoFence Drawing Tool
 
-- Drawing tools can will highlight overlapping features. Only effective on polygon based layers.
+- Drawing tools can will highlight overlapping features. Only polygon features are highlighted.
