@@ -25,9 +25,9 @@ export default function index() {
     dequal,
   );
   return (
-    <Grid2 container sx={{ flexGrow: 1 }}>
+    <Grid2 container sx={{ flexGrow: 1 }} wrap={"nowrap"}>
       <DashboardPanel />
-      <Grid2 container direction={"column"} flexGrow={1}>
+      <Grid2 container direction={"column"} flexGrow={1} wrap="nowrap">
         <MapActionContextUI />
         <MapWrapper />
       </Grid2>

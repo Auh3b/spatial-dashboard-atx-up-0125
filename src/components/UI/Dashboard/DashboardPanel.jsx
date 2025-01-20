@@ -37,7 +37,7 @@ export default function DashboardPanel() {
   const { title } = useMemo(() => contentData[selectedPanel], [selectedPanel]);
   return (
     <Box height={"100%"}>
-      <Grid2 container sx={{ height: "100%" }}>
+      <Grid2 container sx={{ height: "100%" }} wrap="nowrap">
         <PanelTabs value={selectedPanel} onChange={handlePanelSelect} />
         <Divider orientation="vertical" flexItem />
         <PanelContent title={title}>

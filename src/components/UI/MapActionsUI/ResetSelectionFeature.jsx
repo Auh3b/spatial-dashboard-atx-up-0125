@@ -17,7 +17,7 @@ export default function ResetSelectionFeature() {
     dispatch(setDrawMode(DRAW_MODES.FREE));
   };
   return (
-    <Grid2 container alignItems={"center"}>
+    <Grid2 container alignItems={"center"} wrap="nowrap">
       <Typography variant="caption">reset</Typography>
       <IconButton onClick={handleClick}>
         <RestartAltIcon fontSize="small" />

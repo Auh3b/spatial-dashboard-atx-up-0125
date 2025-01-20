@@ -51,9 +51,9 @@ export default function SelectedFeatureUI() {
     <Fragment>
       {Boolean(dataTableProps) && (
         <Fragment>
-          <Grid2 container alignItems={"center"} gap={1}>
-            <Typography variant="caption">
-              {dataTableProps.count} Selected Features
+          <Grid2 container alignItems={"center"} gap={1} wrap="nowrap">
+            <Typography variant="caption" noWrap>
+              {dataTableProps.count} selected features
             </Typography>
             <IconButton onClick={handleOpen}>
               <TableChartIcon fontSize="small" />
