@@ -1,4 +1,12 @@
-import { Box, Grid2, Tab, Typography, Tabs, Divider } from "@mui/material";
+import {
+  Box,
+  Grid2,
+  Tab,
+  Typography,
+  Tabs,
+  Divider,
+  Tooltip,
+} from "@mui/material";
 import React, { useMemo, useState } from "react";
 import HomeIcon from "@mui/icons-material/Home";
 import LayersIcon from "@mui/icons-material/Layers";
@@ -55,7 +63,7 @@ export default function DashboardPanel() {
 
 function PanelContent({ title, children }) {
   return (
-    <Box sx={{ minWidth: "250px" }}>
+    <Box sx={{ width: "250px" }}>
       <Grid2 container direction={"column"}>
         <Typography variant="overline" sx={{ p: 1 }}>
           {title}
@@ -81,11 +89,13 @@ function PanelTabs(props) {
 
 function CustomTab(props) {
   return (
-    <Tab
-      {...props}
-      sx={{
-        minWidth: "unset",
-      }}
-    />
+    <Tooltip title={contentData[props.value].title} placement="right">
+      <Tab
+        {...props}
+        sx={{
+          minWidth: "unset",
+        }}
+      />
+    </Tooltip>
   );
 }

@@ -21,6 +21,7 @@ export const getFilteredParams = (state) => {
   const isDrawing = getIsDrawing(state);
   const coords = getDrawingProps(state);
   return {
+    layer,
     source,
     ...sourceDetails,
     isDrawing,

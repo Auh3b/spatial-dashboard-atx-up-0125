@@ -7,23 +7,25 @@ import useMapActionContext from "../../hooks/useMapActionContext";
 import ResetSelectionFeature from "./ResetSelectionFeature";
 
 export default function MapActionContextUI() {
-  useMapActionContext();
+  const { layer } = useMapActionContext();
   return (
     <Fragment>
-      <Box width={"100%"} height={48}>
-        <Grid2 container direction={"column"}>
-          <Grid2
-            container
-            gap={2}
-            justifyContent={"space-between"}
-            wrap="nowrap">
-            <DrawingToolbar />
-            <SelectedFeatureUI />
-            <ResetSelectionFeature />
+      {Boolean(layer) && (
+        <Box width={"100%"} height={48}>
+          <Grid2 container direction={"column"}>
+            <Grid2
+              container
+              gap={2}
+              justifyContent={"space-between"}
+              wrap="nowrap">
+              <DrawingToolbar />
+              <SelectedFeatureUI />
+              <ResetSelectionFeature />
+            </Grid2>
+            <Divider orientation={"horizontal"} />
           </Grid2>
-          <Divider orientation={"horizontal"} />
-        </Grid2>
-      </Box>
+        </Box>
+      )}
     </Fragment>
   );
 }

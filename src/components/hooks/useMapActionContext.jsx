@@ -25,5 +25,7 @@ export default function useMapActionContext() {
     dequal,
   );
 
-  return null;
+  return {
+    layer: params.layer,
+  };
 }
