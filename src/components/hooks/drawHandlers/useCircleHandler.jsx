@@ -5,7 +5,11 @@ import {
   makeCircle,
 } from "../../../utils/geoFunc";
 import { useDispatch } from "react-redux";
-import { setDrawingProps, setDrawMode } from "../../../store/mapStore";
+import {
+  setDrawingProps,
+  setDrawMode,
+  setIsDrawing,
+} from "../../../store/mapStore";
 import { DRAW_MODES } from "../../../utils/drawingUtils";
 
 export default function useCircleHandler() {
@@ -28,6 +32,7 @@ export default function useCircleHandler() {
     onMouseDown: (e) => {
       const { lng, lat } = e.lngLat;
       setCenter([lng, lat]);
+      dispatch(setIsDrawing(true));
     },
     onMouseUp: useCallback(
       (e) => {
@@ -39,6 +44,7 @@ export default function useCircleHandler() {
         const raw_coord = extractCoordinate(circleFeature);
         setCenter(null);
         dispatch(setDrawingProps({ feature: raw_coord }));
+        dispatch(setIsDrawing(false));
         dispatch(setDrawMode(DRAW_MODES.FREE));
       },
       [center],

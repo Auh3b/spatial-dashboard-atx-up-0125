@@ -4,6 +4,7 @@ import {
   getDrawingProps,
   setDrawingProps,
   setDrawMode,
+  setIsDrawing,
 } from "../../../store/mapStore";
 import { DRAW_MODES } from "../../../utils/drawingUtils";
 
@@ -16,6 +17,7 @@ export default function usePolygonHandler() {
     onMouseDown: () => undefined,
     onMouseUp: useCallback(
       (e) => {
+        dispatch(setIsDrawing(true));
         const { lng, lat } = e.lngLat;
         let feature;
         if (!drawingProps?.feature) {
@@ -38,6 +40,7 @@ export default function usePolygonHandler() {
         const lastPoint = feature[0];
         const finalFeature = [...feature, [lng, lat], lastPoint];
         dispatch(setDrawingProps({ feature: finalFeature }));
+        dispatch(setIsDrawing(false));
         dispatch(setDrawMode(DRAW_MODES.FREE));
       },
       [drawingProps],

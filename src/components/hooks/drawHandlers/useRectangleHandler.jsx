@@ -1,7 +1,11 @@
 import { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import { extractCoordinate, makeRectangle } from "../../../utils/geoFunc";
-import { setDrawingProps, setDrawMode } from "../../../store/mapStore";
+import {
+  setDrawingProps,
+  setDrawMode,
+  setIsDrawing,
+} from "../../../store/mapStore";
 import { DRAW_MODES } from "../../../utils/drawingUtils";
 
 export default function useRectangleHandler() {
@@ -21,6 +25,7 @@ export default function useRectangleHandler() {
       [start],
     ),
     onMouseDown: (e) => {
+      dispatch(setIsDrawing(true));
       const { lng, lat } = e.lngLat;
       setStart([lng, lat]);
     },
@@ -33,6 +38,7 @@ export default function useRectangleHandler() {
         const raw_coord = extractCoordinate(rectFeature);
         setStart(null);
         dispatch(setDrawingProps({ feature: raw_coord }));
+        dispatch(setIsDrawing(false));
         dispatch(setDrawMode(DRAW_MODES.FREE));
       },
       [start],
