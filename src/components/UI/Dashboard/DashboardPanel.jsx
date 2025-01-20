@@ -47,6 +47,7 @@ export default function DashboardPanel() {
           <DashboardUpload selected={selectedPanel} index={3} />
           <DashboardSetting selected={selectedPanel} index={4} />
         </PanelContent>
+        <Divider orientation="vertical" flexItem />
       </Grid2>
     </Box>
   );

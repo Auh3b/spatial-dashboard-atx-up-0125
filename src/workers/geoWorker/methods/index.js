@@ -95,7 +95,6 @@ function applySpatialFilter(params) {
 
   const overlay = makePolygon([feature.feature]);
   let target = datasets[source].data;
-  console.log(target);
 
   if (type !== LOADER_TYPE.GEOJSON) {
     target = featureCollection(target.map((d) => makePoint([d.lng, d.lat])));
