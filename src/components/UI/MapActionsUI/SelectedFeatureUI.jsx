@@ -46,7 +46,7 @@ export default function SelectedFeatureUI() {
   const handleClose = () => {
     setModelOpen(false);
   };
-  console.log(dataTableProps);
+
   return (
     <Fragment>
       {Boolean(dataTableProps) && (

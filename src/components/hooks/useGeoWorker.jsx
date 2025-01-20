@@ -18,7 +18,6 @@ export default function useGeoWorker({ name, params }) {
           setData(result);
         })
         .catch((e) => {
-          console.log(e);
           dispatch(
             setFeedback({
               message: "Oops! Something went wrong",

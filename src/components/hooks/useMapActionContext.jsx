@@ -19,9 +19,7 @@ export default function useMapActionContext() {
           if (!e) throw Error("Something went wrong");
           dispatch(setFilteredData(e));
         })
-        .catch((e) => {
-          dispatch(setFeedback({ message: e.message, status: "warning" }));
-        });
+        .catch((e) => {});
     },
     [params],
     dequal,

@@ -18,7 +18,6 @@ export default function useLineHandler() {
         } else {
           feature = drawingProps.feature;
         }
-        console.log(feature);
         feature = [...feature, [lng, lat]];
         dispatch(setDrawingProps({ feature }));
       },

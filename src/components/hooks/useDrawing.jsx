@@ -62,13 +62,6 @@ export default function useDrawing() {
     dispatch(setDrawMode(DRAW_MODES.FREE));
   };
 
-  const { current: map } = useMap();
-  useEffect(() => {
-    if (map) {
-      console.log(map.getCursor());
-    }
-  }, [mode, map]);
-
   useEffect(() => {
     if (mode === DRAW_MODES.FREE) {
       enableInteraction();
