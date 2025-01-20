@@ -13,10 +13,10 @@ const name = "Hexgon Layer";
 const colors = ["#0198bd", "#d1374e"];
 const labels = ["Low", "High"];
 const type = "ramp";
-const datasetName = "united_kindom_clustering";
+const source = "united_kindom_clustering";
 export default function HexAggLayer() {
   const dispatch = useDispatch();
-  const dataSet = useSelector((state) => getData(state, datasetName)) || {};
+  const dataSet = useSelector((state) => getData(state, source)) || {};
   const { isLoading, data } = useGeoWorker({
     name: METHOD_NAMES.GET_DATA,
     params: dataSet,
@@ -29,6 +29,7 @@ export default function HexAggLayer() {
         value: {
           id,
           name,
+          source,
           legend: {
             type,
             colors,

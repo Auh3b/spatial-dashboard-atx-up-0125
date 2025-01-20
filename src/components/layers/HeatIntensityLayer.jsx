@@ -11,11 +11,11 @@ const name = "Heat Map Layer";
 const colors = ["yellow", "red"];
 const labels = ["Low", "High"];
 const type = "ramp";
-const datasetName = "united_kindom_clustering";
+const source = "united_kindom_clustering";
 
 export default function HeatIntensityLayer() {
   const dispatch = useDispatch();
-  const dataSet = useSelector((state) => getData(state, datasetName)) || {};
+  const dataSet = useSelector((state) => getData(state, source)) || {};
   const { data } = useGeoWorker({
     name: METHOD_NAMES.GET_DATA,
     params: dataSet,
@@ -28,6 +28,7 @@ export default function HeatIntensityLayer() {
         value: {
           id,
           name,
+          source,
           legend: {
             type,
             colors,
