@@ -1,25 +1,25 @@
-import { GeoJsonLayer } from "@deck.gl/layers";
-import { useEffect } from "react";
+import { GeoJsonLayer } from "deck.gl";
 import { useDispatch, useSelector } from "react-redux";
+import { getData } from "../../store/appStore";
+import useGeoWorker from "../hooks/useGeoWorker";
+import { useEffect } from "react";
 import {
   addLayer,
   removeLayer,
   removePopup,
   setPopup,
 } from "../../store/mapStore";
-import { getData } from "../../store/appStore";
-import useGeoWorker from "../hooks/useGeoWorker";
 import { METHOD_NAMES } from "../../workers/geoWorker/methods/methodUtils";
 
-const id = "country-layer";
-const name = "Country Layer";
-const colors = ["#e7298a"];
-const labels = ["Country"];
+const id = "admin-1-layer";
+const name = "Admin 1 Layer";
+const colors = ["#7570b3"];
+const labels = ["Admin 2"];
 const type = "category";
 
-const datasetName = "countries";
+const datasetName = "admin_1";
 
-export default function CountriesLayer() {
+export default function Admin1Layer() {
   const dispatch = useDispatch();
 
   const dataSet = useSelector((state) => getData(state, datasetName)) || {};
@@ -52,8 +52,8 @@ export default function CountriesLayer() {
     return new GeoJsonLayer({
       id,
       data,
-      getFillColor: [231, 41, 138, 100],
-      getLineColor: [231, 41, 138],
+      getFillColor: [117, 112, 179, 100],
+      getLineColor: [117, 112, 179],
       getLineWidth: 1,
       lineWidthUnits: "pixels",
       pickable: true,
@@ -71,17 +71,16 @@ export default function CountriesLayer() {
               show: true,
               longitude,
               feature: object,
-              p_code: object.properties["adm0_a3"],
-              level: 0,
-              next_level: 1,
+              p_code: object.properties["GID_" + 1],
+              level: 1,
+              next_level: 2,
               latitude,
               content:
-                object.properties["name"] ||
+                object.properties["NAME_1"] ||
                 "If your seeing this, change the field value 😉",
             }),
           );
         }
       },
-      updateTriggers: {},
     });
 }

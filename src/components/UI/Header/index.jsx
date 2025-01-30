@@ -7,7 +7,7 @@ export default function Header() {
       <Grid2 sx={{ px: 2, py: 1 }}>
         <Typography>Site Title</Typography>
       </Grid2>
-      <Divider orientation="horizantal" />
+      <Divider orientation="horizontal" />
     </Box>
   );
 }

@@ -69,7 +69,7 @@ function PanelContent({ title, children }) {
           {title}
         </Typography>
         <Divider flexItem />
-        <Box sx={{ flexGrow: 1 }}>{children}</Box>
+        <Box>{children}</Box>
       </Grid2>
     </Box>
   );

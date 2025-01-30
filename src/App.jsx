@@ -7,6 +7,7 @@ import theme from "./styles/theme";
 import { CssBaseline } from "@mui/material";
 import Feedback from "./components/UI/Feedback";
 import Layout from "./components/Layout";
+import DataLoadingFeed from "./components/UI/DataLoadingFeed";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
             className="app-container"
             style={{ width: "100vw", height: "100vh" }}>
             <Layout />
+            <DataLoadingFeed />
             <Feedback />
           </div>
         </CssBaseline>

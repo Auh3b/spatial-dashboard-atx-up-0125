@@ -10,7 +10,7 @@ export default function DashboardHome({ selected, index }) {
             Welcome to this Dashboard!😁 '
           </Typography>
           <Typography variant={"body2"}>
-            Move to layer to begin interacting with the Dashboard
+            Right click on the admin boundary to fetch context for next level
           </Typography>
         </Box>
       )}

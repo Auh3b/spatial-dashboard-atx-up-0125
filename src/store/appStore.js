@@ -7,6 +7,10 @@ const initialState = {
     message: "",
   },
   data: {},
+  dataLoadingfeed: {
+    isLoading: false,
+    message: "",
+  },
 };
 
 const appStore = createSlice({
@@ -30,6 +34,9 @@ const appStore = createSlice({
           state.data[d.name] = d;
         });
     },
+    setDataLoadingFeed: (state, action) => {
+      state.dataLoadingfeed = action.payload;
+    },
   },
 });
 
@@ -52,8 +59,14 @@ export const setBatchData = (payload) => ({
   payload,
 });
 
+export const setDataLoadingFeed = (payload) => ({
+  type: "app/setDataLoadingFeed",
+  payload,
+});
+
 export const getDarkMode = (state) => state.app.darkMode;
 export const getFeedback = (state) => state.app.feedback;
+export const getDataLoadingFeed = (state) => state.app.dataLoadingfeed;
 export const getData = (state, name) => state.app.data[name];
 export const getAllData = (state) => state.app.data;
 

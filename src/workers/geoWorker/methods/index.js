@@ -13,9 +13,9 @@ export async function fetchData(params) {
   let volumes = {};
   let schema = {};
   for (let i = 0; i < queue.length; i++) {
-    const { name, type } = queue[i];
+    const { name, type, ...rest } = queue[i];
     const data = resolve[i];
-    const loadedData = await loadData({ name, type, data });
+    const loadedData = await loadData({ name, type, data, ...rest });
     volumes[name] = getDataVolume(loadedData, type);
     schema[name] = getDataSchema(loadedData, type);
   }
@@ -54,9 +54,12 @@ function setData(params) {
 }
 
 async function loadData(params) {
-  const { type, data, name } = params;
+  const { type, data, name, filter } = params;
   const processedData = await parse(data, loaders[type]);
-  const dataWithIds = addIds(processedData, type);
+  const filteredData = filter
+    ? applyPropertyFilter(processedData, { ...filter, fileType: type })
+    : processedData;
+  const dataWithIds = addIds(filteredData, type);
   setData({ name, data: dataWithIds });
   return dataWithIds;
 }
@@ -89,6 +92,20 @@ function getDataSchema(data, type) {
     return Object.keys(data.features[0].properties);
   }
   return Object.keys(data[0]);
+}
+
+function applyPropertyFilter(data, params) {
+  const { fileType, type, value, column } = params;
+  const filterFn = FILTER_FUNCTIONS[type](value, column);
+
+  if (fileType === LOADER_TYPE.GEOJSON) {
+    return {
+      ...data,
+      features: data.features.filter((d) => filterFn(d["properties"])),
+    };
+  }
+
+  return data.filter((d) => filterFn(d));
 }
 
 function applySpatialFilter(params) {
@@ -138,4 +155,16 @@ function applySpatialFilter(params) {
     count,
     data: output,
   };
+}
+
+export var FILTER_TYPES = {
+  IN: "in",
+};
+
+export var FILTER_FUNCTIONS = {
+  [FILTER_TYPES.IN]: filterIn,
+};
+
+function filterIn(value, column) {
+  return (d) => d[column] === value;
 }

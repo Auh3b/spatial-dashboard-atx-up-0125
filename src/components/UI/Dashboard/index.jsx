@@ -6,7 +6,11 @@ import { METHOD_NAMES } from "../../../workers/geoWorker/methods/methodUtils";
 import useCompareEffect from "../../hooks/useCompareEffect";
 import { dequal } from "dequal";
 import { useDispatch } from "react-redux";
-import { setBatchData } from "../../../store/appStore";
+import {
+  setBatchData,
+  setDataLoadingFeed,
+  setFeedback,
+} from "../../../store/appStore";
 import queue from "../../../data/queue";
 import MapActionContextUI from "../MapActionsUI";
 
@@ -17,8 +21,16 @@ export default function index() {
   const dispatch = useDispatch();
   useCompareEffect(
     () => {
+      if (isLoading)
+        dispatch(
+          setDataLoadingFeed({ isLoading, message: "Loading initial data" }),
+        );
       if (!isLoading && data) {
         dispatch(setBatchData(data));
+        dispatch(setDataLoadingFeed({ isLoading, message: "" }));
+        dispatch(
+          setFeedback({ status: "success", message: "Initial data loaded" }),
+        );
       }
     },
     [isLoading, data],

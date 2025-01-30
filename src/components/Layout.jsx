@@ -5,7 +5,12 @@ import Header from "./UI/Header";
 
 export default function Layout() {
   return (
-    <Grid2 container direction={"column"} width={"100%"} height={"100%"}>
+    <Grid2
+      container
+      wrap="nowrap"
+      direction={"column"}
+      width={"100%"}
+      height={"100%"}>
       <Header />
       <Dashboard />
     </Grid2>

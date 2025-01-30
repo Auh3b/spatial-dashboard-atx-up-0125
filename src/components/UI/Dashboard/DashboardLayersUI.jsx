@@ -64,7 +64,7 @@ function LayerUI({ id, name, legend, selected }) {
           }}
         />
       </Grid2>
-      <Divider variant="vertical" />
+      <Divider variant="vertical" sx={{ mt: 1 }} />
     </Box>
   );
 }
@@ -77,8 +77,8 @@ const LegendTypeUI = {
 function Legend({ type, colors, labels }) {
   const LegendVisual = useMemo(() => LegendTypeUI[type], [type]);
   return (
-    <Box p={1}>
-      <Typography variant="caption">Key</Typography>
+    <Box px={1}>
+      {/* <Typography variant="caption">Key</Typography> */}
       <LegendVisual type={type} colors={colors} labels={labels} />
     </Box>
   );

@@ -1,25 +1,24 @@
-import { GeoJsonLayer } from "@deck.gl/layers";
-import { useEffect } from "react";
+import { GeoJsonLayer } from "deck.gl";
 import { useDispatch, useSelector } from "react-redux";
+import { getData } from "../../store/appStore";
+import useGeoWorker from "../hooks/useGeoWorker";
+import { useEffect } from "react";
 import {
   addLayer,
   removeLayer,
   removePopup,
   setPopup,
 } from "../../store/mapStore";
-import { getData } from "../../store/appStore";
-import useGeoWorker from "../hooks/useGeoWorker";
 import { METHOD_NAMES } from "../../workers/geoWorker/methods/methodUtils";
-
-const id = "country-layer";
-const name = "Country Layer";
-const colors = ["#e7298a"];
-const labels = ["Country"];
+const id = "admin-2-layer";
+const name = "Admin 2 Layer";
+const colors = ["#d95f02"];
+const labels = ["Admin 2"];
 const type = "category";
 
-const datasetName = "countries";
+const datasetName = "admin_2";
 
-export default function CountriesLayer() {
+export default function Admin2Layer() {
   const dispatch = useDispatch();
 
   const dataSet = useSelector((state) => getData(state, datasetName)) || {};
@@ -52,14 +51,11 @@ export default function CountriesLayer() {
     return new GeoJsonLayer({
       id,
       data,
-      getFillColor: [231, 41, 138, 100],
-      getLineColor: [231, 41, 138],
+      getFillColor: [217, 95, 2, 100],
+      getLineColor: [217, 95, 2],
       getLineWidth: 1,
       lineWidthUnits: "pixels",
-      pickable: true,
-      onDrag: () => {
-        dispatch(removePopup());
-      },
+      // pickable: true,
       onClick: ({ x, y, coordinate, object }, e) => {
         if (e.leftButton) dispatch(removePopup());
         if (e.rightButton) {
@@ -70,18 +66,16 @@ export default function CountriesLayer() {
               y,
               show: true,
               longitude,
-              feature: object,
-              p_code: object.properties["adm0_a3"],
-              level: 0,
-              next_level: 1,
+              feature,
+              p_code: object.properties["GUI_" + 2],
+              level: 2,
               latitude,
               content:
-                object.properties["name"] ||
+                object.properties["NAME_1"] ||
                 "If your seeing this, change the field value 😉",
             }),
           );
         }
       },
-      updateTriggers: {},
     });
 }

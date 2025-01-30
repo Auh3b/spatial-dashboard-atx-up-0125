@@ -1,17 +1,16 @@
 import { Box, CircularProgress } from "@mui/material";
 import React from "react";
 
-export default function LoadingUI() {
+export default function LoadingUI({ size = "16px", sxProps = {} }) {
   return (
     <Box
       sx={{
-        width: "100%",
-        height: "100%",
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        ...sxProps,
       }}>
-      <CircularProgress />
+      <CircularProgress size={size} />
     </Box>
   );
 }
