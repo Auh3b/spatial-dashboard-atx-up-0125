@@ -99,7 +99,7 @@ function MapWrapper() {
         mapStyle={basemapUrl}
         mapboxAccessToken={ACCESS_TOKEN}>
         <MapNav />
-        <DeckGLOverlay layers={layers()} interleaved />
+        <DeckGLOverlay layers={layers()} interleaved autoHighlight />
         {/* <MapPopup /> */}
         {geojsonData && (
           <Source type="geojson" data={geojsonData}>

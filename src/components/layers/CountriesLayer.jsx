@@ -61,8 +61,9 @@ export default function CountriesLayer() {
         dispatch(removePopup());
       },
       onClick: ({ x, y, coordinate, object }, e) => {
+        console.log(e);
         if (e.leftButton) dispatch(removePopup());
-        if (e.rightButton) {
+        if (e.rightButton || (e.leftButton && e.changedPointers[0].ctrlKey)) {
           const [longitude, latitude] = coordinate;
           dispatch(
             setPopup({

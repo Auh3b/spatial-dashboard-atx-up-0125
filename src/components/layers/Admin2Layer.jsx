@@ -58,7 +58,7 @@ export default function Admin2Layer() {
       // pickable: true,
       onClick: ({ x, y, coordinate, object }, e) => {
         if (e.leftButton) dispatch(removePopup());
-        if (e.rightButton) {
+        if (e.rightButton || (e.leftButton && e.changedPointers[0].ctrlKey)) {
           const [longitude, latitude] = coordinate;
           dispatch(
             setPopup({
