@@ -5,6 +5,7 @@ import useGeoWorker from "../hooks/useGeoWorker";
 import { useEffect } from "react";
 import {
   addLayer,
+  getIsDrawing,
   removeLayer,
   removePopup,
   setPopup,
@@ -20,7 +21,7 @@ const datasetName = "admin_2";
 
 export default function Admin2Layer() {
   const dispatch = useDispatch();
-
+  const isDrawing = useSelector((state) => getIsDrawing(state));
   const dataSet = useSelector((state) => getData(state, datasetName)) || {};
   const { data } = useGeoWorker({
     name: METHOD_NAMES.GET_DATA,
@@ -55,27 +56,41 @@ export default function Admin2Layer() {
       getLineColor: [217, 95, 2],
       getLineWidth: 1,
       lineWidthUnits: "pixels",
-      // pickable: true,
-      onClick: ({ x, y, coordinate, object }, e) => {
-        if (e.leftButton) dispatch(removePopup());
-        if (e.rightButton || (e.leftButton && e.changedPointers[0].ctrlKey)) {
-          const [longitude, latitude] = coordinate;
-          dispatch(
-            setPopup({
-              x,
-              y,
-              show: true,
-              longitude,
-              feature,
-              p_code: object.properties["GUI_" + 2],
-              level: 2,
-              latitude,
-              content:
-                object.properties["NAME_1"] ||
-                "If your seeing this, change the field value 😉",
-            }),
-          );
-        }
+      pickable: true,
+      onDrag: isDrawing
+        ? undefined
+        : () => {
+            dispatch(removePopup());
+          },
+      onClick: isDrawing
+        ? undefined
+        : ({ x, y, coordinate, object }, e) => {
+            if (e.leftButton) dispatch(removePopup());
+            if (
+              e.rightButton ||
+              (e.leftButton && e.changedPointers[0].ctrlKey)
+            ) {
+              const [longitude, latitude] = coordinate;
+              dispatch(
+                setPopup({
+                  x,
+                  y,
+                  show: true,
+                  longitude,
+                  feature,
+                  p_code: object.properties["GUI_" + 2],
+                  level: 2,
+                  latitude,
+                  content:
+                    object.properties["NAME_1"] ||
+                    "If your seeing this, change the field value 😉",
+                }),
+              );
+            }
+          },
+      updateTriggers: {
+        onClick: isDrawing,
+        onDrag: isDrawing,
       },
     });
 }

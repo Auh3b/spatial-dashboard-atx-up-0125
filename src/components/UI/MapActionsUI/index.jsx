@@ -10,22 +10,22 @@ export default function MapActionContextUI() {
   const { layer } = useMapActionContext();
   return (
     <Fragment>
-      {Boolean(layer) && (
-        <Box width={"100%"} height={48}>
-          <Grid2 container direction={"column"}>
-            <Grid2
-              container
-              gap={2}
-              justifyContent={"space-between"}
-              wrap="nowrap">
-              <DrawingToolbar />
-              <SelectedFeatureUI />
-              <ResetSelectionFeature />
-            </Grid2>
-            <Divider orientation={"horizontal"} />
+      {/* {Boolean(layer) && ( */}
+      <Box width={"100%"} height={48}>
+        <Grid2 container direction={"column"}>
+          <Grid2
+            container
+            gap={2}
+            justifyContent={"space-between"}
+            wrap="nowrap">
+            <DrawingToolbar />
+            <SelectedFeatureUI />
+            <ResetSelectionFeature />
           </Grid2>
-        </Box>
-      )}
+          <Divider orientation={"horizontal"} />
+        </Grid2>
+      </Box>
+      {/* )} */}
     </Fragment>
   );
 }

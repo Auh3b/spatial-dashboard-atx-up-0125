@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addLayer,
+  getIsDrawing,
   removeLayer,
   removePopup,
   setPopup,
@@ -21,7 +22,7 @@ const datasetName = "countries";
 
 export default function CountriesLayer() {
   const dispatch = useDispatch();
-
+  const isDrawing = useSelector((state) => getIsDrawing(state));
   const dataSet = useSelector((state) => getData(state, datasetName)) || {};
   const { data } = useGeoWorker({
     name: METHOD_NAMES.GET_DATA,
@@ -57,32 +58,41 @@ export default function CountriesLayer() {
       getLineWidth: 1,
       lineWidthUnits: "pixels",
       pickable: true,
-      onDrag: () => {
-        dispatch(removePopup());
+      onDrag: isDrawing
+        ? undefined
+        : () => {
+            dispatch(removePopup());
+          },
+      onClick: isDrawing
+        ? undefined
+        : ({ x, y, coordinate, object }, e) => {
+            if (e.leftButton) dispatch(removePopup());
+            if (
+              e.rightButton ||
+              (e.leftButton && e.changedPointers[0].ctrlKey)
+            ) {
+              const [longitude, latitude] = coordinate;
+              dispatch(
+                setPopup({
+                  x,
+                  y,
+                  show: true,
+                  longitude,
+                  feature: object,
+                  p_code: object.properties["adm0_a3"],
+                  level: 0,
+                  next_level: 1,
+                  latitude,
+                  content:
+                    object.properties["name"] ||
+                    "If your seeing this, change the field value 😉",
+                }),
+              );
+            }
+          },
+      updateTriggers: {
+        onClick: isDrawing,
+        onDrag: isDrawing,
       },
-      onClick: ({ x, y, coordinate, object }, e) => {
-        console.log(e);
-        if (e.leftButton) dispatch(removePopup());
-        if (e.rightButton || (e.leftButton && e.changedPointers[0].ctrlKey)) {
-          const [longitude, latitude] = coordinate;
-          dispatch(
-            setPopup({
-              x,
-              y,
-              show: true,
-              longitude,
-              feature: object,
-              p_code: object.properties["adm0_a3"],
-              level: 0,
-              next_level: 1,
-              latitude,
-              content:
-                object.properties["name"] ||
-                "If your seeing this, change the field value 😉",
-            }),
-          );
-        }
-      },
-      updateTriggers: {},
     });
 }

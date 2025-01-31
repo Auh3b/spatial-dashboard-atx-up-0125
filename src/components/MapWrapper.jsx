@@ -91,15 +91,14 @@ function MapWrapper() {
     <div style={{ flexGrow: 1 }} ref={mapWrapperContainerRef}>
       <Map
         initialViewState={INITIAL_VIEW_STATE}
-        cursor="pointer"
-        {...viewState}
+        // {...viewState}
         {...interactivity}
         {...eventHandlers}
         onMove={handleViewStateChange}
         mapStyle={basemapUrl}
         mapboxAccessToken={ACCESS_TOKEN}>
         <MapNav />
-        <DeckGLOverlay layers={layers()} interleaved autoHighlight />
+        <DeckGLOverlay layers={layers()} interleaved />
         {/* <MapPopup /> */}
         {geojsonData && (
           <Source type="geojson" data={geojsonData}>
