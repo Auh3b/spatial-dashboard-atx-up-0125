@@ -13,6 +13,7 @@ const initialState = {
   selectedLayer: null,
   filteredData: null,
   layers: {},
+  legend: {},
   country: "",
   interactivity: {
     scrollZoom: true,
@@ -51,12 +52,46 @@ const mapStore = createSlice({
       }
     },
     removeLayer: (state, action) => {
-      const { id, value } = action.payload;
+      const { id } = action.payload;
       if (state.layers[id]) delete state.layers[id];
     },
     updateLayer: (state, action) => {
       const { id, value } = action.payload;
       state.layers[id] = value;
+    },
+    addLegend: (state, action) => {
+      const { id, value } = action.payload;
+
+      if (!state.legend[id]) {
+        state.legend[id] = value;
+        return;
+      }
+    },
+    removeLegend: (state, action) => {
+      const { id } = action.payload;
+      if (state.legend[id]) delete state.legend[id];
+    },
+    updateLegend: (state, action) => {
+      const { id, value } = action.payload;
+      const { id: childId, parent, visible } = value;
+      console.log(parent);
+      if (!parent) {
+        state.legend[id] = {
+          ...state.legend[id],
+          visible,
+        };
+      } else {
+        state.legend[parent] = {
+          ...state.legend[parent],
+          subs: {
+            ...state.legend[parent].subs,
+            [childId]: {
+              ...state.legend[parent].subs[childId],
+              visible,
+            },
+          },
+        };
+      }
     },
     setCountry: (state, action) => {
       const country = action.payload;
@@ -129,6 +164,21 @@ export const updateLayer = (payload) => ({
   payload,
 });
 
+export const addLegend = (payload) => ({
+  type: "map/addLegend",
+  payload,
+});
+
+export const removeLegend = (payload) => ({
+  type: "map/removeLegend",
+  payload,
+});
+
+export const updateLegend = (payload) => ({
+  type: "map/updateLegend",
+  payload,
+});
+
 export const setPopup = (payload) => ({
   type: "map/setPopup",
   payload,
@@ -194,6 +244,14 @@ export const getViewState = (state) => {
 
 export const getLayers = (state) => {
   return state.map.layers;
+};
+
+export const getLegend = (state) => {
+  return state.map.legend;
+};
+
+export const getLegendItem = (state, id) => {
+  return state.map.legend[id] || {};
 };
 
 export const getPopup = (state) => {

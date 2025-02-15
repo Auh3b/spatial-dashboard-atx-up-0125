@@ -6,3 +6,13 @@ Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+
+## Running procedure due to breaking change
+
+The application the client-end should be run concurrently with server, use the `start` script:
+
+```shell
+npm run start
+```
+
+Admin levels 1 and 2 utilies the `api` to retrive their respective datasets.

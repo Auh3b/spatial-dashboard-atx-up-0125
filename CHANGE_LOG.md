@@ -67,3 +67,9 @@
 ## GeoFence Drawing Tool
 
 - Drawing tools can will highlight overlapping features. Only polygon features are highlighted.
+
+## 29/10/2026
+
+## Data layers
+
+- Added ability to drill down to admin levels country( lv0) --> states/provinces(lv1) --> counties (lv2)

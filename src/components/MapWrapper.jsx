@@ -18,6 +18,7 @@ import * as turf from "@turf/turf";
 import useDrawing from "./hooks/useDrawing";
 import MapNav from "./UI/MapNav";
 import CustomPopupContextMenu from "./UI/CustomPopupContextMenu";
+import Legend from "./UI/Legend";
 
 const ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_API_TOKEN;
 
@@ -112,6 +113,7 @@ function MapWrapper() {
             />
           </Source>
         )}
+        <Legend />
         {/* use MapPopup Element above */}
         <CustomPopupContextMenu />
       </Map>
