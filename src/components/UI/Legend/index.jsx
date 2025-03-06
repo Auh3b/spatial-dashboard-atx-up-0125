@@ -22,7 +22,7 @@ export default function Legend() {
     },
     [legend],
   );
-  console.log(legend);
+
   return (
     <Box
       sx={{

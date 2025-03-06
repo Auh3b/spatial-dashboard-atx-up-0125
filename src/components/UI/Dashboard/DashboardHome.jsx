@@ -7,11 +7,9 @@ export default function DashboardHome({ selected, index }) {
       {selected === index && (
         <Box sx={{ p: 1 }}>
           <Typography variant="h5" sx={{ mb: 2 }}>
-            Welcome to this Dashboard!😁 '
+            Dashboard
           </Typography>
-          <Typography variant={"body2"}>
-            Right click on the admin boundary to fetch context for next level
-          </Typography>
+          <Typography variant={"body2"}></Typography>
         </Box>
       )}
     </Fragment>

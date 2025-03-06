@@ -8,7 +8,6 @@ import {
   setDrawMode,
   setInteractivity,
 } from "../../store/mapStore";
-import { useMap } from "react-map-gl";
 import useDrawHandlers from "./drawHandlers";
 import { DRAW_MODES } from "../../utils/drawingUtils";
 
@@ -31,6 +30,7 @@ export default function useDrawing() {
         touchPitch: false,
       }),
     );
+    dispatch(setCursor("crosshair"));
   };
 
   const enableInteraction = () => {
@@ -46,6 +46,7 @@ export default function useDrawing() {
         touchPitch: true,
       }),
     );
+    dispatch(setCursor("auto"));
   };
 
   const setDrawingMode = (value) => {
@@ -70,5 +71,5 @@ export default function useDrawing() {
     }
   }, [mode]);
 
-  return { mode, startDrawing, stopDrawing, handlers };
+  return { cursor, mode, startDrawing, stopDrawing, handlers };
 }

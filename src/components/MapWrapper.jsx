@@ -36,8 +36,7 @@ function MapWrapper() {
     (state) => `mapbox://styles/mapbox/${getBasemapUrl(state)}`,
   );
   const interactivity = useSelector((state) => getInteractivity(state));
-  const cursor = useSelector((state) => getCursor(state));
-  const { mode, handlers } = useDrawing();
+  const { cursor, mode, handlers } = useDrawing();
   const [popupInfo, setPopupInfo] = useState(null);
   const [geojsonData, setGeojsonData] = useState(null);
 
@@ -93,13 +92,14 @@ function MapWrapper() {
       <Map
         initialViewState={INITIAL_VIEW_STATE}
         // {...viewState}
+        cursor={cursor}
         {...interactivity}
         {...eventHandlers}
         onMove={handleViewStateChange}
         mapStyle={basemapUrl}
         mapboxAccessToken={ACCESS_TOKEN}>
         <MapNav />
-        <DeckGLOverlay layers={layers()} interleaved />
+        <DeckGLOverlay getCursor={() => cursor} layers={layers()} interleaved />
         {/* <MapPopup /> */}
         {geojsonData && (
           <Source type="geojson" data={geojsonData}>
