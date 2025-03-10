@@ -1,9 +1,10 @@
 import { parse } from "@loaders.gl/core";
-import { LOADER_TYPE, loaders } from "./methodUtils";
-import { v4 } from "uuid";
-import { makePoint, makePolygon } from "../../../utils/geoFunc";
 import { booleanIntersects, featureCollection } from "@turf/turf";
+import { v4 } from "uuid";
 import { DRAW_MODES, featureHandler } from "../../../utils/drawingUtils";
+import { FILTER_FUNCTIONS } from "../../../utils/filterFuncs";
+import { makePoint } from "../../../utils/geoFunc";
+import { LOADER_TYPE, loaders } from "./methodUtils";
 
 let datasets = {};
 
@@ -155,16 +156,4 @@ function applySpatialFilter(params) {
     count,
     data: output,
   };
-}
-
-export var FILTER_TYPES = {
-  IN: "in",
-};
-
-export var FILTER_FUNCTIONS = {
-  [FILTER_TYPES.IN]: filterIn,
-};
-
-function filterIn(value, column) {
-  return (d) => d[column] === value;
 }

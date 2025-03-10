@@ -1,36 +1,21 @@
-import React, { Fragment, useCallback, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import { Box, Collapse, Divider, Grid2, Typography } from "@mui/material";
+import { zip } from "d3";
+import React, { useCallback, useMemo } from "react";
+import { useDispatch } from "react-redux";
 import {
-  getLayers,
-  getSelectedLayer,
   removeFilteredData,
   removeSelectedLayer,
   setDrawingProps,
   setSelectedLayer,
-} from "../../../store/mapStore";
-import { Box, Divider, Grid2, Typography } from "@mui/material";
-import { zip } from "d3";
+} from "../../../../store/mapStore";
+import ColorPicker from "./components/ColorPicker";
+import ShapePicker from "./components/ShapePicker";
+import StrokeChanger from "./components/StrokeColor";
 
-export default function DashboardLayersUI({ selected, index }) {
-  const _layers = useSelector((state) => getLayers(state));
-  const layers = useMemo(() => Object.values(_layers), [_layers]);
-  const selectedLayer = useSelector((state) => getSelectedLayer(state));
-  return (
-    <Fragment>
-      {selected === index && (
-        <Box>
-          {Boolean(layers.length) &&
-            layers.map((d) => (
-              <LayerUI key={d.id} {...d} selected={selectedLayer} />
-            ))}
-        </Box>
-      )}
-    </Fragment>
-  );
-}
-
-function LayerUI({ id, name, legend, selected }) {
+export default function LayerUI({ id, name, selected }) {
   const dispatch = useDispatch();
+
   const handleClick = useCallback(() => {
     if (selected !== id) {
       dispatch(setSelectedLayer(id));
@@ -40,31 +25,58 @@ function LayerUI({ id, name, legend, selected }) {
     dispatch(setDrawingProps(null));
     dispatch(removeSelectedLayer());
   }, [selected]);
+
   const isSelected = selected === id;
+
   return (
-    <Box
-      sx={{
-        "&:hover": {
-          cursor: "pointer",
-        },
-      }}
-      onClick={handleClick}>
-      <Grid2 container>
-        <Grid2 container direction={"column"} sx={{ flexGrow: 1 }}>
-          <Typography variant={"overline"} sx={{ pl: 1, fontSize: "0.65rem" }}>
+    <Box>
+      <Grid2 container direction={"column"}>
+        <Grid2
+          container
+          alignItems={"center"}
+          sx={{
+            backgroundColor: (theme) =>
+              isSelected ? theme.palette.action.hover : "unset",
+            py: 1,
+            "&:hover": {
+              cursor: "pointer",
+            },
+          }}
+          onClick={handleClick}>
+          <Typography
+            variant={"overline"}
+            sx={{ pl: 1, fontSize: "0.65rem", flexGrow: 1 }}>
             {name}
           </Typography>
-          <Legend {...legend} />
+          {isSelected ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
         </Grid2>
-        <Box
-          sx={{
-            width: 4,
-            backgroundColor: (theme) =>
-              isSelected ? theme.palette.primary.dark : "unset",
-          }}
-        />
+        <Collapse in={isSelected}>
+          <Grid2 sx={{ p: 1 }}>
+            <AttributeWrapper title={"Shape"}>
+              <ShapePicker id={id} />
+            </AttributeWrapper>
+            <AttributeWrapper title={"Fill"}>
+              <ColorPicker id={id} />
+            </AttributeWrapper>
+            <AttributeWrapper title={"Stroke"}>
+              <StrokeChanger id={id} />
+            </AttributeWrapper>
+            {/* <Legend {...legend} /> */}
+          </Grid2>
+        </Collapse>
       </Grid2>
-      <Divider variant="vertical" sx={{ mt: 1 }} />
+      <Divider variant="vertical" />
+    </Box>
+  );
+}
+
+function AttributeWrapper({ title, children }) {
+  return (
+    <Box sx={{ my: 1 }}>
+      <Typography variant="subtitle2" sx={{ fontSize: 12, mb: 1 }}>
+        {title}
+      </Typography>
+      {children}
     </Box>
   );
 }
@@ -78,7 +90,6 @@ function Legend({ type, colors, labels }) {
   const LegendVisual = useMemo(() => LegendTypeUI[type], [type]);
   return (
     <Box px={1}>
-      {/* <Typography variant="caption">Key</Typography> */}
       <LegendVisual type={type} colors={colors} labels={labels} />
     </Box>
   );

@@ -9,14 +9,13 @@ import {
   METHOD_NAMES,
 } from "../../workers/geoWorker/methods/methodUtils";
 import { setBatchData, setDataLoadingFeed } from "../../store/appStore";
-import { FILTER_TYPES } from "../../workers/geoWorker/methods";
 import useMapNavigation from "../hooks/useMapNavigation";
+import { FILTER_TYPES } from "../../utils/filterFuncs";
 
 export default function CustomPopupContextMenu() {
   const { flyToFeature } = useMapNavigation();
   const dispatch = useDispatch();
   const popup = useSelector((state) => getPopup(state));
-  // console.log(popup);
   const handleLevelOneZoom = useCallback(async () => {
     dispatch(removePopup());
     if (popup.show) {

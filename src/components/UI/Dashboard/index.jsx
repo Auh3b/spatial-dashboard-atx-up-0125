@@ -1,18 +1,20 @@
 import { Grid2 } from "@mui/material";
-import DashboardPanel from "./DashboardPanel";
-import MapWrapper from "../../MapWrapper";
-import useGeoWorker from "../../hooks/useGeoWorker";
-import { METHOD_NAMES } from "../../../workers/geoWorker/methods/methodUtils";
-import useCompareEffect from "../../hooks/useCompareEffect";
 import { dequal } from "dequal";
 import { useDispatch } from "react-redux";
+import queue from "../../../data/queue";
 import {
   setBatchData,
   setDataLoadingFeed,
   setFeedback,
 } from "../../../store/appStore";
-import queue from "../../../data/queue";
+import { addLayer } from "../../../store/mapStore";
+import { LAYER_TYPE } from "../../../utils/layerUtils";
+import { METHOD_NAMES } from "../../../workers/geoWorker/methods/methodUtils";
+import MapWrapper from "../../MapWrapper";
+import useCompareEffect from "../../hooks/useCompareEffect";
+import useGeoWorker from "../../hooks/useGeoWorker";
 import MapActionContextUI from "../MapActionsUI";
+import DashboardPanel from "./DashboardPanel";
 
 const name = METHOD_NAMES.FETCH_DATA;
 
@@ -27,6 +29,24 @@ export default function index() {
         );
       if (!isLoading && data) {
         dispatch(setBatchData(data));
+        dispatch(
+          addLayer({
+            id: data[0].name,
+            value: {
+              id: data[0].name,
+              name: data[0].name,
+              source: data[0].name,
+              type: LAYER_TYPE.POLYGON_LAYER,
+              legend: {
+                type: "single",
+                color: "#9332a8",
+                label: "Countries",
+                strokeColor: "#9332a8",
+                strokeWidth: 5,
+              },
+            },
+          }),
+        );
         dispatch(setDataLoadingFeed({ isLoading, message: "" }));
         dispatch(
           setFeedback({ status: "success", message: "Initial data loaded" }),

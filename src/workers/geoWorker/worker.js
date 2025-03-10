@@ -1,6 +1,6 @@
 import { expose } from "comlink";
-import { METHOD_NAMES } from "./methods/methodUtils";
 import { fetchData, getData, getFilteredData } from "./methods";
+import { METHOD_NAMES } from "./methods/methodUtils";
 
 const METHODS = {
   [METHOD_NAMES.FETCH_DATA]: fetchData,

@@ -2,11 +2,6 @@ import { CompositeLayer, PolygonLayer, ScatterplotLayer } from "deck.gl";
 import { useSelector } from "react-redux";
 import { getDrawingProps } from "../../store/mapStore";
 
-function makePolygon(value) {
-  const [a, b] = value;
-  return [a, [b[0], a[1]], b, [a[0], b[1]]];
-}
-
 class CustomDrawLayer extends CompositeLayer {
   renderLayers() {
     const data = this.props.data.feature;
@@ -23,6 +18,7 @@ class CustomDrawLayer extends CompositeLayer {
         lineWidthUnits: "pixels",
         pickable: true,
       }),
+
       new PolygonLayer({
         id: "draw-layer-polygon",
         data: [data],

@@ -5,6 +5,7 @@ export const METHOD_NAMES = {
   FETCH_DATA: "fetchData",
   GET_DATA: "getData",
   GET_FILTERED_DATA: "getFilteredData",
+  SET_DATA: "setData",
 };
 
 export const LOADER_TYPE = {
