@@ -78,6 +78,7 @@ function addIds(data, type) {
       })),
     };
   }
+  if (type === LOADER_TYPE.JSON) return data.map((d) => ({ ...d, id: v4() }));
   return data.data.map((d) => ({ ...d, id: v4() }));
 }
 

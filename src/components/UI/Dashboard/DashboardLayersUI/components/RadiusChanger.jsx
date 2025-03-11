@@ -6,7 +6,7 @@ import { updateLayer } from "../../../../../store/mapStore";
 import useLayerConfig from "../../../../hooks/useLayerConfig";
 import useAllowedAttributes from "../hooks/useAllowedAttributes";
 import AttributeWrapper from "./common/AttributeWrapper";
-import SliderUI from "./common/SliderUI";
+import NumberInput from "./common/NumberInput";
 
 const attributeId = ATTRIBUTES.RADIUS;
 export default function RadiusChanger({ id, type }) {
@@ -14,7 +14,7 @@ export default function RadiusChanger({ id, type }) {
   const isAllowed = useAllowedAttributes(type, attributeId);
   const { layer } = useLayerConfig(id);
   const handleChange = useCallback(
-    (_e, radius) => {
+    (radius) => {
       const value = produce(layer, (draft) => {
         draft.legend.radius = radius;
       });
@@ -31,10 +31,13 @@ export default function RadiusChanger({ id, type }) {
     <>
       {isAllowed && (
         <AttributeWrapper title={attributeId}>
-          <SliderUI
+          <NumberInput
+            title={"Radius"}
             min={5}
-            max={15}
-            value={layer?.legend?.radius}
+            labelFormat=".0f"
+            step={5}
+            max={Infinity}
+            value={layer.legend.radius}
             onChange={handleChange}
           />
         </AttributeWrapper>

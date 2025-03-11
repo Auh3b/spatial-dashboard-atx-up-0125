@@ -1,7 +1,7 @@
 import { Box, Grid2, Typography } from "@mui/material";
 import { produce } from "immer";
 import React, { useCallback, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { ATTRIBUTES } from "../../../../../data/layerConfig";
 import { updateLayer } from "../../../../../store/mapStore";
 import useLayerConfig from "../../../../hooks/useLayerConfig";
@@ -29,26 +29,14 @@ const coordinateItems = [
 export default function CoordinateSelector({ id, type, sourceType, source }) {
   const dispatch = useDispatch();
   const isAllowed = useAllowedAttributes(type, attributeId);
-  const datasources = useSelector((state) => state.app.data);
 
   const { layer } = useLayerConfig(id);
 
   const handleChange = useCallback(
     (attr) => {
       return (e) => {
-        console.log(layer);
         const value = produce(layer, (draft) => {
-          if (attr === "latitude") {
-            draft.legend.latitude = e.target.value;
-          }
-
-          if (attr === "longitude") {
-            draft.legend.longitude = e.target.value;
-          }
-
-          if (attr === "coordinate") {
-            draft.legend.coordinate = e.target.value;
-          }
+          draft.legend[attr] = e.target.value;
         });
         dispatch(
           updateLayer({

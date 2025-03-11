@@ -27,7 +27,11 @@ export const attributeConfig = {
   [LAYER_TYPE.LINE_LAYER]: [ATTRIBUTES.COORDINATES, ATTRIBUTES.STROKE],
   [LAYER_TYPE.HEATMAP_LAYER]: [ATTRIBUTES.COORDINATES, ATTRIBUTES.HEATMAP],
   [LAYER_TYPE.HEX_LAYER]: [ATTRIBUTES.COORDINATES, ATTRIBUTES.HEX],
-  [LAYER_TYPE.ICON_LAYER]: [ATTRIBUTES.COORDINATES, ATTRIBUTES.HEX],
+  [LAYER_TYPE.ICON_LAYER]: [
+    ATTRIBUTES.COORDINATES,
+    ATTRIBUTES.ICON,
+    ATTRIBUTES.FILL_COLOR,
+  ],
 };
 
 const initialLayerConfig = {
@@ -37,8 +41,8 @@ const initialLayerConfig = {
       color: getRandomColor(),
       radius: 5,
       strokeWidth: 1,
-      latitude: "lat",
-      longitude: "lng",
+      latitude: "",
+      longitude: "",
       strokeColor: getRandomColor(),
     },
   },
@@ -61,6 +65,9 @@ const initialLayerConfig = {
     legend: {
       visible: true,
       latitude: "",
+      size: "",
+      iconAtlas: "",
+      iconMapping: "",
       longitude: "",
       color: getRandomColor(),
       icon: "",
@@ -72,7 +79,7 @@ const initialLayerConfig = {
       latitude: "",
       longitude: "",
       extruded: true,
-      radius: 100,
+      radius: 1000,
       elevationScale: 10,
     },
   },

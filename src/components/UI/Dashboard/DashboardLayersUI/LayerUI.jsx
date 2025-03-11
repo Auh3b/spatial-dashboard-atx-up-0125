@@ -26,6 +26,7 @@ import ColorPicker from "./components/ColorPicker";
 import CoordinateSelector from "./components/CoordinateSelector";
 import HeatMapAttrChanger from "./components/HeatMapAttrChanger";
 import HexAttrChanger from "./components/HexAttrChanger";
+import IconAttrChanger from "./components/IconAttrChanger";
 import NameChanger from "./components/NameChanger";
 import RadiusChanger from "./components/RadiusChanger";
 import ShapePicker from "./components/ShapePicker";
@@ -66,7 +67,7 @@ export default function LayerUI({
           sx={{
             backgroundColor: (theme) =>
               isSelected ? theme.palette.action.hover : "unset",
-            py: 1,
+            py: 0.5,
           }}>
           <Box sx={{ flexGrow: 1 }}>
             <NameChanger id={id} />
@@ -89,6 +90,7 @@ export default function LayerUI({
             <RadiusChanger id={id} type={type} />
             <HexAttrChanger id={id} type={type} />
             <HeatMapAttrChanger id={id} type={type} />
+            <IconAttrChanger id={id} type={type} />
             <Button
               onClick={handleDelete}
               size="small"

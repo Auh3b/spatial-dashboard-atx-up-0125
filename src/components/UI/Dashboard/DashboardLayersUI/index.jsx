@@ -1,4 +1,4 @@
-import { Box, Button } from "@mui/material";
+import { Box, Button, Divider } from "@mui/material";
 import React, { Fragment, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { getLayers, getSelectedLayer } from "../../../../store/mapStore";
@@ -14,6 +14,7 @@ export default function DashboardLayersUI({ selected, index }) {
       {selected === index && (
         <Box>
           <AddLayerButton />
+          <Divider />
           {Boolean(layers.length) &&
             layers.map((d) => (
               <LayerUI key={d.id} {...d} selected={selectedLayer} />

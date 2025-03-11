@@ -10,21 +10,10 @@ import { produce } from "immer";
 import React, { Fragment, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getLayers, updateLayer } from "../../../store/mapStore";
+import useLayerConfig from "../../hooks/useLayerConfig";
 
 export default function Legend() {
-  const dispatch = useDispatch();
   const layers = useSelector((state) => getLayers(state));
-  const handleCheck = useCallback(
-    ({ id, visible }) => {
-      const layer = layers[id];
-      const value = produce(layer, (draft) => {
-        draft.legend.visible = visible;
-      });
-      dispatch(updateLayer({ id, value }));
-    },
-    [layers],
-  );
-  console.log(layers);
 
   return (
     <Box
@@ -42,7 +31,7 @@ export default function Legend() {
           <Divider flexItem sx={{ mb: 1 }} />
           {layers &&
             Object.values(layers).map(({ id, ...rest }) => (
-              <LegendItem key={id} id={id} {...rest} onCheck={handleCheck} />
+              <LegendItem key={id} id={id} {...rest} />
             ))}
         </Grid2>
       </Paper>
@@ -50,14 +39,18 @@ export default function Legend() {
   );
 }
 
-function LegendItem({ id, name, legend: { visible }, onCheck }) {
-  // const [open, setOpen] = useState(false);
+function LegendItem({ id, name, legend: { visible } }) {
+  const dispatch = useDispatch();
+  const { layer } = useLayerConfig(id);
 
   const handleCheck = useCallback(
     (e) => {
-      onCheck({ id, visible: e.target.checked });
+      const value = produce(layer, (draft) => {
+        draft.legend.visible = e.target.checked;
+      });
+      dispatch(updateLayer({ id, value }));
     },
-    [parent, id],
+    [layer],
   );
 
   // const handleToggle = useCallback(() => {

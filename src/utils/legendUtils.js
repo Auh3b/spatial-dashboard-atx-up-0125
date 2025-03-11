@@ -16,3 +16,12 @@ export function getLegendChildren(children) {
 
   return output;
 }
+
+/**
+ *
+ * @param {string} value
+ * @returns
+ */
+export function getNameFromString(value) {
+  return value.split("/").at(-1).split(".")[0];
+}

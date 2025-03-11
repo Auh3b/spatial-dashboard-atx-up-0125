@@ -19,8 +19,12 @@ import {
   allowedShapes,
   getInitialLayerConfig,
 } from "../../../../../data/layerConfig";
+import { setBatchData } from "../../../../../store/appStore";
 import { addLayer } from "../../../../../store/mapStore";
+import { getFileExt } from "../../../../../utils/fileUploadFuncs";
+import { getNameFromString } from "../../../../../utils/legendUtils";
 import geoWorker from "../../../../../workers/geoWorker";
+import { METHOD_NAMES } from "../../../../../workers/geoWorker/methods/methodUtils";
 import useFileUpload from "../../../../hooks/useFileUpload";
 import ValueSelector from "./common/ValueSelector";
 
@@ -239,6 +243,7 @@ function NewLocalSource({ tab, onClose }) {
 }
 
 function NewURLSource({ tab, onClose }) {
+  const dispatch = useDispatch();
   const [selectedLayerType, setSelectedLayerType] = useState("");
   const [url, setUrl] = useState("");
 
@@ -252,9 +257,38 @@ function NewURLSource({ tab, onClose }) {
 
   const selected = tab === "url";
 
-  const handleAdd = async () => {
-    geoWorker;
-  };
+  const handleAdd = useCallback(async () => {
+    // try {
+    const name = getNameFromString(url);
+    const title = name;
+    const method = METHOD_NAMES.FETCH_DATA;
+    const type = getFileExt(url);
+    const queue = [
+      {
+        name,
+        title,
+        url,
+        type,
+      },
+    ];
+    const result = await geoWorker({
+      name: method,
+      params: {
+        queue,
+      },
+    });
+    console.log(queue);
+
+    if (!result) throw "Something went happened.";
+    dispatch(setBatchData(result));
+    const id = crypto.randomUUID().toString();
+    const value = getInitialLayerConfig(id, result[0], selectedLayerType);
+    dispatch(addLayer({ id, value }));
+    onClose();
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  }, [selectedLayerType, url]);
 
   return (
     <>
@@ -301,6 +335,7 @@ function NewURLSource({ tab, onClose }) {
           </Grid2>
           <Button
             sx={{}}
+            onClick={handleAdd}
             variant="contained"
             startIcon={<Add />}
             disabled={!selectedLayerType || !url}>

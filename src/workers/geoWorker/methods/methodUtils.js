@@ -12,6 +12,7 @@ export const LOADER_TYPE = {
   GEOJSON: "geojson",
   CSV: "csv",
   JSON: "json",
+  KML: "kml",
 };
 
 export const loaders = {

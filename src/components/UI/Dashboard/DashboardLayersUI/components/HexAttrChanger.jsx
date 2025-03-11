@@ -15,9 +15,9 @@ export default function HexAttrChanger({ id, type }) {
   const { layer } = useLayerConfig(id);
   const handleNumberChange = useCallback(
     (attr) => {
-      return (e) => {
+      return (newValue) => {
         const value = produce(layer, (draft) => {
-          draft.legend[attr] = +e.target.value;
+          draft.legend[attr] = newValue;
         });
         dispatch(
           updateLayer({
@@ -35,12 +35,20 @@ export default function HexAttrChanger({ id, type }) {
         <AttributeWrapper title={attributeId}>
           <NumberInput
             title={"Elevation Scale"}
+            min={1}
+            step={1}
+            max={Infinity}
+            labelFormat=".0f"
             value={layer.legend.elevationScale}
             onChange={handleNumberChange("elevationScale")}
           />
           <NumberInput
             title={"Radius"}
-            value={layer.legend.radus}
+            min={50}
+            step={50}
+            max={Infinity}
+            labelFormat=".0f"
+            value={layer.legend.radius}
             onChange={handleNumberChange("radius")}
           />
         </AttributeWrapper>

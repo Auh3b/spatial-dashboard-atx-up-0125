@@ -63,8 +63,8 @@ function getPositionProp(layerItem) {
   if (layerItem.sourceType === "geojson") {
     return (feature) => feature.geometry.coordinates;
   }
-  if (layerItem.legend.coordinates) {
-    return (d) => d[layerItem.legend.coordinates];
+  if (layerItem.legend.coordinate) {
+    return (d) => d[layerItem.legend.coordinate];
   }
   if (layerItem.legend.latitude && layerItem.legend.longitude) {
     return (d) => [d[layerItem.legend.longitude], d[layerItem.legend.latitude]];
@@ -150,6 +150,11 @@ async function getIconLayerProps(layerItem) {
   layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPosition"] = getPositionProp(layerItem);
   layerProps["visible"] = layerItem.legend.visible;
+  layerProps["getIcon"] = () => layerItem.legend.icon;
+  layerProps["getSize"] = () => layerItem.legend.size;
+  layerProps["getColor"] = () => layerItem.legend.color;
+  layerProps["iconAtlas"] = layerItem.legend.iconAtlas;
+  layerProps["iconMapping"] = layerItem.legend.iconMapping;
   return layerProps;
 }
 
@@ -159,6 +164,9 @@ async function getHeatMapLayerProps(layerItem) {
   layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPosition"] = getPositionProp(layerItem);
   layerProps["visible"] = layerItem.legend.visible;
+  layerProps["intensity"] = layerItem.legend.intensity;
+  layerProps["threshold"] = layerItem.legend.threshold;
+  layerProps["radiusPixels"] = layerItem.legend.radiusPixels;
   return layerProps;
 }
 
