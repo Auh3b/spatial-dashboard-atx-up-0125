@@ -1,6 +1,7 @@
 import { Grid2 } from "@mui/material";
 import { dequal } from "dequal";
 import { useDispatch } from "react-redux";
+import { getInitialLayerConfig } from "../../../data/layerConfig";
 import queue from "../../../data/queue";
 import {
   setBatchData,
@@ -32,19 +33,13 @@ export default function index() {
         dispatch(
           addLayer({
             id: data[0].name,
-            value: {
-              id: data[0].name,
-              name: data[0].name,
-              source: data[0].name,
-              type: LAYER_TYPE.POLYGON_LAYER,
-              legend: {
-                type: "single",
-                color: "#9332a8",
-                label: "Countries",
-                strokeColor: "#9332a8",
-                strokeWidth: 5,
-              },
-            },
+            value: getInitialLayerConfig(data[0], LAYER_TYPE.POLYGON_LAYER),
+          }),
+        );
+        dispatch(
+          addLayer({
+            id: data[1].name,
+            value: getInitialLayerConfig(data[1], LAYER_TYPE.POINT_LAYER),
           }),
         );
         dispatch(setDataLoadingFeed({ isLoading, message: "" }));

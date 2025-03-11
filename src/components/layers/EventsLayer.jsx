@@ -52,8 +52,14 @@
 //   });
 // }
 
-import React, { useEffect } from "react";
+import ComputerIcon from "@mui/icons-material/Computer";
+import GroupIcon from "@mui/icons-material/Group";
+import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
+import NewspaperIcon from "@mui/icons-material/Newspaper";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import { IconLayer } from "deck.gl";
+import React, { useEffect } from "react";
+import ReactDOMServer from "react-dom/server"; // To render Material UI Icons as SVG
 import { useDispatch, useSelector } from "react-redux";
 import {
   // addLayer,
@@ -62,12 +68,6 @@ import {
   // removeLayer,
   removeLegend,
 } from "../../store/mapStore";
-import NewspaperIcon from "@mui/icons-material/Newspaper";
-import ReportProblemIcon from "@mui/icons-material/ReportProblem";
-import ComputerIcon from "@mui/icons-material/Computer";
-import GroupIcon from "@mui/icons-material/Group";
-import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
-import ReactDOMServer from "react-dom/server"; // To render Material UI Icons as SVG
 import { getLegendChildren } from "../../utils/legendUtils";
 
 // Event data with icon names
@@ -75,31 +75,36 @@ export const eventsData = [
   {
     id: "breaking-news",
     name: "Breaking News",
-    coordinates: [-122.4, 37.74],
+    latitude: 37.74,
+    longitude: -122.4,
     icon: "newspaper",
   },
   {
     id: "terrorism",
     name: "Terrorism",
-    coordinates: [-122.45, 37.75],
+    latitude: 37.75,
+    longitude: -122.45,
     icon: "explosion",
   },
   {
     id: "cyber-attack",
     name: "Cyber Attack",
-    coordinates: [-122.5, 37.76],
+    latitude: 37.76,
+    longitude: -122.5,
     icon: "computer",
   },
   {
     id: "civil-unrest",
     name: "Civil Unrest",
-    coordinates: [-119.55, 37.77],
+    latitude: 37.77,
+    longitude: -119.55,
     icon: "people",
   },
   {
     id: "natural-disaster",
     name: "Natural Disaster",
-    coordinates: [-120.6, 37.78],
+    latitude: 37.78,
+    longitude: -120.6,
     icon: "fire_extinguisher",
   },
 ];

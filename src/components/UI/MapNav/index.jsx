@@ -1,21 +1,21 @@
+import { Landscape } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
+import NavigationIcon from "@mui/icons-material/Navigation";
+import RemoveIcon from "@mui/icons-material/Remove";
 import {
   Box,
-  Button,
-  ButtonGroup,
+  Divider,
+  Grid2,
+  IconButton,
   Paper,
   Slider,
   Tooltip,
   Typography,
 } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import NavigationIcon from "@mui/icons-material/Navigation";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useMap } from "react-map-gl";
 import { useSelector } from "react-redux";
 import { getViewState } from "../../../store/mapStore";
-import { Landscape } from "@mui/icons-material";
-import { red } from "@mui/material/colors";
 
 export default function MapNav() {
   const { current: map } = useMap();
@@ -28,26 +28,15 @@ export default function MapNav() {
         right: (theme) => theme.spacing(2),
       }}>
       <Paper>
-        <ButtonGroup
-          variant="text"
-          orientation="vertical"
-          size="small"
-          sx={{
-            "& .MuiButtonGroup-groupedTextVertical": {
-              borderColor: (theme) => theme.palette.divider,
-            },
-            "& .MuiButtonGroup-firstButton": {
-              borderColor: (theme) => theme.palette.divider,
-            },
-            "& .MuiButtonGroup-middleButton": {
-              borderColor: (theme) => theme.palette.divider,
-            },
-          }}>
+        <Grid2 container direction={"column"}>
           <ZoomInButton mapRef={map} />
+          <Divider flexItem />
           <ZoomOutButton mapRef={map} />
+          <Divider flexItem />
           <NorthArrowButton mapRef={map} />
+          <Divider flexItem />
           <PitchButon mapRef={map} />
-        </ButtonGroup>
+        </Grid2>
       </Paper>
       <PitchSlider mapRef={map} />
     </Box>
@@ -103,13 +92,16 @@ function PitchButon({ mapRef }) {
             mousebutton or hold Ctrl or CMD and mousedown to change pitch
           </Typography>
         }>
-        <Button
+        <IconButton
+          size="small"
+          color="primary"
+          disableRipple
           onMouseDown={handleDragStart}
           sx={{
             cursor: start ? "ns-resize" : "pointer",
           }}>
           <Landscape />
-        </Button>
+        </IconButton>
       </Tooltip>
     </>
   );
@@ -121,14 +113,14 @@ function PitchSlider({ mapRef }) {
   const handleChange = useCallback(
     (e, value) => {
       if (mapRef) return mapRef.setPitch(value);
-      console.log(e, value, mapRef);
     },
     [mapRef],
   );
 
   return (
-    <Paper sx={{ px: 1, py: 2, mt: 1, height: 200 }}>
+    <Paper sx={{ px: 0.5, py: 2, mt: 1, height: 200 }}>
       <Slider
+        sx={{ mx: "auto" }}
         onChange={handleChange}
         size="small"
         orientation="vertical"
@@ -152,13 +144,17 @@ function NorthArrowButton({ mapRef }) {
   }, [mapRef]);
 
   return (
-    <Button onClick={handleClick}>
+    <IconButton
+      size="small"
+      color="primary"
+      disableRipple
+      onClick={handleClick}>
       <NavigationIcon
         sx={{
           transform: `rotate(${-viewState?.bearing ?? 0}deg)`,
         }}
       />
-    </Button>
+    </IconButton>
   );
 }
 
@@ -167,9 +163,13 @@ function ZoomInButton({ mapRef }) {
     if (mapRef) mapRef.zoomIn();
   }, [mapRef]);
   return (
-    <Button onClick={handleClick}>
+    <IconButton
+      disableRipple
+      size="small"
+      color="primary"
+      onClick={handleClick}>
       <AddIcon />
-    </Button>
+    </IconButton>
   );
 }
 function ZoomOutButton({ mapRef }) {
@@ -177,8 +177,12 @@ function ZoomOutButton({ mapRef }) {
     if (mapRef) mapRef.zoomOut();
   }, [mapRef]);
   return (
-    <Button onClick={handleClick}>
+    <IconButton
+      disableRipple
+      size="small"
+      color="primary"
+      onClick={handleClick}>
       <RemoveIcon />
-    </Button>
+    </IconButton>
   );
 }

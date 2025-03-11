@@ -74,7 +74,6 @@ const mapStore = createSlice({
     updateLegend: (state, action) => {
       const { id, value } = action.payload;
       const { id: childId, parent, visible } = value;
-      console.log(parent);
       if (!parent) {
         state.legend[id] = {
           ...state.legend[id],

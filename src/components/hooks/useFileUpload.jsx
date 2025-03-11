@@ -14,7 +14,7 @@ export default function useFileUpload() {
     setIsLoading(true);
     try {
       const upload = event.target.files[0];
-      console.log(upload);
+
       if (!upload) throw FEEDBACK_MESSAGE.NO_FILE_SELECTED;
       const uploadType = getFileExt(upload.name);
       const result = await parseUpload(upload, uploadType);

@@ -10,10 +10,14 @@ import {
   setSelectedLayer,
 } from "../../../../store/mapStore";
 import ColorPicker from "./components/ColorPicker";
+import CoordinateSelector from "./components/CoordinateSelector";
+import HeatMapAttrChanger from "./components/HeatMapAttrChanger";
+import HexAttrChanger from "./components/HexAttrChanger";
+import RadiusChanger from "./components/RadiusChanger";
 import ShapePicker from "./components/ShapePicker";
-import StrokeChanger from "./components/StrokeColor";
+import StrokeChanger from "./components/StrokeChanger";
 
-export default function LayerUI({ id, name, selected }) {
+export default function LayerUI({ id, name, selected, type }) {
   const dispatch = useDispatch();
 
   const handleClick = useCallback(() => {
@@ -52,31 +56,17 @@ export default function LayerUI({ id, name, selected }) {
         </Grid2>
         <Collapse in={isSelected}>
           <Grid2 sx={{ p: 1 }}>
-            <AttributeWrapper title={"Shape"}>
-              <ShapePicker id={id} />
-            </AttributeWrapper>
-            <AttributeWrapper title={"Fill"}>
-              <ColorPicker id={id} />
-            </AttributeWrapper>
-            <AttributeWrapper title={"Stroke"}>
-              <StrokeChanger id={id} />
-            </AttributeWrapper>
-            {/* <Legend {...legend} /> */}
+            <ShapePicker id={id} />
+            <ColorPicker id={id} type={type} />
+            <StrokeChanger id={id} type={type} />
+            <CoordinateSelector id={id} type={type} />
+            <RadiusChanger id={id} type={type} />
+            <HexAttrChanger id={id} type={type} />
+            <HeatMapAttrChanger id={id} type={type} />
           </Grid2>
         </Collapse>
       </Grid2>
       <Divider variant="vertical" />
-    </Box>
-  );
-}
-
-function AttributeWrapper({ title, children }) {
-  return (
-    <Box sx={{ my: 1 }}>
-      <Typography variant="subtitle2" sx={{ fontSize: 12, mb: 1 }}>
-        {title}
-      </Typography>
-      {children}
     </Box>
   );
 }

@@ -1,18 +1,10 @@
 import { UploadFile } from "@mui/icons-material";
-import {
-  Box,
-  Button,
-  Grid2,
-  Skeleton,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, Grid2, Skeleton, TextField, Typography } from "@mui/material";
 import useFileUpload from "../../../hooks/useFileUpload";
 
 export default function FileUploadUI() {
   const { file, fileForm, isLoading, handleFileUpload, handleFormChange } =
     useFileUpload();
-  console.log(file);
   return (
     <Grid2 container direction={"column"} gap={2} sx={{ p: 1 }}>
       <Typography variant={"subtitle2"} gutterBottom>

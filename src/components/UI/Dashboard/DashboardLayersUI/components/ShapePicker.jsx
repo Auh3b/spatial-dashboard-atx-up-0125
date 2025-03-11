@@ -1,9 +1,10 @@
 import { Box, FormControl, MenuItem, Select } from "@mui/material";
-import { produce } from "immer";
-import React, { useCallback, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getLayers, updateLayer } from "../../../../../store/mapStore";
+import React, { useCallback } from "react";
+import { useDispatch } from "react-redux";
+import { getInitialLayerConfig } from "../../../../../data/layerConfig";
+import { updateLayer } from "../../../../../store/mapStore";
 import { LAYER_TYPE } from "../../../../../utils/layerUtils";
+import useLayerConfig from "../../../../hooks/useLayerConfig";
 
 const allowedShapes = [
   {
@@ -34,20 +35,14 @@ const allowedShapes = [
 
 export default function ShapePicker({ id }) {
   const dispatch = useDispatch();
-  const _layers = useSelector((state) => getLayers(state));
-
-  const layer = useMemo(() => {
-    return _layers[id];
-  }, [_layers, id]);
+  const { layer, source } = useLayerConfig(id);
 
   const handleChange = useCallback(
     (e) => {
-      const value = produce(layer, (draft) => {
-        draft.type = e.target.value;
-      });
+      const value = getInitialLayerConfig(source, e.target.value);
       dispatch(updateLayer({ id, value }));
     },
-    [layer, id],
+    [source, id],
   );
 
   return (
