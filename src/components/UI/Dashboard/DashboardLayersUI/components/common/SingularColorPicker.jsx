@@ -1,4 +1,11 @@
-import { Box, Grid2, Paper, Popper, Typography } from "@mui/material";
+import {
+  Box,
+  ClickAwayListener,
+  Grid2,
+  Paper,
+  Popper,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import { RgbaColorPicker } from "react-colorful";
 import {
@@ -10,6 +17,7 @@ export default function SingularColorPicker({ onColorChange, value }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const handleClick = (e) =>
     setAnchorEl((prev) => (prev ? null : e.currentTarget));
+  const handleClose = () => setAnchorEl(null);
   const open = Boolean(anchorEl);
   return (
     <>
@@ -35,13 +43,15 @@ export default function SingularColorPicker({ onColorChange, value }) {
         id={crypto.randomUUID().toString()}
         open={open}
         anchorEl={anchorEl}
-        placement="top">
-        <Paper sx={{ position: "absolute", top: 32, p: 1 }}>
-          <RgbaColorPicker
-            value={deckColorToRgba(value)}
-            onChange={onColorChange}
-          />
-        </Paper>
+        placement="bottom">
+        <ClickAwayListener onClickAway={handleClose}>
+          <Paper sx={{ p: 0.5, m: 0.5 }}>
+            <RgbaColorPicker
+              value={deckColorToRgba(value)}
+              onChange={onColorChange}
+            />
+          </Paper>
+        </ClickAwayListener>
       </Popper>
     </>
   );

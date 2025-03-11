@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { produce } from "immer";
 import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
@@ -8,8 +8,8 @@ import { rgbaToDeckColor } from "../../../../../utils/colorUtils";
 import useLayerConfig from "../../../../hooks/useLayerConfig";
 import useAllowedAttributes from "../hooks/useAllowedAttributes";
 import AttributeWrapper from "./common/AttributeWrapper";
+import NumberInput from "./common/NumberInput";
 import SingularColorPicker from "./common/SingularColorPicker";
-import SliderUI from "./common/SliderUI";
 
 const attributeId = ATTRIBUTES.STROKE;
 
@@ -18,7 +18,7 @@ export default function StrokeChanger({ id, type }) {
   const dispatch = useDispatch();
   const { layer } = useLayerConfig(id);
   const handleStrokeChange = useCallback(
-    (_e, stroke) => {
+    (stroke) => {
       const value = produce(layer, (draft) => {
         draft.legend.strokeWidth = stroke;
       });
@@ -47,13 +47,13 @@ export default function StrokeChanger({ id, type }) {
       {isAllowed && (
         <AttributeWrapper title={attributeId}>
           <Box>
-            <StrokeWidth
-              onChange={handleStrokeChange}
-              value={layer.legend.strokeWidth || 0}
-            />
             <StrokeColor
               onColorChange={handleColorChange}
               value={layer.legend.strokeColor || "#962921"}
+            />
+            <StrokeWidth
+              onChange={handleStrokeChange}
+              value={layer.legend.strokeWidth || 0}
             />
           </Box>
         </AttributeWrapper>
@@ -62,21 +62,18 @@ export default function StrokeChanger({ id, type }) {
   );
 }
 
-const staticStrokeWidthProps = {
-  min: 0,
-  step: 0.5,
-  max: 5,
-  size: "small",
-  sx: {
-    flexGrow: 1,
-  },
-};
-
 function StrokeWidth({ onChange, value }) {
   return (
     <Box>
-      <Typography variant="caption">Size</Typography>
-      <SliderUI {...staticStrokeWidthProps} onChange={onChange} value={value} />
+      <NumberInput
+        title={"Size"}
+        min={0}
+        labelFormat=".2f"
+        step={0.5}
+        max={10}
+        value={value}
+        onChange={onChange}
+      />
     </Box>
   );
 }

@@ -35,8 +35,8 @@ export default function HexAttrChanger({ id, type }) {
         <AttributeWrapper title={attributeId}>
           <NumberInput
             title={"Elevation Scale"}
-            min={1}
-            step={1}
+            min={5}
+            step={5}
             max={Infinity}
             labelFormat=".0f"
             value={layer.legend.elevationScale}
