@@ -1,10 +1,23 @@
-import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
-import { Box, Collapse, Divider, Grid2, Typography } from "@mui/material";
+import {
+  Delete,
+  KeyboardArrowDown,
+  KeyboardArrowUp,
+} from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  Collapse,
+  Divider,
+  Grid2,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import { zip } from "d3";
 import React, { useCallback, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import {
   removeFilteredData,
+  removeLayer,
   removeSelectedLayer,
   setDrawingProps,
   setSelectedLayer,
@@ -13,11 +26,19 @@ import ColorPicker from "./components/ColorPicker";
 import CoordinateSelector from "./components/CoordinateSelector";
 import HeatMapAttrChanger from "./components/HeatMapAttrChanger";
 import HexAttrChanger from "./components/HexAttrChanger";
+import NameChanger from "./components/NameChanger";
 import RadiusChanger from "./components/RadiusChanger";
 import ShapePicker from "./components/ShapePicker";
 import StrokeChanger from "./components/StrokeChanger";
 
-export default function LayerUI({ id, name, selected, type }) {
+export default function LayerUI({
+  id,
+  name,
+  selected,
+  type,
+  sourceType,
+  source,
+}) {
   const dispatch = useDispatch();
 
   const handleClick = useCallback(() => {
@@ -29,6 +50,10 @@ export default function LayerUI({ id, name, selected, type }) {
     dispatch(setDrawingProps(null));
     dispatch(removeSelectedLayer());
   }, [selected]);
+
+  const handleDelete = () => {
+    dispatch(removeLayer({ id }));
+  };
 
   const isSelected = selected === id;
 
@@ -42,27 +67,37 @@ export default function LayerUI({ id, name, selected, type }) {
             backgroundColor: (theme) =>
               isSelected ? theme.palette.action.hover : "unset",
             py: 1,
-            "&:hover": {
-              cursor: "pointer",
-            },
-          }}
-          onClick={handleClick}>
-          <Typography
-            variant={"overline"}
-            sx={{ pl: 1, fontSize: "0.65rem", flexGrow: 1 }}>
-            {name}
-          </Typography>
-          {isSelected ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+          }}>
+          <Box sx={{ flexGrow: 1 }}>
+            <NameChanger id={id} />
+          </Box>
+          <IconButton disableRipple onClick={handleClick}>
+            {isSelected ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+          </IconButton>
         </Grid2>
         <Collapse in={isSelected}>
           <Grid2 sx={{ p: 1 }}>
             <ShapePicker id={id} />
             <ColorPicker id={id} type={type} />
             <StrokeChanger id={id} type={type} />
-            <CoordinateSelector id={id} type={type} />
+            <CoordinateSelector
+              id={id}
+              type={type}
+              sourceType={sourceType}
+              source={source}
+            />
             <RadiusChanger id={id} type={type} />
             <HexAttrChanger id={id} type={type} />
             <HeatMapAttrChanger id={id} type={type} />
+            <Button
+              onClick={handleDelete}
+              size="small"
+              variant="contained"
+              color="error"
+              startIcon={<Delete />}
+              sx={{ mb: 1, ml: 1 }}>
+              Delete Layer
+            </Button>
           </Grid2>
         </Collapse>
       </Grid2>

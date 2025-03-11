@@ -30,16 +30,22 @@ export default function index() {
         );
       if (!isLoading && data) {
         dispatch(setBatchData(data));
+        const id1 = crypto.randomUUID().toString();
         dispatch(
           addLayer({
-            id: data[0].name,
-            value: getInitialLayerConfig(data[0], LAYER_TYPE.POLYGON_LAYER),
+            id: id1,
+            value: getInitialLayerConfig(
+              id1,
+              data[0],
+              LAYER_TYPE.POLYGON_LAYER,
+            ),
           }),
         );
+        const id2 = crypto.randomUUID().toString();
         dispatch(
           addLayer({
-            id: data[1].name,
-            value: getInitialLayerConfig(data[1], LAYER_TYPE.POINT_LAYER),
+            id: id2,
+            value: getInitialLayerConfig(id2, data[1], LAYER_TYPE.POINT_LAYER),
           }),
         );
         dispatch(setDataLoadingFeed({ isLoading, message: "" }));

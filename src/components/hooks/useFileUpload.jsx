@@ -8,6 +8,7 @@ export default function useFileUpload() {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState(null);
+  const [fileName, setFileName] = useState("");
   const [fileForm, setFileForm] = useState({});
 
   const handleFileUpload = async (event) => {
@@ -18,6 +19,7 @@ export default function useFileUpload() {
       if (!upload) throw FEEDBACK_MESSAGE.NO_FILE_SELECTED;
       const uploadType = getFileExt(upload.name);
       const result = await parseUpload(upload, uploadType);
+      setFileName(upload.name);
       setFile(result);
       setFileForm({
         source: upload.name.split(".")[0].replace(" ", "_"),
@@ -45,6 +47,7 @@ export default function useFileUpload() {
   return {
     file,
     fileForm,
+    fileName,
     isLoading,
     handleFileUpload,
     handleFormChange,

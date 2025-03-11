@@ -41,3 +41,9 @@ function alphaRgbaToDeckColorAlpha(value) {
 
   return scale(value);
 }
+
+export function deckColorToRgbaString(value) {
+  const [r, g, b, a] = value;
+  const colorunit = rgb(r, g, b, deckColorAlphaToRgbaAlpha(a));
+  return colorunit.formatRgb();
+}

@@ -26,7 +26,7 @@ const coordinateItems = [
   },
 ];
 
-export default function CoordinateSelector({ id, type }) {
+export default function CoordinateSelector({ id, type, sourceType, source }) {
   const dispatch = useDispatch();
   const isAllowed = useAllowedAttributes(type, attributeId);
   const datasources = useSelector((state) => state.app.data);
@@ -62,14 +62,15 @@ export default function CoordinateSelector({ id, type }) {
   );
 
   const options = useMemo(() => {
-    if (datasources[id])
-      return datasources[id].schema.map((d) => ({ label: d, option: d }));
+    if (source) return source.schema.map((d) => ({ label: d, option: d }));
     return [];
-  }, [datasources]);
+  }, [source]);
+
+  const isGeojson = sourceType === "geojson";
 
   return (
     <>
-      {isAllowed && (
+      {isAllowed && !isGeojson && (
         <AttributeWrapper title={attributeId}>
           <Box>
             {coordinateItems.map(({ label, option }) => (
@@ -85,6 +86,10 @@ export default function CoordinateSelector({ id, type }) {
                 </Grid2>
                 <Grid2 size={6}>
                   <ValueSelector
+                    disabled={
+                      option !== "coordinate" && layer.legend["coordinate"]
+                    }
+                    value={layer.legend[option]}
                     options={options}
                     onChange={handleChange(option)}
                   />

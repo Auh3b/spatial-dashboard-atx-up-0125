@@ -1,23 +1,23 @@
-import {
-  Box,
-  Grid2,
-  Tab,
-  Typography,
-  Tabs,
-  Divider,
-  Tooltip,
-} from "@mui/material";
-import React, { useMemo, useState } from "react";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 import HomeIcon from "@mui/icons-material/Home";
 import LayersIcon from "@mui/icons-material/Layers";
-import TableChartIcon from "@mui/icons-material/TableChart";
-import FileUploadIcon from "@mui/icons-material/FileUpload";
 import SettingsIcon from "@mui/icons-material/Settings";
-import DashboardTable from "./DashboardTable";
-import DashboardUpload from "./DashboardUpload";
+import TableChartIcon from "@mui/icons-material/TableChart";
+import {
+  Box,
+  Divider,
+  Grid2,
+  Tab,
+  Tabs,
+  Tooltip,
+  Typography,
+} from "@mui/material";
+import React, { useMemo, useState } from "react";
+import DashboardHome from "./DashboardHome";
 import DashboardLayersUI from "./DashboardLayersUI";
 import DashboardSetting from "./DashboardSetting";
-import DashboardHome from "./DashboardHome";
+import DashboardTable from "./DashboardTable";
+import DashboardUpload from "./DashboardUpload";
 
 const contentData = {
   0: {
@@ -63,13 +63,13 @@ export default function DashboardPanel() {
 
 function PanelContent({ title, children }) {
   return (
-    <Box sx={{ width: "250px" }}>
+    <Box sx={{ width: "275px" }}>
       <Grid2 container direction={"column"}>
         <Typography variant="overline" sx={{ p: 1 }}>
           {title}
         </Typography>
         <Divider flexItem />
-        <Box>{children}</Box>
+        <Box sx={{ maxHeight: "85vh", overflowY: "auto" }}>{children}</Box>
       </Grid2>
     </Box>
   );

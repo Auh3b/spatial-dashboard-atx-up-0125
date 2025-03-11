@@ -1,7 +1,10 @@
 import { Box, Grid2, Paper, Popper, Typography } from "@mui/material";
 import { useState } from "react";
 import { RgbaColorPicker } from "react-colorful";
-import { deckColorToRgba } from "../../../../../../utils/colorUtils";
+import {
+  deckColorToRgba,
+  deckColorToRgbaString,
+} from "../../../../../../utils/colorUtils";
 
 export default function SingularColorPicker({ onColorChange, value }) {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -11,23 +14,21 @@ export default function SingularColorPicker({ onColorChange, value }) {
   return (
     <>
       <Box>
-        <Typography variant="caption">Color</Typography>
-        <Grid2
-          container
-          alignItems={"center"}
-          gap={2}
-          sx={{
-            px: 2,
-            py: 1,
-            "&:hover": {
-              cursor: "pointer",
-            },
-            borderRadius: 0.5,
-            border: (theme) => `${theme.palette.divider} 1px solid`,
-          }}
-          onClick={handleClick}>
-          <Box sx={{ width: 10, height: 10, backgroundColor: value }} />
-          <Typography variant="caption">{value}</Typography>
+        <Grid2 container alignItems={"center"} justifyContent={"space-between"}>
+          <Typography variant="caption">Color</Typography>
+          <Box
+            sx={{
+              width: 16,
+              height: 16,
+              backgroundColor: deckColorToRgbaString(value),
+              "&:hover": {
+                cursor: "pointer",
+              },
+              borderRadius: 0.5,
+              border: (theme) => `${theme.palette.divider} 1px solid`,
+            }}
+            onClick={handleClick}
+          />
         </Grid2>
       </Box>
       <Popper

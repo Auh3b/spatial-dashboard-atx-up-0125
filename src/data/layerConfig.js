@@ -32,8 +32,8 @@ export const attributeConfig = {
 
 const initialLayerConfig = {
   [LAYER_TYPE.POINT_LAYER]: {
-    visible: true,
     legend: {
+      visible: true,
       color: getRandomColor(),
       radius: 5,
       strokeWidth: 1,
@@ -43,23 +43,23 @@ const initialLayerConfig = {
     },
   },
   [LAYER_TYPE.POLYGON_LAYER]: {
-    visible: true,
     legend: {
+      visible: true,
       color: getRandomColor(),
       strokeWidth: 1,
       strokeColor: getRandomColor(),
     },
   },
   [LAYER_TYPE.LINE_LAYER]: {
-    visible: true,
     legend: {
+      visible: true,
       strokeWidth: 1,
       strokeColor: getRandomColor(),
     },
   },
   [LAYER_TYPE.ICON_LAYER]: {
-    visible: true,
     legend: {
+      visible: true,
       latitude: "",
       longitude: "",
       color: getRandomColor(),
@@ -67,8 +67,8 @@ const initialLayerConfig = {
     },
   },
   [LAYER_TYPE.HEX_LAYER]: {
-    visible: true,
     legend: {
+      visible: true,
       latitude: "",
       longitude: "",
       extruded: true,
@@ -77,8 +77,8 @@ const initialLayerConfig = {
     },
   },
   [LAYER_TYPE.HEATMAP_LAYER]: {
-    visible: true,
     legend: {
+      visible: true,
       latitude: "",
       longitude: "",
       intensity: 1,
@@ -88,14 +88,45 @@ const initialLayerConfig = {
   },
 };
 
+export const allowedShapes = [
+  {
+    label: "Point",
+    value: LAYER_TYPE.POINT_LAYER,
+  },
+  {
+    label: "Line",
+    value: LAYER_TYPE.LINE_LAYER,
+  },
+  {
+    label: "Polygon",
+    value: LAYER_TYPE.POLYGON_LAYER,
+  },
+  {
+    label: "Icon",
+    value: LAYER_TYPE.ICON_LAYER,
+  },
+  {
+    label: "Heat Map",
+    value: LAYER_TYPE.HEATMAP_LAYER,
+  },
+  {
+    label: "Hex Map",
+    value: LAYER_TYPE.HEX_LAYER,
+  },
+];
+
 const getConfig = (type) => initialLayerConfig[type];
 
-export const getInitialLayerConfig = (source, type) => {
-  const { name: id, type: sourceType } = source;
+export const getInitialLayerConfig = (id, source, type) => {
+  const { name, type: sourceType } = source;
+
+  const deckId = `${type}-${id}-${source.name}`;
+
   const config = {
     id,
-    name: id,
-    source: id,
+    deckId,
+    name,
+    source,
     sourceType,
     type,
     ...getConfig(type),

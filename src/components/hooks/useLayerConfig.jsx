@@ -7,13 +7,7 @@ export default function useLayerConfig(id) {
   const layer = useMemo(() => {
     if (layers[id]) return layers[id];
   }, [layers, id]);
-  const dataSources = useSelector((state) => state.app.data);
-  const source = useMemo(() => {
-    if (dataSources[id]) return dataSources[id];
-    return null;
-  }, [dataSources]);
   return {
     layer,
-    source,
   };
 }

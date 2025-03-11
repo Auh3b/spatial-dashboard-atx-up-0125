@@ -1,3 +1,4 @@
+import { polygon } from "@turf/turf";
 import {
   HeatmapLayer,
   HexagonLayer,
@@ -59,7 +60,6 @@ export async function derivedLayers({ layerData = {} }) {
 }
 
 function getPositionProp(layerItem) {
-  console.log(layerItem);
   if (layerItem.sourceType === "geojson") {
     return (feature) => feature.geometry.coordinates;
   }
@@ -75,12 +75,24 @@ function getPositionProp(layerItem) {
 async function getDataProp(layerItem) {
   const data = await geoWorker({
     name: METHOD_NAMES.GET_DATA,
-    params: layerItem,
+    params: layerItem.source,
   });
-  if (layerItem.sourceType === "geojson") {
-    return data.features;
-  }
-  return data;
+
+  if (layerItem.sourceType !== "geojson") return data;
+
+  const output = data.features.reduce((acc, current) => {
+    if (current.geometry.type.search(/^(Multi).*/gm) === -1)
+      return [...acc, current];
+    let output = [];
+
+    for (let i = 0; i < current.geometry.coordinates.length; i++) {
+      const coordinate = current.geometry.coordinates[i];
+      const feature = polygon(coordinate, current.properties);
+      output = [...output, feature];
+    }
+    return [...acc, ...output];
+  }, []);
+  return output;
 }
 
 async function getLayerProps(layerItem) {
@@ -91,7 +103,7 @@ async function getLayerProps(layerItem) {
 
 async function getPointLayerProps(layerItem) {
   const layerProps = {};
-  layerProps["id"] = layerItem.name;
+  layerProps["id"] = layerItem.deckId;
   layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPosition"] = getPositionProp(layerItem);
   layerProps["getFillColor"] = layerItem.legend.color;
@@ -101,13 +113,14 @@ async function getPointLayerProps(layerItem) {
   layerProps["pointRadiusUnits"] = "pixels";
   layerProps["stroked"] = true;
   layerProps["lineWidthUnits"] = "pixels";
+  layerProps["visible"] = layerItem.legend.visible;
 
   return layerProps;
 }
 
 async function getPolygonLayerProps(layerItem) {
   const layerProps = {};
-  layerProps["id"] = layerItem.name;
+  layerProps["id"] = layerItem.deckId;
   layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPolygon"] = getPositionProp(layerItem);
   layerProps["getFillColor"] = layerItem.legend.color;
@@ -115,45 +128,49 @@ async function getPolygonLayerProps(layerItem) {
   layerProps["getLineWidth"] = layerItem.legend.strokeWidth;
   layerProps["lineWidthUnits"] = "pixels";
   layerProps["stroked"] = true;
-  layerProps["visible"] = true;
+  layerProps["visible"] = layerItem.legend.visible;
   return layerProps;
 }
 
 async function getLineLayerProps(layerItem) {
   const layerProps = {};
-  layerProps["id"] = layerItem.name;
+  layerProps["id"] = layerItem.deckId;
   layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPosition"] = getPositionProp(layerItem);
   layerProps["getLineColor"] = layerItem.legend.strokeColor;
   layerProps["lineWidthUnits"] = "pixels";
-  layerProps["visible"] = true;
+  layerProps["visible"] = layerItem.legend.visible;
   layerProps["stroked"] = true;
   return layerProps;
 }
 
 async function getIconLayerProps(layerItem) {
   const layerProps = {};
-  layerProps["id"] = layerItem.name;
+  layerProps["id"] = layerItem.deckId;
   layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPosition"] = getPositionProp(layerItem);
+  layerProps["visible"] = layerItem.legend.visible;
   return layerProps;
 }
 
 async function getHeatMapLayerProps(layerItem) {
   const layerProps = {};
-  layerProps["id"] = layerItem.name;
+  layerProps["id"] = layerItem.deckId;
   layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPosition"] = getPositionProp(layerItem);
+  layerProps["visible"] = layerItem.legend.visible;
   return layerProps;
 }
 
 async function getHexLayerProps(layerItem) {
+  console.log(layerItem);
   const layerProps = {};
-  layerProps["id"] = layerItem.name;
+  layerProps["id"] = layerItem.deckId;
   layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPosition"] = getPositionProp(layerItem);
   layerProps["radius"] = layerItem.legend.radius;
   layerProps["extruded"] = layerItem.legend.extruded;
   layerProps["elevationScale"] = layerItem.legend.elevationScale;
+  layerProps["visible"] = layerItem.legend.visible;
   return layerProps;
 }

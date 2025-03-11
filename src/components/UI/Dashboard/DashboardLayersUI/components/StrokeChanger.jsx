@@ -64,7 +64,7 @@ export default function StrokeChanger({ id, type }) {
 
 const staticStrokeWidthProps = {
   min: 0,
-  step: 0.01,
+  step: 0.5,
   max: 5,
   size: "small",
   sx: {

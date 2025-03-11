@@ -1,27 +1,30 @@
 import {
   Box,
+  Checkbox,
   Divider,
   Grid2,
   Paper,
   Typography,
-  Checkbox,
-  IconButton,
-  Collapse,
 } from "@mui/material";
-import React, { Fragment, useCallback, useState } from "react";
+import { produce } from "immer";
+import React, { Fragment, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getLegend, updateLegend } from "../../../store/mapStore";
-import { ChevronRight, KeyboardArrowDown } from "@mui/icons-material";
+import { getLayers, updateLayer } from "../../../store/mapStore";
 
 export default function Legend() {
   const dispatch = useDispatch();
-  const legend = useSelector((state) => getLegend(state));
+  const layers = useSelector((state) => getLayers(state));
   const handleCheck = useCallback(
-    ({ id, parent, visible }) => {
-      dispatch(updateLegend({ id, value: { id, parent, visible } }));
+    ({ id, visible }) => {
+      const layer = layers[id];
+      const value = produce(layer, (draft) => {
+        draft.legend.visible = visible;
+      });
+      dispatch(updateLayer({ id, value }));
     },
-    [legend],
+    [layers],
   );
+  console.log(layers);
 
   return (
     <Box
@@ -37,15 +40,9 @@ export default function Legend() {
             Legend
           </Typography>
           <Divider flexItem sx={{ mb: 1 }} />
-          {legend &&
-            Object.values(legend).map(({ id, ...rest }) => (
-              <LegendItem
-                key={id}
-                id={id}
-                {...rest}
-                checked={false}
-                onCheck={handleCheck}
-              />
+          {layers &&
+            Object.values(layers).map(({ id, ...rest }) => (
+              <LegendItem key={id} id={id} {...rest} onCheck={handleCheck} />
             ))}
         </Grid2>
       </Paper>
@@ -53,28 +50,21 @@ export default function Legend() {
   );
 }
 
-function LegendItem({
-  id,
-  name,
-  visible,
-  onCheck,
-  subs = undefined,
-  parent = undefined,
-}) {
-  const [open, setOpen] = useState(false);
+function LegendItem({ id, name, legend: { visible }, onCheck }) {
+  // const [open, setOpen] = useState(false);
 
   const handleCheck = useCallback(
     (e) => {
-      onCheck({ id, parent, visible: e.target.checked });
+      onCheck({ id, visible: e.target.checked });
     },
     [parent, id],
   );
 
-  const handleToggle = useCallback(() => {
-    if (subs) {
-      setOpen((prev) => !prev);
-    }
-  }, [subs]);
+  // const handleToggle = useCallback(() => {
+  //   if (subs) {
+  //     setOpen((prev) => !prev);
+  //   }
+  // }, [subs]);
 
   return (
     <Fragment>
@@ -85,7 +75,7 @@ function LegendItem({
         justifyContent={"space-between"}
         sx={{ my: 0.25 }}>
         <Grid2 container sx={{}}>
-          <Box
+          {/* <Box
             sx={{
               mx: !subs && !parent ? 0.5 : "unset",
               minWidth: !subs && !parent ? 24 : "unset",
@@ -102,8 +92,8 @@ function LegendItem({
                 {open ? <KeyboardArrowDown /> : <ChevronRight />}
               </IconButton>
             )}
-          </Box>
-          <Typography variant={parent ? "caption" : "subtitle2"}>
+          </Box> */}
+          <Typography sx={{ pl: 1 }} variant={parent ? "caption" : "subtitle2"}>
             {name}
           </Typography>
         </Grid2>
@@ -115,8 +105,8 @@ function LegendItem({
           sx={{ py: 0, placeSelf: "flex-end" }}
         />
       </Grid2>
-      <Collapse in={open}>
-        <Grid2 container justifyContent={"end"}>
+      {/* <Collapse in={open}> */}
+      {/* <Grid2 container justifyContent={"end"}>
           {subs && <Divider flexItem orientation="vertical" sx={{ px: 1 }} />}
           {subs && (
             <Box flexGrow={1} pl={2}>
@@ -130,8 +120,8 @@ function LegendItem({
               ))}
             </Box>
           )}
-        </Grid2>
-      </Collapse>
+        </Grid2> */}
+      {/* </Collapse> */}
     </Fragment>
   );
 }
