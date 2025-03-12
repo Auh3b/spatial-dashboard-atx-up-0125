@@ -12,4 +12,5 @@ export const tabulationHandlers = {
   [LOADER_TYPE.CSV]: tabulateNormal,
   [LOADER_TYPE.JSON]: tabulateNormal,
   [LOADER_TYPE.GEOJSON]: tabulateGeoJSON,
+  [LOADER_TYPE.KML]: tabulateGeoJSON,
 };

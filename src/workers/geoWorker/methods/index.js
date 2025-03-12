@@ -8,25 +8,44 @@ import { LOADER_TYPE, loaders } from "./methodUtils";
 
 let datasets = {};
 
+export async function setLocalData(params) {
+  const { data, ...queue } = params;
+  const output = processLocalLoad(queue, data);
+  return output;
+}
+
 export async function fetchData(params) {
   const { queue } = params;
   const resolve = await Promise.all(queue.map(({ url }) => fetch(url)));
-  let volumes = {};
-  let schema = {};
+  let output = [];
   for (let i = 0; i < queue.length; i++) {
-    const { name, type, ...rest } = queue[i];
-    const data = resolve[i];
-    const loadedData = await loadData({ name, type, data, ...rest });
-    volumes[name] = getDataVolume(loadedData, type);
-    schema[name] = getDataSchema(loadedData, type);
+    const _output = await processLoad(queue[i], resolve[i]);
+    output = [...output, _output];
   }
 
-  return queue.map((d, i) => ({
-    ...d,
-    loaded: true,
-    volume: volumes[d.name],
-    schema: schema[d.name],
-  }));
+  return output;
+}
+
+function processLocalLoad(queue, data) {
+  let output = { ...queue };
+  const { name, type, ...rest } = queue;
+  const loadedData = loadLocalData({ name, type, data, ...rest });
+  output["volume"] = getDataVolume(loadedData, type);
+  output["schema"] = getDataSchema(loadedData, type);
+  output["loaded"] = true;
+  output["type"] = type === LOADER_TYPE.KML ? LOADER_TYPE.GEOJSON : type;
+  return output;
+}
+
+async function processLoad(queue, data) {
+  let output = { ...queue };
+  const { name, type, ...rest } = queue;
+  const loadedData = await loadData({ name, type, data, ...rest });
+  output["volume"] = getDataVolume(loadedData, type);
+  output["schema"] = getDataSchema(loadedData, type);
+  output["loaded"] = true;
+  output["type"] = type === LOADER_TYPE.KML ? LOADER_TYPE.GEOJSON : type;
+  return output;
 }
 
 export function getData(params) {
@@ -54,6 +73,17 @@ function setData(params) {
   };
 }
 
+function loadLocalData(params) {
+  const { type, data, name, filter } = params;
+  const processedData = data;
+  const filteredData = filter
+    ? applyPropertyFilter(processedData, { ...filter, fileType: type })
+    : processedData;
+  const dataWithIds = addIds(filteredData, type);
+  setData({ name, data: dataWithIds });
+  return dataWithIds;
+}
+
 async function loadData(params) {
   const { type, data, name, filter } = params;
   const processedData = await parse(data, loaders[type]);
@@ -66,7 +96,7 @@ async function loadData(params) {
 }
 
 function addIds(data, type) {
-  if (type === LOADER_TYPE.GEOJSON) {
+  if (type === LOADER_TYPE.GEOJSON || type === LOADER_TYPE.KML) {
     return {
       ...data,
       features: data.features.map((d) => ({
@@ -83,14 +113,14 @@ function addIds(data, type) {
 }
 
 function getDataVolume(data, type) {
-  if (type === LOADER_TYPE.GEOJSON) {
+  if (type === LOADER_TYPE.GEOJSON || type === LOADER_TYPE.KML) {
     return data.features.length;
   }
   return data.length;
 }
 
 function getDataSchema(data, type) {
-  if (type === LOADER_TYPE.GEOJSON) {
+  if (type === LOADER_TYPE.GEOJSON || type === LOADER_TYPE.KML) {
     return Object.keys(data.features[0].properties);
   }
   return Object.keys(data[0]);
@@ -100,7 +130,7 @@ function applyPropertyFilter(data, params) {
   const { fileType, type, value, column } = params;
   const filterFn = FILTER_FUNCTIONS[type](value, column);
 
-  if (fileType === LOADER_TYPE.GEOJSON) {
+  if (fileType === LOADER_TYPE.GEOJSON || fileType === LOADER_TYPE.KML) {
     return {
       ...data,
       features: data.features.filter((d) => filterFn(d["properties"])),
@@ -123,7 +153,7 @@ function applySpatialFilter(params) {
 
   let target = datasets[source].data;
 
-  if (type !== LOADER_TYPE.GEOJSON) {
+  if (type !== LOADER_TYPE.GEOJSON || type === LOADER_TYPE.KML) {
     target = featureCollection(
       target.map((d) => {
         if (d.lat && d.lng) {
@@ -145,7 +175,7 @@ function applySpatialFilter(params) {
 
   const count = _output.length;
 
-  if (type === LOADER_TYPE.GEOJSON) {
+  if (type === LOADER_TYPE.GEOJSON || type === LOADER_TYPE.KML) {
     return {
       count,
       data: featureCollection(_output),

@@ -21,14 +21,14 @@ import {
 } from "../../../../../data/layerConfig";
 import { setBatchData } from "../../../../../store/appStore";
 import { addLayer } from "../../../../../store/mapStore";
-import { getFileExt } from "../../../../../utils/fileUploadFuncs";
+import { allowedFiles, getFileExt } from "../../../../../utils/fileUploadFuncs";
 import { getNameFromString } from "../../../../../utils/legendUtils";
 import geoWorker from "../../../../../workers/geoWorker";
 import { METHOD_NAMES } from "../../../../../workers/geoWorker/methods/methodUtils";
 import useFileUpload from "../../../../hooks/useFileUpload";
 import ValueSelector from "./common/ValueSelector";
 
-export default function AddLayerModel({ open, onClose }) {
+export default function AddLayerModal({ open, onClose }) {
   const [selectedTab, setSelectedTab] = useState("existing");
   const handleChange = (_e, value) => {
     setSelectedTab(value);
@@ -161,8 +161,9 @@ function FromSourceTab({ tab, onClose }) {
 }
 
 function NewLocalSource({ tab, onClose }) {
+  const dispatch = useDispatch();
   const [selectedLayerType, setSelectedLayerType] = useState("");
-  const { file, fileName, handleFileUpload } = useFileUpload();
+  const { file, handleFileUpload } = useFileUpload();
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -171,12 +172,35 @@ function NewLocalSource({ tab, onClose }) {
 
   const selected = tab === "local";
 
+  const handleAdd = useCallback(async () => {
+    try {
+      const name = METHOD_NAMES.SET_DATA;
+      const params = file;
+      const source = await geoWorker({ name, params });
+      dispatch(setBatchData([source]));
+      const id = crypto.randomUUID().toString();
+      const value = getInitialLayerConfig(id, source, selectedLayerType);
+      dispatch(
+        addLayer({
+          id,
+          value,
+        }),
+      );
+      onClose();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [file, selectedLayerType]);
+
   return (
     <>
       {selected && (
         <Box sx={{ p: 1 }}>
           <Typography variant={"subtitle1"}>
-            Add a layer from new source
+            Add a layer from new source.{" "}
+            <span style={{ fontStyle: "italic" }}>
+              Allowed files include {allowedFiles.join(", ")}
+            </span>
           </Typography>
 
           <Grid2
@@ -191,7 +215,7 @@ function NewLocalSource({ tab, onClose }) {
             </Grid2>
             <Tooltip>
               <Typography noWrap={true} sx={{ flexGrow: 1 }}>
-                {fileName}
+                {file?.name || ""}
               </Typography>
             </Tooltip>
             <Grid2 size={3}>
@@ -203,7 +227,7 @@ function NewLocalSource({ tab, onClose }) {
                 Select File
                 <input
                   type="file"
-                  accept=".json,.geojson,.csv"
+                  accept=".json,.geojson,.csv,.kml"
                   hidden
                   onChange={handleFileUpload}
                 />
@@ -231,6 +255,7 @@ function NewLocalSource({ tab, onClose }) {
           </Grid2>
           <Button
             sx={{}}
+            onClick={handleAdd}
             variant="contained"
             startIcon={<Add />}
             disabled={!selectedLayerType || !file}>

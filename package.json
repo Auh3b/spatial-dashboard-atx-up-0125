@@ -22,6 +22,7 @@
     "@loaders.gl/core": "4.3.3",
     "@loaders.gl/csv": "4.3.3",
     "@loaders.gl/json": "4.3.3",
+    "@loaders.gl/kml": "^4.3.3",
     "@luma.gl/core": "9.0.28",
     "@luma.gl/engine": "9.0.28",
     "@mapbox/mapbox-gl-draw": "1.5.0",

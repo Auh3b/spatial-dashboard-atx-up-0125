@@ -3,13 +3,12 @@ import { useDispatch } from "react-redux";
 import { setFeedback } from "../../store/appStore";
 import { FEEDBACK_MESSAGE } from "../../utils/feedbackUtils";
 import { getFileExt, parseUpload } from "../../utils/fileUploadFuncs";
+import { getNameFromString } from "../../utils/legendUtils";
 
 export default function useFileUpload() {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState(null);
-  const [fileName, setFileName] = useState("");
-  const [fileForm, setFileForm] = useState({});
 
   const handleFileUpload = async (event) => {
     setIsLoading(true);
@@ -17,14 +16,10 @@ export default function useFileUpload() {
       const upload = event.target.files[0];
 
       if (!upload) throw FEEDBACK_MESSAGE.NO_FILE_SELECTED;
-      const uploadType = getFileExt(upload.name);
-      const result = await parseUpload(upload, uploadType);
-      setFileName(upload.name);
-      setFile(result);
-      setFileForm({
-        source: upload.name.split(".")[0].replace(" ", "_"),
-        name: upload.name,
-      });
+      const type = getFileExt(upload.name);
+      const data = await parseUpload(upload, type);
+      const name = getNameFromString(upload.name);
+      setFile({ name, data, type });
     } catch (error) {
       console.log(error);
       dispatch(
@@ -38,18 +33,9 @@ export default function useFileUpload() {
     }
   };
 
-  const handleFormChange = (key) => {
-    return (e) => {
-      const value = e.currentTarget.value;
-      setFileForm((prev) => ({ ...prev, [key]: value }));
-    };
-  };
   return {
     file,
-    fileForm,
-    fileName,
     isLoading,
     handleFileUpload,
-    handleFormChange,
   };
 }

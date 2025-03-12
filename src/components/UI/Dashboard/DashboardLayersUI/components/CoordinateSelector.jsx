@@ -54,7 +54,7 @@ export default function CoordinateSelector({ id, type, sourceType, source }) {
     return [];
   }, [source]);
 
-  const isGeojson = sourceType === "geojson";
+  const isGeojson = sourceType === "geojson" || sourceType === "kml";
 
   return (
     <>

@@ -60,7 +60,7 @@ export async function derivedLayers({ layerData = {} }) {
 }
 
 function getPositionProp(layerItem) {
-  if (layerItem.sourceType === "geojson") {
+  if (layerItem.sourceType === "geojson" || layerItem.sourceType === "kml") {
     return (feature) => feature.geometry.coordinates;
   }
   if (layerItem.legend.coordinate) {
@@ -78,7 +78,9 @@ async function getDataProp(layerItem) {
     params: layerItem.source,
   });
 
-  if (layerItem.sourceType !== "geojson") return data;
+  console.log(data, layerItem);
+
+  if (!["geojson", "kml"].includes(layerItem.sourceType)) return data;
 
   const output = data.features.reduce((acc, current) => {
     if (current.geometry.type.search(/^(Multi).*/gm) === -1)
@@ -171,7 +173,6 @@ async function getHeatMapLayerProps(layerItem) {
 }
 
 async function getHexLayerProps(layerItem) {
-  console.log(layerItem);
   const layerProps = {};
   layerProps["id"] = layerItem.deckId;
   layerProps["data"] = await getDataProp(layerItem);

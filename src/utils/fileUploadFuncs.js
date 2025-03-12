@@ -1,18 +1,20 @@
 import { parse } from "@loaders.gl/core";
 import { CSVLoader } from "@loaders.gl/csv";
 import { _GeoJSONLoader, JSONLoader } from "@loaders.gl/json";
+import { KMLLoader } from "@loaders.gl/kml";
 
 export const FILE_TYPE = {
   CSV: "csv",
   GEOJSON: "geojson",
   JSON: "json",
-  KMZ: "kmz",
+  KML: "kml",
 };
 
 export const LOADERS = {
   [FILE_TYPE.CSV]: CSVLoader,
   [FILE_TYPE.JSON]: JSONLoader,
   [FILE_TYPE.GEOJSON]: _GeoJSONLoader,
+  [FILE_TYPE.KML]: KMLLoader,
 };
 
 export const LOADER_OPTIONS = {

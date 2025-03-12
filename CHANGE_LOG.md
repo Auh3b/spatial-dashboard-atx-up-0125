@@ -70,6 +70,12 @@
 
 ## 29/10/2026
 
-## Data layers
+### Data layers
 
 - Added ability to drill down to admin levels country( lv0) --> states/provinces(lv1) --> counties (lv2)
+
+## 12/03/2025
+
+### Layers (Breaking Changes)
+
+- The nature in which layers are add to the map has changed, and does not use individual files. Layers are generated based on a source, and the source can be taken from a existing source, from HTTPS/URL, or uploaded by a local file. Data is stored locally and will disappear when application is closed.
