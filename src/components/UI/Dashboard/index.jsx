@@ -26,41 +26,23 @@ export default function index() {
     () => {
       if (isLoading)
         dispatch(
-          setDataLoadingFeed({ isLoading, message: "Loading initial data" }),
+          setDataLoadingFeed({ isLoading, message: "Loading initial data" })
         );
       if (!isLoading && data) {
         dispatch(setBatchData(data));
-        const id1 = crypto.randomUUID().toString();
-        dispatch(
-          addLayer({
-            id: id1,
-            value: getInitialLayerConfig(
-              id1,
-              data[0],
-              LAYER_TYPE.POLYGON_LAYER,
-            ),
-          }),
-        );
-        const id2 = crypto.randomUUID().toString();
-        dispatch(
-          addLayer({
-            id: id2,
-            value: getInitialLayerConfig(id2, data[1], LAYER_TYPE.POINT_LAYER),
-          }),
-        );
         dispatch(setDataLoadingFeed({ isLoading, message: "" }));
         dispatch(
-          setFeedback({ status: "success", message: "Initial data loaded" }),
+          setFeedback({ status: "success", message: "Initial data loaded" })
         );
       }
     },
     [isLoading, data],
-    dequal,
+    dequal
   );
   return (
     <Grid2 container sx={{ flexGrow: 1 }} wrap={"nowrap"}>
       <DashboardPanel />
-      <Grid2 container direction={"column"} flexGrow={1} wrap="nowrap">
+      <Grid2 container direction={"column"} flexGrow={1} wrap='nowrap'>
         <MapActionContextUI />
         <MapWrapper />
       </Grid2>

@@ -7,13 +7,22 @@ import {
   Typography,
 } from "@mui/material";
 import { produce } from "immer";
-import React, { Fragment, useCallback } from "react";
+import React, { Fragment, useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getLayers, updateLayer } from "../../../store/mapStore";
 import useLayerConfig from "../../hooks/useLayerConfig";
 
 export default function Legend() {
-  const layers = useSelector((state) => getLayers(state));
+  const _layers = useSelector((state) => getLayers(state));
+  const layers = useMemo(() => {
+    const output = {};
+    for (let layerId in _layers) {
+      if (_layers[layerId]?.showInLegend) {
+        output[layerId] = _layers[layerId];
+      }
+    }
+    return output;
+  }, [_layers]);
 
   return (
     <Box
@@ -22,10 +31,11 @@ export default function Legend() {
         right: 16,
         bottom: 16,
         zIndex: (theme) => theme.zIndex.modal,
-      }}>
+      }}
+    >
       <Paper sx={{ minWidth: 200, pb: 1 }}>
         <Grid2 container direction={"column"}>
-          <Typography variant="overline" sx={{ px: 2 }}>
+          <Typography variant='overline' sx={{ px: 2 }}>
             Legend
           </Typography>
           <Divider flexItem sx={{ mb: 1 }} />
@@ -50,7 +60,7 @@ function LegendItem({ id, name, legend: { visible } }) {
       });
       dispatch(updateLayer({ id, value }));
     },
-    [layer],
+    [layer]
   );
 
   // const handleToggle = useCallback(() => {
@@ -63,10 +73,11 @@ function LegendItem({ id, name, legend: { visible } }) {
     <Fragment>
       <Grid2
         container
-        wrap="nowrap"
+        wrap='nowrap'
         alignItems={"center"}
         justifyContent={"space-between"}
-        sx={{ my: 0.25 }}>
+        sx={{ my: 0.25 }}
+      >
         <Grid2 container sx={{}}>
           {/* <Box
             sx={{
@@ -92,7 +103,7 @@ function LegendItem({ id, name, legend: { visible } }) {
         </Grid2>
         <Checkbox
           disableRipple
-          size="small"
+          size='small'
           checked={visible}
           onChange={handleCheck}
           sx={{ py: 0, placeSelf: "flex-end" }}

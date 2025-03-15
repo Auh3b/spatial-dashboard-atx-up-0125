@@ -1,3 +1,5 @@
+import { addLayer } from "../store/mapStore";
+import { getUniqueId } from "../utils/axillaryUtils";
 import { getRandomColor } from "../utils/colorUtils";
 import { LAYER_TYPE } from "../utils/layerUtils";
 
@@ -36,6 +38,7 @@ export const attributeConfig = {
 
 const initialLayerConfig = {
   [LAYER_TYPE.POINT_LAYER]: {
+    showInLegend: false,
     legend: {
       visible: true,
       color: getRandomColor(),
@@ -47,6 +50,7 @@ const initialLayerConfig = {
     },
   },
   [LAYER_TYPE.POLYGON_LAYER]: {
+    showInLegend: false,
     legend: {
       visible: true,
       color: getRandomColor(),
@@ -55,6 +59,7 @@ const initialLayerConfig = {
     },
   },
   [LAYER_TYPE.LINE_LAYER]: {
+    showInLegend: false,
     legend: {
       visible: true,
       strokeWidth: 1,
@@ -62,6 +67,7 @@ const initialLayerConfig = {
     },
   },
   [LAYER_TYPE.ICON_LAYER]: {
+    showInLegend: false,
     legend: {
       visible: true,
       latitude: "",
@@ -74,6 +80,7 @@ const initialLayerConfig = {
     },
   },
   [LAYER_TYPE.HEX_LAYER]: {
+    showInLegend: false,
     legend: {
       visible: true,
       latitude: "",
@@ -84,6 +91,7 @@ const initialLayerConfig = {
     },
   },
   [LAYER_TYPE.HEATMAP_LAYER]: {
+    showInLegend: false,
     legend: {
       visible: true,
       latitude: "",
@@ -140,3 +148,75 @@ export const getInitialLayerConfig = (id, source, type) => {
   };
   return config;
 };
+
+const admin0Config = {
+  id: getUniqueId(),
+  name: "Admin0",
+  type: LAYER_TYPE.POLYGON_LAYER,
+  showInLegend: false,
+  isExplore: true,
+  legend: {
+    visible: true,
+    color: [],
+    stroke: [],
+    strokeWidth: 1,
+  },
+};
+
+const admin1Config = {
+  id: getUniqueId(),
+  name: "Admin 1",
+  type: LAYER_TYPE.POLYGON_LAYER,
+  showInLegend: false,
+  isExplore: true,
+  legend: {
+    visible: true,
+    color: [],
+    stroke: [],
+    strokeWidth: 1,
+  },
+};
+
+const admin2Config = {
+  id: getUniqueId(),
+  name: "Admin 2",
+  type: LAYER_TYPE.POLYGON_LAYER,
+  showInLegend: false,
+  isExplore: true,
+  legend: {
+    visible: true,
+    color: [],
+    stroke: [],
+    strokeWidth: 1,
+  },
+};
+
+const drawingConfig = {
+  id: getUniqueId(),
+  name: "Drawing Layer",
+  type: LAYER_TYPE.POLYGON_LAYER,
+  isDrawing: true,
+  showInLegend: false,
+  legend: {
+    visible: true,
+    color: [],
+    strokeWidth: 1,
+    stroke: [],
+  },
+};
+
+export const exploreLayers = [admin0Config, admin1Config, admin2Config];
+export const drawingLayers = [drawingConfig];
+
+export function setBatchLayers(layerConfigs, dispatch) {
+  for (let i = 0; i < layerConfigs.length; i++) {
+    const value = layerConfigs[i];
+    const id = value.id;
+    dispatch(
+      addLayer({
+        id,
+        value,
+      })
+    );
+  }
+}

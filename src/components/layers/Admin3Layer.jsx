@@ -23,25 +23,25 @@ export default function Admin3Layer() {
     params: dataSet,
   });
 
-  useEffect(() => {
-    dispatch(
-      addLayer({
-        id,
-        value: {
-          id,
-          name,
-          source: datasetName,
-          legend: {
-            type,
-            colors,
-            labels,
-          },
-        },
-      }),
-    );
+  // useEffect(() => {
+  //   dispatch(
+  //     addLayer({
+  //       id,
+  //       value: {
+  //         id,
+  //         name,
+  //         source: datasetName,
+  //         legend: {
+  //           type,
+  //           colors,
+  //           labels,
+  //         },
+  //       },
+  //     }),
+  //   );
 
-    return () => dispatch(removeLayer(id));
-  }, []);
+  //   return () => dispatch(removeLayer(id));
+  // }, []);
 
   if (data)
     return new GeoJsonLayer({
@@ -66,7 +66,7 @@ export default function Admin3Layer() {
             content:
               object.properties["NAME_1"] ||
               "If your seeing this, change the field value 😉",
-          }),
+          })
         );
       },
     });

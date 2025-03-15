@@ -47,6 +47,7 @@ export async function derivedLayers({ layerData = {} }) {
   try {
     let layers = [];
     for (let layerId in layerData) {
+      if (isDerivedLayer(layers[layerId])) continue;
       const layerItem = layerData[layerId];
       const layerProps = await getLayerProps(layerItem);
       const layer = getLayer(layerItem.type, layerProps);
@@ -77,8 +78,6 @@ async function getDataProp(layerItem) {
     name: METHOD_NAMES.GET_DATA,
     params: layerItem.source,
   });
-
-  console.log(data, layerItem);
 
   if (!["geojson", "kml"].includes(layerItem.sourceType)) return data;
 
@@ -182,4 +181,8 @@ async function getHexLayerProps(layerItem) {
   layerProps["elevationScale"] = layerItem.legend.elevationScale;
   layerProps["visible"] = layerItem.legend.visible;
   return layerProps;
+}
+
+export function isDerivedLayer(layerConfig) {
+  return Boolean(!layerConfig?.isDrawing) || Boolean(!layerConfig?.isExplore);
 }

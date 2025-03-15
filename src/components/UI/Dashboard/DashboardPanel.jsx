@@ -14,10 +14,10 @@ import {
 } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import DashboardHome from "./DashboardHome";
-import DashboardLayersUI from "./DashboardLayersUI";
 import DashboardSetting from "./DashboardSetting";
 import DashboardTable from "./DashboardTable";
 import DashboardUpload from "./DashboardUpload";
+import DashboardLayersUI from "./DashboardLayersUI/index";
 
 const contentData = {
   0: {
@@ -45,9 +45,9 @@ export default function DashboardPanel() {
   const { title } = useMemo(() => contentData[selectedPanel], [selectedPanel]);
   return (
     <Box height={"100%"}>
-      <Grid2 container sx={{ height: "100%" }} wrap="nowrap">
+      <Grid2 container sx={{ height: "100%" }} wrap='nowrap'>
         <PanelTabs value={selectedPanel} onChange={handlePanelSelect} />
-        <Divider orientation="vertical" flexItem />
+        <Divider orientation='vertical' flexItem />
         <PanelContent title={title}>
           <DashboardHome selected={selectedPanel} index={0} />
           <DashboardLayersUI selected={selectedPanel} index={1} />
@@ -55,7 +55,7 @@ export default function DashboardPanel() {
           <DashboardUpload selected={selectedPanel} index={3} />
           <DashboardSetting selected={selectedPanel} index={4} />
         </PanelContent>
-        <Divider orientation="vertical" flexItem />
+        <Divider orientation='vertical' flexItem />
       </Grid2>
     </Box>
   );
@@ -65,7 +65,7 @@ function PanelContent({ title, children }) {
   return (
     <Box sx={{ width: "275px" }}>
       <Grid2 container direction={"column"}>
-        <Typography variant="overline" sx={{ p: 1 }}>
+        <Typography variant='overline' sx={{ p: 1 }}>
           {title}
         </Typography>
         <Divider flexItem />
@@ -77,7 +77,7 @@ function PanelContent({ title, children }) {
 
 function PanelTabs(props) {
   return (
-    <Tabs {...props} orientation="vertical">
+    <Tabs {...props} orientation='vertical'>
       <CustomTab icon={<HomeIcon />} value={0} />
       <CustomTab icon={<LayersIcon />} value={1} />
       <CustomTab icon={<TableChartIcon />} value={2} />
@@ -89,7 +89,7 @@ function PanelTabs(props) {
 
 function CustomTab(props) {
   return (
-    <Tooltip title={contentData[props.value].title} placement="right">
+    <Tooltip title={contentData[props.value].title} placement='right'>
       <Tab
         {...props}
         sx={{
