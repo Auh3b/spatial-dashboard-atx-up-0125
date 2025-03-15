@@ -1,60 +1,30 @@
 import { GeoJsonLayer } from "deck.gl";
 import { useDispatch, useSelector } from "react-redux";
-import { getData } from "../../store/appStore";
-import useGeoWorker from "../hooks/useGeoWorker";
-import { useEffect } from "react";
-import {
-  addLayer,
-  getIsDrawing,
-  removeLayer,
-  removePopup,
-  setPopup,
-} from "../../store/mapStore";
+import { STATIC_LAYER_NAMES } from "../../data/layerConfig";
+import { getIsDrawing, removePopup, setPopup } from "../../store/mapStore";
 import { METHOD_NAMES } from "../../workers/geoWorker/methods/methodUtils";
-const id = "admin-2-layer";
-const name = "Admin 2 Layer";
-const colors = ["#d95f02"];
-const labels = ["Admin 2"];
-const type = "category";
+import useGeoWorker from "../hooks/useGeoWorker";
+import useLayerConfig from "../hooks/useLayerConfig";
 
-const datasetName = "admin_2";
+const id = STATIC_LAYER_NAMES.ADMIN_2_LAYER;
 
 export default function Admin2Layer() {
   const dispatch = useDispatch();
+  const { layer } = useLayerConfig(id);
   const isDrawing = useSelector((state) => getIsDrawing(state));
-  const dataSet = useSelector((state) => getData(state, datasetName)) || {};
   const { data } = useGeoWorker({
     name: METHOD_NAMES.GET_DATA,
-    params: dataSet,
+    params: layer?.source || {},
   });
 
-  // useEffect(() => {
-  //   dispatch(
-  //     addLayer({
-  //       id,
-  //       value: {
-  //         id,
-  //         name,
-  //         source: datasetName,
-  //         legend: {
-  //           type,
-  //           colors,
-  //           labels,
-  //         },
-  //       },
-  //     }),
-  //   );
-
-  //   return () => dispatch(removeLayer(id));
-  // }, []);
-
-  if (data)
+  if (data && layer)
     return new GeoJsonLayer({
       id,
       data,
-      getFillColor: [217, 95, 2, 100],
-      getLineColor: [217, 95, 2],
-      getLineWidth: 1,
+      getFillColor: layer.legend.color,
+      getLineColor: layer.legend.stroke,
+      getLineWidth: layer.legend.strokeWidth,
+      visible: layer.legend.visible,
       lineWidthUnits: "pixels",
       pickable: true,
       onDrag: isDrawing
@@ -77,6 +47,7 @@ export default function Admin2Layer() {
                   y,
                   show: true,
                   longitude,
+                  type: "explore",
                   feature,
                   p_code: object.properties["GUI_" + 2],
                   level: 2,
@@ -84,11 +55,15 @@ export default function Admin2Layer() {
                   content:
                     object.properties["NAME_1"] ||
                     "If your seeing this, change the field value 😉",
-                })
+                }),
               );
             }
           },
       updateTriggers: {
+        visible: layer,
+        getFillColor: layer,
+        getLineColor: layer,
+        getLineWidth: layer,
         onClick: isDrawing,
         onDrag: isDrawing,
       },

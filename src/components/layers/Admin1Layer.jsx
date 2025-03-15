@@ -1,61 +1,30 @@
 import { GeoJsonLayer } from "deck.gl";
 import { useDispatch, useSelector } from "react-redux";
-import { getData } from "../../store/appStore";
-import useGeoWorker from "../hooks/useGeoWorker";
-import { useEffect } from "react";
-import {
-  addLayer,
-  getIsDrawing,
-  removeLayer,
-  removePopup,
-  setPopup,
-} from "../../store/mapStore";
+import { STATIC_LAYER_NAMES } from "../../data/layerConfig";
+import { getIsDrawing, removePopup, setPopup } from "../../store/mapStore";
 import { METHOD_NAMES } from "../../workers/geoWorker/methods/methodUtils";
+import useGeoWorker from "../hooks/useGeoWorker";
+import useLayerConfig from "../hooks/useLayerConfig";
 
-const id = "admin-1-layer";
-const name = "Admin 1 Layer";
-const colors = ["#7570b3"];
-const labels = ["Admin 2"];
-const type = "category";
-
-const datasetName = "admin_1";
+const id = STATIC_LAYER_NAMES.ADMIN_1_LAYER;
 
 export default function Admin1Layer() {
   const dispatch = useDispatch();
   const isDrawing = useSelector((state) => getIsDrawing(state));
-  const dataSet = useSelector((state) => getData(state, datasetName)) || {};
+  const { layer } = useLayerConfig(id);
   const { data } = useGeoWorker({
     name: METHOD_NAMES.GET_DATA,
-    params: dataSet,
+    params: layer?.source || {},
   });
 
-  // useEffect(() => {
-  //   dispatch(
-  //     addLayer({
-  //       id,
-  //       value: {
-  //         id,
-  //         name,
-  //         source: datasetName,
-  //         legend: {
-  //           type,
-  //           colors,
-  //           labels,
-  //         },
-  //       },
-  //     }),
-  //   );
-
-  //   return () => dispatch(removeLayer(id));
-  // }, []);
-
-  if (data)
+  if (data && layer)
     return new GeoJsonLayer({
       id,
       data,
-      getFillColor: [117, 112, 179, 100],
-      getLineColor: [117, 112, 179],
-      getLineWidth: 1,
+      getFillColor: layer.legend.color,
+      getLineColor: layer.legend.stroke,
+      getLineWidth: layer.legend.strokeWidth,
+      visible: layer.legend.visible,
       lineWidthUnits: "pixels",
       pickable: true,
       onDrag: isDrawing
@@ -77,6 +46,7 @@ export default function Admin1Layer() {
                   x,
                   y,
                   show: true,
+                  type: "explore",
                   longitude,
                   feature: object,
                   p_code: object.properties["GID_" + 1],
@@ -86,11 +56,15 @@ export default function Admin1Layer() {
                   content:
                     object.properties["NAME_1"] ||
                     "If your seeing this, change the field value 😉",
-                })
+                }),
               );
             }
           },
       updateTriggers: {
+        visible: layer,
+        getFillColor: layer,
+        getLineColor: layer,
+        getLineWidth: layer,
         onClick: isDrawing,
         onDrag: isDrawing,
       },

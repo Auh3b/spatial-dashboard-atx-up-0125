@@ -2,7 +2,6 @@ import { Grid2, TextField, Typography } from "@mui/material";
 import React from "react";
 
 export default function TextInput({ title, value, onChange }) {
-  console.log(value);
   return (
     <Grid2
       my={1}

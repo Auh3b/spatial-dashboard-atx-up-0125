@@ -35,7 +35,7 @@ export default function StrokeChanger({ id, type }) {
   const handleColorChange = useCallback(
     (color) => {
       const value = produce(layer, (draft) => {
-        draft.legend.strokeColor = rgbaToDeckColor(color);
+        draft.legend.stroke = rgbaToDeckColor(color);
       });
       dispatch(updateLayer({ id, value }));
     },
@@ -49,11 +49,11 @@ export default function StrokeChanger({ id, type }) {
           <Box>
             <StrokeColor
               onColorChange={handleColorChange}
-              value={layer.legend.strokeColor || "#962921"}
+              value={layer.legend.stroke}
             />
             <StrokeWidth
               onChange={handleStrokeChange}
-              value={layer.legend.strokeWidth || 0}
+              value={layer.legend.strokeWidth}
             />
           </Box>
         </AttributeWrapper>

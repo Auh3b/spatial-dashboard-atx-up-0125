@@ -283,36 +283,36 @@ function NewURLSource({ tab, onClose }) {
   const selected = tab === "url";
 
   const handleAdd = useCallback(async () => {
-    // try {
-    const name = getNameFromString(url);
-    const title = name;
-    const method = METHOD_NAMES.FETCH_DATA;
-    const type = getFileExt(url);
-    const queue = [
-      {
-        name,
-        title,
-        url,
-        type,
-      },
-    ];
-    const result = await geoWorker({
-      name: method,
-      params: {
-        queue,
-      },
-    });
-    console.log(queue);
+    try {
+      const name = getNameFromString(url);
+      const title = name;
+      const method = METHOD_NAMES.FETCH_DATA;
+      const type = getFileExt(url);
+      const queue = [
+        {
+          name,
+          title,
+          url,
+          type,
+        },
+      ];
+      const result = await geoWorker({
+        name: method,
+        params: {
+          queue,
+        },
+      });
+      console.log(queue);
 
-    if (!result) throw "Something went happened.";
-    dispatch(setBatchData(result));
-    const id = crypto.randomUUID().toString();
-    const value = getInitialLayerConfig(id, result[0], selectedLayerType);
-    dispatch(addLayer({ id, value }));
-    onClose();
-    // } catch (error) {
-    //   console.log(error);
-    // }
+      if (!result) throw "Something went happened.";
+      dispatch(setBatchData(result));
+      const id = crypto.randomUUID().toString();
+      const value = getInitialLayerConfig(id, result[0], selectedLayerType);
+      dispatch(addLayer({ id, value }));
+      onClose();
+    } catch (error) {
+      console.log(error);
+    }
   }, [selectedLayerType, url]);
 
   return (

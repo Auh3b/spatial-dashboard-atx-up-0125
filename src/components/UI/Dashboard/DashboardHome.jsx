@@ -6,8 +6,8 @@ export default function DashboardHome({ selected, index }) {
     <Fragment>
       {selected === index && (
         <Box sx={{ p: 1 }}>
-          <Typography variant='h5' sx={{ mb: 2 }}>
-            Dashboard dsasa
+          <Typography variant="h5" sx={{ mb: 2 }}>
+            Dashboard
           </Typography>
           <Typography variant={"body2"}></Typography>
         </Box>

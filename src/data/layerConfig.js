@@ -1,5 +1,4 @@
 import { addLayer } from "../store/mapStore";
-import { getUniqueId } from "../utils/axillaryUtils";
 import { getRandomColor } from "../utils/colorUtils";
 import { LAYER_TYPE } from "../utils/layerUtils";
 
@@ -149,50 +148,58 @@ export const getInitialLayerConfig = (id, source, type) => {
   return config;
 };
 
-const admin0Config = {
-  id: getUniqueId(),
-  name: "Admin0",
+export const STATIC_LAYER_NAMES = {
+  ADMIN_0_LAYER: "admin-0-layer",
+  ADMIN_1_LAYER: "admin-1-layer",
+  ADMIN_2_LAYER: "admin-2-layer",
+  DRAWING_LAYER: "drawing-layer",
+  OVERLAY_RESULTS_LAYER: "overlay-results-layer",
+};
+
+export const admin0Config = {
+  id: STATIC_LAYER_NAMES.ADMIN_0_LAYER,
+  name: "Admin 0",
   type: LAYER_TYPE.POLYGON_LAYER,
   showInLegend: false,
   isExplore: true,
   legend: {
     visible: true,
-    color: [],
-    stroke: [],
+    color: [231, 41, 138, 100],
+    stroke: [231, 41, 138, 255],
     strokeWidth: 1,
   },
 };
 
-const admin1Config = {
-  id: getUniqueId(),
+export const admin1Config = {
+  id: STATIC_LAYER_NAMES.ADMIN_1_LAYER,
   name: "Admin 1",
   type: LAYER_TYPE.POLYGON_LAYER,
   showInLegend: false,
   isExplore: true,
   legend: {
     visible: true,
-    color: [],
-    stroke: [],
+    color: [117, 112, 179, 100],
+    stroke: [117, 112, 179, 255],
     strokeWidth: 1,
   },
 };
 
-const admin2Config = {
-  id: getUniqueId(),
+export const admin2Config = {
+  id: STATIC_LAYER_NAMES.ADMIN_2_LAYER,
   name: "Admin 2",
   type: LAYER_TYPE.POLYGON_LAYER,
   showInLegend: false,
   isExplore: true,
   legend: {
     visible: true,
-    color: [],
-    stroke: [],
+    color: [217, 95, 2, 100],
+    stroke: [217, 95, 2, 255],
     strokeWidth: 1,
   },
 };
 
-const drawingConfig = {
-  id: getUniqueId(),
+export const drawingConfig = {
+  id: STATIC_LAYER_NAMES.DRAWING_LAYER,
   name: "Drawing Layer",
   type: LAYER_TYPE.POLYGON_LAYER,
   isDrawing: true,
@@ -216,7 +223,7 @@ export function setBatchLayers(layerConfigs, dispatch) {
       addLayer({
         id,
         value,
-      })
+      }),
     );
   }
 }

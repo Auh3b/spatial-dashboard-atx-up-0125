@@ -1,4 +1,12 @@
-import { bboxPolygon, circle, distance, point, polygon } from "@turf/turf";
+import {
+  area,
+  bboxPolygon,
+  center,
+  circle,
+  distance,
+  point,
+  polygon,
+} from "@turf/turf";
 
 /**
  *
@@ -53,4 +61,27 @@ export function makeRectangle(start, end) {
  */
 export function makePolygon(coords) {
   return polygon(coords);
+}
+
+export function isCircleGeometry(coordinates) {
+  if (coordinates.length < 3) return false;
+  const centerValue = center(coordinates);
+  const edge = coordinates[0];
+  const radius = getDistance(centerValue, edge);
+  const circumference = 2 * Math.PI * radius;
+  const areaValue = area(coordinates);
+  const tR = 4 * Math.PI * ((areaValue / circumference) ^ 2);
+  const isCircle = tR === 1;
+  return {
+    isCircle,
+    radius,
+  };
+}
+
+export function getRadius(coordinates) {
+  if (coordinates.length < 3) return 0;
+  const centerValue = center([coordinates]);
+  const edge = coordinates[0];
+  const radius = getDistance(centerValue, edge);
+  return radius;
 }

@@ -26,7 +26,7 @@ const coordinateItems = [
   },
 ];
 
-export default function CoordinateSelector({ id, type, sourceType, source }) {
+export default function CoordinateSelector({ id, type, source }) {
   const dispatch = useDispatch();
   const isAllowed = useAllowedAttributes(type, attributeId);
 
@@ -54,7 +54,7 @@ export default function CoordinateSelector({ id, type, sourceType, source }) {
     return [];
   }, [source]);
 
-  const isGeojson = sourceType === "geojson" || sourceType === "kml";
+  const isGeojson = source?.type === "geojson" || source?.type === "kml";
 
   return (
     <>

@@ -1,7 +1,7 @@
 import { Grid2 } from "@mui/material";
 import { dequal } from "dequal";
 import { useDispatch } from "react-redux";
-import { getInitialLayerConfig } from "../../../data/layerConfig";
+import { admin0Config } from "../../../data/layerConfig";
 import queue from "../../../data/queue";
 import {
   setBatchData,
@@ -9,7 +9,6 @@ import {
   setFeedback,
 } from "../../../store/appStore";
 import { addLayer } from "../../../store/mapStore";
-import { LAYER_TYPE } from "../../../utils/layerUtils";
 import { METHOD_NAMES } from "../../../workers/geoWorker/methods/methodUtils";
 import MapWrapper from "../../MapWrapper";
 import useCompareEffect from "../../hooks/useCompareEffect";
@@ -26,23 +25,29 @@ export default function index() {
     () => {
       if (isLoading)
         dispatch(
-          setDataLoadingFeed({ isLoading, message: "Loading initial data" })
+          setDataLoadingFeed({ isLoading, message: "Loading initial data" }),
         );
       if (!isLoading && data) {
-        dispatch(setBatchData(data));
         dispatch(setDataLoadingFeed({ isLoading, message: "" }));
+        dispatch(setBatchData(data));
         dispatch(
-          setFeedback({ status: "success", message: "Initial data loaded" })
+          addLayer({
+            id: admin0Config.id,
+            value: { ...admin0Config, source: data[0] },
+          }),
+        );
+        dispatch(
+          setFeedback({ status: "success", message: "Initial data loaded" }),
         );
       }
     },
     [isLoading, data],
-    dequal
+    dequal,
   );
   return (
     <Grid2 container sx={{ flexGrow: 1 }} wrap={"nowrap"}>
       <DashboardPanel />
-      <Grid2 container direction={"column"} flexGrow={1} wrap='nowrap'>
+      <Grid2 container direction={"column"} flexGrow={1} wrap="nowrap">
         <MapActionContextUI />
         <MapWrapper />
       </Grid2>

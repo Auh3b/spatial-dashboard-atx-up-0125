@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
+import appStore from "./appStore";
 import mapStore, {
   getDrawingProps,
   getIsDrawing,
   getLayers,
   getSelectedLayer,
 } from "./mapStore";
-import appStore, { getData } from "./appStore";
 
 export const store = configureStore({
   reducer: {
@@ -15,15 +15,12 @@ export const store = configureStore({
 });
 
 export const getFilteredParams = (state) => {
-  const layer = getSelectedLayer(state);
-  const source = getLayers(state)[layer]?.source || "";
-  const sourceDetails = getData(state, source);
+  const layerId = getSelectedLayer(state);
+  const layer = getLayers(state)[layerId];
   const isDrawing = getIsDrawing(state);
   const coords = getDrawingProps(state);
   return {
-    layer,
-    source,
-    ...sourceDetails,
+    ...layer,
     isDrawing,
     feature: coords
       ? {

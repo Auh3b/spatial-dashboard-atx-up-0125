@@ -11,10 +11,11 @@ import {
 import useDrawing from "./hooks/useDrawing";
 import useMapLayers from "./hooks/useMapLayers";
 import DeckGLOverlay from "./maps/DeckGLOverlay";
-import CustomPopupContextMenu from "./UI/CustomPopupContextMenu";
+
+import { getDrawingLayers, getExplorationLayers } from "./layers";
+import CustomPopupContextMenu from "./UI/CustomPopupContextMenu/index.jsx";
 import Legend from "./UI/Legend";
 import MapNav from "./UI/MapNav";
-import { getDrawingLayers, getExplorationLayers } from "./layers";
 
 const ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_API_TOKEN;
 
@@ -28,7 +29,7 @@ const INITIAL_VIEW_STATE = {
 function MapWrapper() {
   const dispatch = useDispatch();
   const basemapUrl = useSelector(
-    (state) => `mapbox://styles/mapbox/${getBasemapUrl(state)}`
+    (state) => `mapbox://styles/mapbox/${getBasemapUrl(state)}`,
   );
   const interactivity = useSelector((state) => getInteractivity(state));
   const { cursor, mode, handlers } = useDrawing();
@@ -43,11 +44,11 @@ function MapWrapper() {
   useEffect(() => {
     if (mapWrapperContainerRef.current) {
       mapWrapperContainerRef.current.addEventListener("contextmenu", (e) =>
-        e.preventDefault()
+        e.preventDefault(),
       );
     }
   }, [mapWrapperContainerRef.current]);
-  console.log(layers);
+
   return (
     <div style={{ flexGrow: 1 }} ref={mapWrapperContainerRef}>
       <Map
@@ -57,8 +58,7 @@ function MapWrapper() {
         {...eventHandlers}
         onMove={handleViewStateChange}
         mapStyle={basemapUrl}
-        mapboxAccessToken={ACCESS_TOKEN}
-      >
+        mapboxAccessToken={ACCESS_TOKEN}>
         <MapNav />
         <DeckGLOverlay
           getCursor={() => cursor}
