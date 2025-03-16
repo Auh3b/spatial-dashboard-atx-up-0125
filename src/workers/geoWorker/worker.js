@@ -16,7 +16,7 @@ const executeMethod = async (methodName, params) => {
     const result = await method(params);
     return result;
   } catch (error) {
-    // console.log(error);
+    console.log(error);
   }
 };
 

@@ -58,7 +58,8 @@ export function getData(params) {
 
 export async function getFilteredData(params) {
   const { source, isDrawing, feature } = params;
-  if (!datasets[source]) throw Error("Invalid selection");
+
+  if (!datasets[source.name]) throw Error("Invalid selection");
   if (isDrawing) throw Error("Please finish drawing");
   if (!feature) throw Error("Please draw point or spatial boundary");
   const filtered = applySpatialFilter(params);
@@ -141,8 +142,8 @@ function applyPropertyFilter(data, params) {
 }
 
 function applySpatialFilter(params) {
-  const { source, type, feature } = params;
-
+  const { source, feature } = params;
+  const { type, name } = source;
   let overlay;
 
   if (feature.type === DRAW_MODES.POINT) {
@@ -151,7 +152,7 @@ function applySpatialFilter(params) {
     overlay = featureHandler[feature.type]([feature.feature]);
   }
 
-  let target = datasets[source].data;
+  let target = datasets[name].data;
 
   if (type !== LOADER_TYPE.GEOJSON || type === LOADER_TYPE.KML) {
     target = featureCollection(

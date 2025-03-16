@@ -37,7 +37,8 @@ export const attributeConfig = {
 
 const initialLayerConfig = {
   [LAYER_TYPE.POINT_LAYER]: {
-    showInLegend: false,
+    dynamic: true,
+    showInLegend: true,
     legend: {
       visible: true,
       color: getRandomColor(),
@@ -45,28 +46,31 @@ const initialLayerConfig = {
       strokeWidth: 1,
       latitude: "",
       longitude: "",
-      strokeColor: getRandomColor(),
+      stroke: getRandomColor(),
     },
   },
   [LAYER_TYPE.POLYGON_LAYER]: {
-    showInLegend: false,
+    dynamic: true,
+    showInLegend: true,
     legend: {
       visible: true,
       color: getRandomColor(),
       strokeWidth: 1,
-      strokeColor: getRandomColor(),
+      stroke: getRandomColor(),
     },
   },
   [LAYER_TYPE.LINE_LAYER]: {
-    showInLegend: false,
+    dynamic: true,
+    showInLegend: true,
     legend: {
       visible: true,
       strokeWidth: 1,
-      strokeColor: getRandomColor(),
+      stroke: getRandomColor(),
     },
   },
   [LAYER_TYPE.ICON_LAYER]: {
-    showInLegend: false,
+    dynamic: true,
+    showInLegend: true,
     legend: {
       visible: true,
       latitude: "",
@@ -79,7 +83,8 @@ const initialLayerConfig = {
     },
   },
   [LAYER_TYPE.HEX_LAYER]: {
-    showInLegend: false,
+    dynamic: true,
+    showInLegend: true,
     legend: {
       visible: true,
       latitude: "",
@@ -90,7 +95,8 @@ const initialLayerConfig = {
     },
   },
   [LAYER_TYPE.HEATMAP_LAYER]: {
-    showInLegend: false,
+    dynamic: true,
+    showInLegend: true,
     legend: {
       visible: true,
       latitude: "",
@@ -161,7 +167,7 @@ export const admin0Config = {
   name: "Admin 0",
   type: LAYER_TYPE.POLYGON_LAYER,
   showInLegend: false,
-  isExplore: true,
+  dynamic: false,
   legend: {
     visible: true,
     color: [231, 41, 138, 100],
@@ -175,7 +181,7 @@ export const admin1Config = {
   name: "Admin 1",
   type: LAYER_TYPE.POLYGON_LAYER,
   showInLegend: false,
-  isExplore: true,
+  dynamic: false,
   legend: {
     visible: true,
     color: [117, 112, 179, 100],
@@ -189,7 +195,7 @@ export const admin2Config = {
   name: "Admin 2",
   type: LAYER_TYPE.POLYGON_LAYER,
   showInLegend: false,
-  isExplore: true,
+  dynamic: false,
   legend: {
     visible: true,
     color: [217, 95, 2, 100],
@@ -202,7 +208,7 @@ export const drawingConfig = {
   id: STATIC_LAYER_NAMES.DRAWING_LAYER,
   name: "Drawing Layer",
   type: LAYER_TYPE.POLYGON_LAYER,
-  isDrawing: true,
+  dynamic: false,
   showInLegend: false,
   legend: {
     visible: true,

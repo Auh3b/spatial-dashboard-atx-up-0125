@@ -1,6 +1,6 @@
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Box,
-  Divider,
   Grid2,
   IconButton,
   Modal,
@@ -8,7 +8,6 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import CloseIcon from "@mui/icons-material/Close";
 
 export default function ModalContainer({ open, title, onClose, children }) {
   return (
@@ -21,9 +20,9 @@ export default function ModalContainer({ open, title, onClose, children }) {
           justifyContent: "center",
           alignItems: "center",
         }}>
-        <Paper sx={{ width: "50%", p: 4 }}>
+        <Paper sx={{ width: "50%", p: 3 }}>
           <ModelTitle title={title} onClose={onClose} />
-          <Divider sx={{ mb: 4 }} />
+
           {children}
         </Paper>
       </Box>
@@ -36,9 +35,13 @@ function ModelTitle({ title, onClose }) {
     onClose();
   };
   return (
-    <Grid2 container alignItems={"center"} justifyContent={"space-between"}>
+    <Grid2
+      container
+      alignItems={"center"}
+      justifyContent={"space-between"}
+      sx={{ mb: 2 }}>
       <Typography>{title}</Typography>
-      <IconButton onClick={handleClose}>
+      <IconButton disableRipple onClick={handleClose}>
         <CloseIcon fontSize="small" />
       </IconButton>
     </Grid2>

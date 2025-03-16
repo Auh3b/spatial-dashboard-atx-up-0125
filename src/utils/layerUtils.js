@@ -47,7 +47,7 @@ export async function derivedLayers({ layerData = {} }) {
   try {
     let layers = [];
     for (let layerId in layerData) {
-      if (isDerivedLayer(layers[layerId])) continue;
+      if (isDerivedLayer(layerData[layerId])) continue;
       const layerItem = layerData[layerId];
       const layerProps = await getLayerProps(layerItem);
       const layer = getLayer(layerItem.type, layerProps);
@@ -108,7 +108,7 @@ async function getPointLayerProps(layerItem) {
   layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPosition"] = getPositionProp(layerItem);
   layerProps["getFillColor"] = layerItem.legend.color;
-  layerProps["getLineColor"] = layerItem.legend.strokeColor;
+  layerProps["getLineColor"] = layerItem.legend.stroke;
   layerProps["getLineWidth"] = layerItem.legend.strokeWidth;
   layerProps["getRadius"] = layerItem.legend.radius;
   layerProps["pointRadiusUnits"] = "pixels";
@@ -125,7 +125,7 @@ async function getPolygonLayerProps(layerItem) {
   layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPolygon"] = getPositionProp(layerItem);
   layerProps["getFillColor"] = layerItem.legend.color;
-  layerProps["getLineColor"] = layerItem.legend.strokeColor;
+  layerProps["getLineColor"] = layerItem.legend.stroke;
   layerProps["getLineWidth"] = layerItem.legend.strokeWidth;
   layerProps["lineWidthUnits"] = "pixels";
   layerProps["stroked"] = true;
@@ -138,7 +138,7 @@ async function getLineLayerProps(layerItem) {
   layerProps["id"] = layerItem.deckId;
   layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPosition"] = getPositionProp(layerItem);
-  layerProps["getLineColor"] = layerItem.legend.strokeColor;
+  layerProps["getLineColor"] = layerItem.legend.stroke;
   layerProps["lineWidthUnits"] = "pixels";
   layerProps["visible"] = layerItem.legend.visible;
   layerProps["stroked"] = true;
@@ -184,5 +184,5 @@ async function getHexLayerProps(layerItem) {
 }
 
 export function isDerivedLayer(layerConfig) {
-  return Boolean(!layerConfig?.isDrawing) || Boolean(!layerConfig?.isExplore);
+  return !layerConfig.dynamic;
 }

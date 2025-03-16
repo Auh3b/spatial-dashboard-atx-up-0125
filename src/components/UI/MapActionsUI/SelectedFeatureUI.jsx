@@ -1,11 +1,11 @@
+import { CopyAllRounded, TableChart } from "@mui/icons-material";
 import { Grid2, IconButton, Typography } from "@mui/material";
-import React, { Fragment, useState, useMemo } from "react";
-import TableChartIcon from "@mui/icons-material/TableChart";
+import React, { Fragment, useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
-import { getFilteredData } from "../../../store/mapStore";
-import DataTableModal from "../Modals/DataTableModal";
 import { getFilteredParams } from "../../../store";
+import { getFilteredData } from "../../../store/mapStore";
 import { tabulationHandlers } from "../../../utils/dataTable";
+import DataTableModal from "../Modals/DataTableModal";
 
 export default function SelectedFeatureUI() {
   const [modelOpen, setModelOpen] = useState(false);
@@ -14,7 +14,7 @@ export default function SelectedFeatureUI() {
   const dataTableProps = useMemo(() => {
     if (filteredData) {
       const { count, data } = filteredData;
-      const { title, type, schema } = filteredParams;
+      const { title, type, schema } = filteredParams.source;
       const columns = schema.map((d) => ({
         field: d,
         fieldName: d,
@@ -39,13 +39,18 @@ export default function SelectedFeatureUI() {
       };
     }
     return null;
-  }, [filteredData]);
+  }, [filteredData, filteredParams]);
+
   const handleOpen = () => {
     setModelOpen(true);
   };
   const handleClose = () => {
     setModelOpen(false);
   };
+
+  const handleCopy = useCallback(() => {
+    navigator.clipboard.writeText(JSON.stringify(filteredData.data));
+  }, [filteredData]);
 
   return (
     <Fragment>
@@ -55,8 +60,15 @@ export default function SelectedFeatureUI() {
             <Typography variant="caption" noWrap>
               {dataTableProps.count} selected features
             </Typography>
-            <IconButton onClick={handleOpen}>
-              <TableChartIcon fontSize="small" />
+            <IconButton disableRipple onClick={handleOpen} size="small">
+              <TableChart fontSize="small" />
+            </IconButton>
+            <IconButton
+              disableFocusRipple
+              size="small"
+              onClick={handleCopy}
+              disabled={!filteredData}>
+              <CopyAllRounded />
             </IconButton>
           </Grid2>
           <DataTableModal
