@@ -19,7 +19,7 @@ export default function SingularColorPicker({ onColorChange, value }) {
     setAnchorEl((prev) => (prev ? null : e.currentTarget));
   const handleClose = () => setAnchorEl(null);
   const open = Boolean(anchorEl);
-  console.log(value, deckColorToRgba(value));
+
   return (
     <>
       <Box>
