@@ -19,6 +19,7 @@ export default function SingularColorPicker({ onColorChange, value }) {
     setAnchorEl((prev) => (prev ? null : e.currentTarget));
   const handleClose = () => setAnchorEl(null);
   const open = Boolean(anchorEl);
+  console.log(value, deckColorToRgba(value));
   return (
     <>
       <Box>
@@ -47,7 +48,7 @@ export default function SingularColorPicker({ onColorChange, value }) {
         <ClickAwayListener onClickAway={handleClose}>
           <Paper sx={{ p: 0.5, m: 0.5 }}>
             <RgbaColorPicker
-              value={deckColorToRgba(value)}
+              color={deckColorToRgba(value)}
               onChange={onColorChange}
             />
           </Paper>
