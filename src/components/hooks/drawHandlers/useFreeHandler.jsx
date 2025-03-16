@@ -5,11 +5,11 @@ export default function useFreeHandler() {
   const dispatch = useDispatch();
 
   return {
-    onClick: (_e) => {
+    onClick: noop,
+    onMouseMove: noop,
+    onMouseDown: (_e) => {
       dispatch(setPopup({ show: false }));
     },
-    onMouseMove: noop,
-    onMouseDown: noop,
     onMouseUp: noop,
     onMouseEnter: noop,
   };
