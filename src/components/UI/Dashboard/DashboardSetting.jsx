@@ -1,8 +1,6 @@
 import {
   Box,
-  FormControl,
   FormControlLabel,
-  FormLabel,
   Grid2,
   MenuItem,
   Select,
@@ -45,15 +43,24 @@ function DarkModeToggleSwitch() {
   }, [darkMode]);
 
   return (
-    <FormControl>
-      <FormLabel>Dark Mode</FormLabel>
+    <Grid2
+      container
+      alignItems={"center"}
+      justifyContent={"space-between"}
+      wrap="nowrap"
+      gap={2}>
+      <Grid2 size={6}>
+        <Typography variant="caption">Dark Mode</Typography>
+      </Grid2>
       <FormControlLabel
-        control={<Switch onChange={handleToggle} checked={darkMode} />}
+        control={
+          <Switch size="small" onChange={handleToggle} checked={darkMode} />
+        }
         label={
           <Typography sx={{ textTransform: "uppercase" }}>{label}</Typography>
         }
       />
-    </FormControl>
+    </Grid2>
   );
 }
 
@@ -64,14 +71,21 @@ function BasemapChanger() {
     dispatch(setBasemapUrl(_e.target.value));
   };
   return (
-    <FormControl>
-      <FormLabel>Switch Basemap</FormLabel>
-      <Select value={basemapUrl} fullWidth onChange={handleChange}>
+    <Grid2
+      container
+      alignItems={"center"}
+      wrap="nowrap"
+      gap={2}
+      justifyContent={"space-between"}>
+      <Grid2 size={6}>
+        <Typography variant="caption">Basemap</Typography>
+      </Grid2>
+      <Select size="small" value={basemapUrl} fullWidth onChange={handleChange}>
         <MenuItem value="satellite-streets-v11">Satellite Streets</MenuItem>
         <MenuItem value="light-v10">Light</MenuItem>
         <MenuItem value="dark-v10">Dark</MenuItem>
         <MenuItem value="satellite-v9">Satellite</MenuItem>
       </Select>
-    </FormControl>
+    </Grid2>
   );
 }
