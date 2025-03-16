@@ -151,11 +151,9 @@ async function getIconLayerProps(layerItem) {
   layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPosition"] = getPositionProp(layerItem);
   layerProps["visible"] = layerItem.legend.visible;
-  layerProps["getIcon"] = () => layerItem.legend.icon;
-  layerProps["getSize"] = () => layerItem.legend.size;
-  layerProps["getColor"] = () => layerItem.legend.color;
-  layerProps["iconAtlas"] = layerItem.legend.iconAtlas;
-  layerProps["iconMapping"] = layerItem.legend.iconMapping;
+  layerProps["getSize"] = layerItem.legend.size;
+  layerProps["getColor"] = layerItem.legend.color;
+  layerProps["getIcon"] = getAutoPackedIconAtlas(layerItem);
   return layerProps;
 }
 
@@ -185,4 +183,13 @@ async function getHexLayerProps(layerItem) {
 
 export function isDerivedLayer(layerConfig) {
   return !layerConfig.dynamic;
+}
+
+function getAutoPackedIconAtlas(layerItem) {
+  return () => ({
+    url: layerItem.legend.iconPreset,
+    width: 64,
+    height: 64,
+    mask: true,
+  });
 }

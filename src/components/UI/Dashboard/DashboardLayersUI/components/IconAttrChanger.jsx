@@ -1,8 +1,14 @@
+import * as icons from "@mui/icons-material";
+import { Autocomplete, Grid2, TextField, Typography } from "@mui/material";
 import { produce } from "immer";
 import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { ATTRIBUTES } from "../../../../../data/layerConfig";
 import { updateLayer } from "../../../../../store/mapStore";
+import {
+  iconToDataUrl,
+  seperateCamelCase,
+} from "../../../../../utils/axillaryUtils";
 import useLayerConfig from "../../../../hooks/useLayerConfig";
 import useAllowedAttributes from "../hooks/useAllowedAttributes";
 import AttributeWrapper from "./common/AttributeWrapper";
@@ -44,6 +50,18 @@ export default function IconAttrChanger({ id, type }) {
     },
     [layer, id],
   );
+
+  const handleIconPresetChange = useCallback(
+    (_e, presetAttr) => {
+      const preset = iconToDataUrl(presetAttr.icon);
+      const value = produce(layer, (draft) => {
+        draft.legend.iconPreset = preset;
+      });
+      dispatch(updateLayer({ id, value }));
+    },
+    [layer, id],
+  );
+
   return (
     <>
       {isAllowed && (
@@ -62,7 +80,11 @@ export default function IconAttrChanger({ id, type }) {
             value={layer.legend.size || 5}
             onChange={handleSizeChange}
           />
-          <TextInput
+          <IconSelector
+            value={layer.legend.iconPreset || ""}
+            onChange={handleIconPresetChange}
+          />
+          {/* <TextInput
             title={"Icon Atlas"}
             value={layer.legend.iconAtlas || ""}
             onChange={handleChange("iconAtlas")}
@@ -71,9 +93,42 @@ export default function IconAttrChanger({ id, type }) {
             title={"Icon Mapping"}
             value={layer.legend.iconMapping || ""}
             onChange={handleChange("iconMapping")}
-          />
+          /> */}
         </AttributeWrapper>
       )}
     </>
+  );
+}
+
+const iconOptions = Object.entries(icons)
+  .filter(
+    ([id]) => id.search(/.*(Filled|Outlined|Sharp|TwoTone|Rounded)$/gm) === -1,
+  )
+  .map(([value, icon]) => ({
+    value,
+    icon,
+    label: seperateCamelCase(value),
+  }));
+
+function IconSelector({ value, onChange }) {
+  return (
+    <Autocomplete
+      id="icon-selector"
+      getOptionLabel={(option) => option.label}
+      size="small"
+      options={iconOptions}
+      onChange={onChange}
+      renderOption={(props, option, { selected }) => (
+        <li {...props}>
+          <Grid2 container gap={2} alignItems={"center"}>
+            {<option.icon size={"small"} />}{" "}
+            <Typography variant="caption">{option.label}</Typography>
+          </Grid2>
+        </li>
+      )}
+      renderInput={(params) => {
+        return <TextField {...params} label="Icons" />;
+      }}
+    />
   );
 }
