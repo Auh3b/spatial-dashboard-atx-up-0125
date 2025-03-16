@@ -1,8 +1,13 @@
-import React from "react";
+import { useDispatch } from "react-redux";
+import { setPopup } from "../../../store/mapStore";
 
 export default function useFreeHandler() {
+  const dispatch = useDispatch();
+
   return {
-    onClick: noop,
+    onClick: (_e) => {
+      dispatch(setPopup({ show: false }));
+    },
     onMouseMove: noop,
     onMouseDown: noop,
     onMouseUp: noop,
