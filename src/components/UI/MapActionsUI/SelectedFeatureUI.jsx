@@ -1,5 +1,5 @@
 import { CopyAllRounded, TableChart } from "@mui/icons-material";
-import { Grid2, IconButton, Typography } from "@mui/material";
+import { Grid2, IconButton, Tooltip, Typography } from "@mui/material";
 import React, { Fragment, useCallback, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { getFilteredParams } from "../../../store";
@@ -60,16 +60,20 @@ export default function SelectedFeatureUI() {
             <Typography variant="caption" noWrap>
               {dataTableProps.count} selected features
             </Typography>
-            <IconButton disableRipple onClick={handleOpen} size="small">
-              <TableChart fontSize="small" />
-            </IconButton>
-            <IconButton
-              disableFocusRipple
-              size="small"
-              onClick={handleCopy}
-              disabled={!filteredData}>
-              <CopyAllRounded />
-            </IconButton>
+            <Tooltip title="See properties">
+              <IconButton disableRipple onClick={handleOpen} size="small">
+                <TableChart fontSize="small" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Copy features">
+              <IconButton
+                disableFocusRipple
+                size="small"
+                onClick={handleCopy}
+                disabled={!filteredData}>
+                <CopyAllRounded />
+              </IconButton>
+            </Tooltip>
           </Grid2>
           <DataTableModal
             {...dataTableProps}
