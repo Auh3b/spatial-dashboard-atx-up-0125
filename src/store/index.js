@@ -16,16 +16,13 @@ export const store = configureStore({
 
 export const getFilteredParams = (state) => {
   const layerId = getSelectedLayer(state);
-  const layer = getLayers(state)[layerId];
   const isDrawing = getIsDrawing(state);
   const coords = getDrawingProps(state);
+  if (!layerId || !coords) return null;
+  const layer = getLayers(state)[layerId];
   return {
     ...layer,
     isDrawing,
-    feature: coords
-      ? {
-          ...coords,
-        }
-      : null,
+    feature: coords,
   };
 };

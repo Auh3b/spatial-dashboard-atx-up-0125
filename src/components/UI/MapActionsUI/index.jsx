@@ -1,13 +1,13 @@
 import { Box, Divider, Grid2 } from "@mui/material";
 import React, { Fragment } from "react";
-import DrawTools from "../DrawTools";
 import useDrawing from "../../hooks/useDrawing";
-import SelectedFeatureUI from "./SelectedFeatureUI";
 import useMapActionContext from "../../hooks/useMapActionContext";
+import DrawTools from "../DrawTools";
 import ResetSelectionFeature from "./ResetSelectionFeature";
+import SelectedFeatureUI from "./SelectedFeatureUI";
 
 export default function MapActionContextUI() {
-  const { layer } = useMapActionContext();
+  useMapActionContext();
   return (
     <Fragment>
       {/* {Boolean(layer) && ( */}

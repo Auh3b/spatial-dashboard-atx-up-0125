@@ -11,7 +11,6 @@ export function seperateCamelCase(value) {
 }
 
 export function iconToDataUrl(IconComponent) {
-  console.log(IconComponent);
   const el = createElement(IconComponent, { color: "primary" });
   let svgString = ReactDOMServer.renderToStaticMarkup(el);
   svgString = svgString.replace(

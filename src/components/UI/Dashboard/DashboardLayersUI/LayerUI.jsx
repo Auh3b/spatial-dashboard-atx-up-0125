@@ -30,17 +30,10 @@ import IconAttrChanger from "./components/IconAttrChanger";
 import NameChanger from "./components/NameChanger";
 import RadiusChanger from "./components/RadiusChanger";
 import ShapePicker from "./components/ShapePicker";
-import StrokeChanger from "./components/StrokeChanger";
 import ShowInLegendToggle from "./components/ShowInLegendToggle";
+import StrokeChanger from "./components/StrokeChanger";
 
-export default function LayerUI({
-  id,
-  name,
-  selected,
-  type,
-  sourceType,
-  source,
-}) {
+export default function LayerUI({ id, selected, type, sourceType, source }) {
   const dispatch = useDispatch();
 
   const handleClick = useCallback(() => {
@@ -69,8 +62,7 @@ export default function LayerUI({
             backgroundColor: (theme) =>
               isSelected ? theme.palette.action.hover : "unset",
             py: 0.5,
-          }}
-        >
+          }}>
           <Box sx={{ flexGrow: 1 }}>
             <NameChanger id={id} />
           </Box>
@@ -96,18 +88,17 @@ export default function LayerUI({
             <ShowInLegendToggle id={id} />
             <Button
               onClick={handleDelete}
-              size='small'
-              variant='contained'
-              color='error'
+              size="small"
+              variant="contained"
+              color="error"
               startIcon={<Delete />}
-              sx={{ mb: 1, ml: 1 }}
-            >
+              sx={{ mb: 1 }}>
               Delete Layer
             </Button>
           </Grid2>
         </Collapse>
       </Grid2>
-      <Divider variant='vertical' />
+      <Divider variant="vertical" />
     </Box>
   );
 }
@@ -138,9 +129,8 @@ function CategoryLegend({ colors, labels }) {
               width: "10px",
               height: "10px",
               borderRadius: "50%",
-            }}
-          ></Box>
-          <Typography variant='caption'>{label}</Typography>
+            }}></Box>
+          <Typography variant="caption">{label}</Typography>
         </Grid2>
       ))}
     </Grid2>
@@ -152,7 +142,7 @@ function RampLegend({ colors, labels }) {
     <Grid2 container direction={"column"}>
       <Grid2 container justifyContent={"space-between"}>
         {labels.map((d) => (
-          <Typography key={d} variant='caption'>
+          <Typography key={d} variant="caption">
             {d}
           </Typography>
         ))}
@@ -162,8 +152,7 @@ function RampLegend({ colors, labels }) {
         height={"10px"}
         sx={{
           background: `linear-gradient(to right, ${colors[0]}, ${colors[1]})`,
-        }}
-      ></Box>
+        }}></Box>
     </Grid2>
   );
 }

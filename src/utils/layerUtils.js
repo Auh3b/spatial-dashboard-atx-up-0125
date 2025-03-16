@@ -38,9 +38,9 @@ const LAYER_PROPPER = {
   [LAYER_TYPE.ICON_LAYER]: getIconLayerProps,
 };
 
-function getLayer(layerType, props) {
+export function getLayerClass(layerType, data, props) {
   const _layer = LAYERS[layerType];
-  return new _layer(props);
+  return new _layer({ ...props, data });
 }
 
 export async function derivedLayers({ layerData = {} }) {
@@ -49,8 +49,9 @@ export async function derivedLayers({ layerData = {} }) {
     for (let layerId in layerData) {
       if (isDerivedLayer(layerData[layerId])) continue;
       const layerItem = layerData[layerId];
-      const layerProps = await getLayerProps(layerItem);
-      const layer = getLayer(layerItem.type, layerProps);
+      const layerProps = getLayerProps(layerItem);
+      const data = await getDataProp(layerItem);
+      const layer = getLayerClass(layerItem.type, data, layerProps);
       layers = [...layers, layer];
     }
 
@@ -81,7 +82,12 @@ async function getDataProp(layerItem) {
 
   if (!["geojson", "kml"].includes(layerItem.sourceType)) return data;
 
-  const output = data.features.reduce((acc, current) => {
+  const output = processGeojson(data);
+  return output;
+}
+
+export function processGeojson(value) {
+  return value.features.reduce((acc, current) => {
     if (current.geometry.type.search(/^(Multi).*/gm) === -1)
       return [...acc, current];
     let output = [];
@@ -93,19 +99,17 @@ async function getDataProp(layerItem) {
     }
     return [...acc, ...output];
   }, []);
-  return output;
 }
 
-async function getLayerProps(layerItem) {
+export function getLayerProps(layerItem) {
   const { type } = layerItem;
-  const layerProps = await LAYER_PROPPER[type](layerItem);
+  const layerProps = LAYER_PROPPER[type](layerItem);
   return layerProps;
 }
 
-async function getPointLayerProps(layerItem) {
+function getPointLayerProps(layerItem) {
   const layerProps = {};
   layerProps["id"] = layerItem.deckId;
-  layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPosition"] = getPositionProp(layerItem);
   layerProps["getFillColor"] = layerItem.legend.color;
   layerProps["getLineColor"] = layerItem.legend.stroke;
@@ -119,10 +123,9 @@ async function getPointLayerProps(layerItem) {
   return layerProps;
 }
 
-async function getPolygonLayerProps(layerItem) {
+function getPolygonLayerProps(layerItem) {
   const layerProps = {};
   layerProps["id"] = layerItem.deckId;
-  layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPolygon"] = getPositionProp(layerItem);
   layerProps["getFillColor"] = layerItem.legend.color;
   layerProps["getLineColor"] = layerItem.legend.stroke;
@@ -133,10 +136,9 @@ async function getPolygonLayerProps(layerItem) {
   return layerProps;
 }
 
-async function getLineLayerProps(layerItem) {
+function getLineLayerProps(layerItem) {
   const layerProps = {};
   layerProps["id"] = layerItem.deckId;
-  layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPosition"] = getPositionProp(layerItem);
   layerProps["getLineColor"] = layerItem.legend.stroke;
   layerProps["lineWidthUnits"] = "pixels";
@@ -145,10 +147,9 @@ async function getLineLayerProps(layerItem) {
   return layerProps;
 }
 
-async function getIconLayerProps(layerItem) {
+function getIconLayerProps(layerItem) {
   const layerProps = {};
   layerProps["id"] = layerItem.deckId;
-  layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPosition"] = getPositionProp(layerItem);
   layerProps["visible"] = layerItem.legend.visible;
   layerProps["getSize"] = layerItem.legend.size;
@@ -157,10 +158,9 @@ async function getIconLayerProps(layerItem) {
   return layerProps;
 }
 
-async function getHeatMapLayerProps(layerItem) {
+function getHeatMapLayerProps(layerItem) {
   const layerProps = {};
   layerProps["id"] = layerItem.deckId;
-  layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPosition"] = getPositionProp(layerItem);
   layerProps["visible"] = layerItem.legend.visible;
   layerProps["intensity"] = layerItem.legend.intensity;
@@ -169,10 +169,9 @@ async function getHeatMapLayerProps(layerItem) {
   return layerProps;
 }
 
-async function getHexLayerProps(layerItem) {
+function getHexLayerProps(layerItem) {
   const layerProps = {};
   layerProps["id"] = layerItem.deckId;
-  layerProps["data"] = await getDataProp(layerItem);
   layerProps["getPosition"] = getPositionProp(layerItem);
   layerProps["radius"] = layerItem.legend.radius;
   layerProps["extruded"] = layerItem.legend.extruded;

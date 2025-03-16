@@ -12,7 +12,7 @@ export default function SelectedFeatureUI() {
   const filteredData = useSelector((state) => getFilteredData(state));
   const filteredParams = useSelector((state) => getFilteredParams(state));
   const dataTableProps = useMemo(() => {
-    if (filteredData) {
+    if (filteredData && filteredParams) {
       const { count, data } = filteredData;
       const { title, type, schema } = filteredParams.source;
       const columns = schema.map((d) => ({
@@ -40,6 +40,7 @@ export default function SelectedFeatureUI() {
     }
     return null;
   }, [filteredData, filteredParams]);
+  // console.log(filteredParams);
 
   const handleOpen = () => {
     setModelOpen(true);

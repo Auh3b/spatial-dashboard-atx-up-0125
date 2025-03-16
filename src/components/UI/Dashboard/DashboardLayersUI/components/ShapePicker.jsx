@@ -22,7 +22,7 @@ export default function ShapePicker({ id }) {
   );
 
   return (
-    <Box sx={{ px: 1 }}>
+    <Box>
       <FormControl fullWidth size="small">
         <Select value={layer.type} onChange={handleChange}>
           {allowedShapes.map(({ label, value }) => (
