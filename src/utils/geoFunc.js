@@ -78,9 +78,13 @@ export function isCircleGeometry(coordinates) {
   };
 }
 
+function getCenterCoordinates(coordinates) {
+  return center(polygon([coordinates])).geometry.coordinates;
+}
+
 export function getRadius(coordinates) {
   if (coordinates.length < 3) return 0;
-  const centerValue = center([coordinates]);
+  const centerValue = getCenterCoordinates(coordinates);
   const edge = coordinates[0];
   const radius = getDistance(centerValue, edge);
   return radius;
