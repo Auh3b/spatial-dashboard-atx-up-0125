@@ -7,6 +7,11 @@ import { FILTER_FUNCTIONS } from "../../../utils/filterFuncs";
 import { makePoint } from "../../../utils/geoFunc";
 import { LOADER_TYPE, loaders } from "./methodUtils";
 
+const FIXES_TYPES = {
+  multiGeometryFix: multiGeometryFix,
+  kmlFix: kmlFix,
+};
+
 let datasets = {};
 
 export async function setLocalData(params) {
@@ -80,12 +85,13 @@ function setData(params) {
 }
 
 function loadLocalData(params) {
-  const { type, data, name, filter } = params;
+  const { type, data, name, filter, fixes } = params;
   const processedData = data;
   const filteredData = filter
     ? applyPropertyFilter(processedData, { ...filter, fileType: type })
     : processedData;
-  const dataWithIds = addIds(filteredData, type);
+  const fixed = processFixes(filteredData, fixes);
+  const dataWithIds = addIds(fixed, type);
   setData({ name, data: dataWithIds });
   return dataWithIds;
 }
@@ -228,3 +234,48 @@ export async function getUniqueColumnValues(params) {
   let output = Array.from(new Set(columnValue)).sort((a, b) => ascending(a, b));
   return new Promise((resolve) => resolve(output));
 }
+
+function processFixes(data, fixes = []) {
+  console.log(fixes);
+  if (!fixes.length) return data;
+
+  let fixedData = data;
+
+  for (let i = 0; i < fixes.length; i++) {
+    const fixType = fixes[i];
+    const fix = FIXES_TYPES[fixType];
+    if (!fix) continue;
+    fixedData = fix(fixedData);
+  }
+
+  return fixedData;
+}
+
+function kmlFix(data) {
+  let fixed_features = [];
+  for (let i = 0; i < data.features.length; i++) {
+    const feature = data.features[i];
+
+    let fixed_coords = [];
+    console.log(feature);
+    for (let j = 0; j < feature.geometry.coordinates.length; j++) {
+      const coord = feature.geometry.coordinates[j];
+      if (typeof coord === "number") {
+        fixed_coords = [...fixed_coords, coord];
+      } else {
+        fixed_coords = [...fixed_coords, [coord[0], coord[1]]];
+      }
+    }
+    let fixed_feature = {
+      ...feature,
+      geometry: {
+        ...feature.geometry,
+        coordinates: fixed_coords,
+      },
+    };
+    fixed_features = [...fixed_features, fixed_feature];
+  }
+  return featureCollection(fixed_features);
+}
+
+function multiGeometryFix(data) {}

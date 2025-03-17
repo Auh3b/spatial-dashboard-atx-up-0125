@@ -225,7 +225,7 @@ function NewLocalSource({ tab, onClose }) {
                 Select File
                 <input
                   type="file"
-                  accept=".json,.geojson,.csv,.kml"
+                  accept=".json,.geojson,.csv"
                   hidden
                   onChange={handleFileUpload}
                 />
