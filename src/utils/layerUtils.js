@@ -111,14 +111,14 @@ function getPointLayerProps(layerItem) {
   const layerProps = {};
   layerProps["id"] = layerItem.deckId;
   layerProps["getPosition"] = getPositionProp(layerItem);
-  layerProps["getFillColor"] = layerItem.legend.color;
-  layerProps["getLineColor"] = layerItem.legend.stroke;
+  layerProps["getFillColor"] = layerItem.legend.color || [52, 100, 235, 100];
+  layerProps["getLineColor"] = layerItem.legend.stroke || [52, 100, 235, 255];
   layerProps["getLineWidth"] = layerItem.legend.strokeWidth;
-  layerProps["getRadius"] = layerItem.legend.radius;
+  layerProps["getRadius"] = layerItem.legend.radius || 5;
   layerProps["radiusUnits"] = "pixels";
   layerProps["stroked"] = true;
   layerProps["lineWidthUnits"] = "pixels";
-  layerProps["visible"] = layerItem.legend.visible;
+  layerProps["visible"] = layerItem.legend.visible || true;
 
   return layerProps;
 }
@@ -127,12 +127,12 @@ function getPolygonLayerProps(layerItem) {
   const layerProps = {};
   layerProps["id"] = layerItem.deckId;
   layerProps["getPolygon"] = getPositionProp(layerItem);
-  layerProps["getFillColor"] = layerItem.legend.color;
-  layerProps["getLineColor"] = layerItem.legend.stroke;
-  layerProps["getLineWidth"] = layerItem.legend.strokeWidth;
+  layerProps["getFillColor"] = layerItem.legend.color || [52, 100, 235, 100];
+  layerProps["getLineColor"] = layerItem.legend.stroke || [52, 100, 235, 255];
+  layerProps["getLineWidth"] = layerItem.legend.strokeWidth || 2;
   layerProps["lineWidthUnits"] = "pixels";
   layerProps["stroked"] = true;
-  layerProps["visible"] = layerItem.legend.visible;
+  layerProps["visible"] = layerItem.legend.visible || true;
   return layerProps;
 }
 
@@ -140,9 +140,9 @@ function getLineLayerProps(layerItem) {
   const layerProps = {};
   layerProps["id"] = layerItem.deckId;
   layerProps["getPosition"] = getPositionProp(layerItem);
-  layerProps["getLineColor"] = layerItem.legend.stroke;
+  layerProps["getLineColor"] = layerItem.legend.stroke || [52, 100, 235, 255];
   layerProps["lineWidthUnits"] = "pixels";
-  layerProps["visible"] = layerItem.legend.visible;
+  layerProps["visible"] = layerItem.legend.visible || true;
   layerProps["stroked"] = true;
   return layerProps;
 }
@@ -151,9 +151,9 @@ function getIconLayerProps(layerItem) {
   const layerProps = {};
   layerProps["id"] = layerItem.deckId;
   layerProps["getPosition"] = getPositionProp(layerItem);
-  layerProps["visible"] = layerItem.legend.visible;
-  layerProps["getSize"] = layerItem.legend.size;
-  layerProps["getColor"] = layerItem.legend.color;
+  layerProps["visible"] = layerItem.legend.visible || true;
+  layerProps["getSize"] = layerItem.legend.size || 50;
+  layerProps["getColor"] = layerItem.legend.color || [52, 100, 235, 100];
   layerProps["getIcon"] = getAutoPackedIconAtlas(layerItem);
   return layerProps;
 }
@@ -162,7 +162,7 @@ function getHeatMapLayerProps(layerItem) {
   const layerProps = {};
   layerProps["id"] = layerItem.deckId;
   layerProps["getPosition"] = getPositionProp(layerItem);
-  layerProps["visible"] = layerItem.legend.visible;
+  layerProps["visible"] = layerItem.legend.visible || true;
   layerProps["intensity"] = layerItem.legend.intensity;
   layerProps["threshold"] = layerItem.legend.threshold;
   layerProps["radiusPixels"] = layerItem.legend.radiusPixels;
@@ -173,10 +173,10 @@ function getHexLayerProps(layerItem) {
   const layerProps = {};
   layerProps["id"] = layerItem.deckId;
   layerProps["getPosition"] = getPositionProp(layerItem);
-  layerProps["radius"] = layerItem.legend.radius;
-  layerProps["extruded"] = layerItem.legend.extruded;
-  layerProps["elevationScale"] = layerItem.legend.elevationScale;
-  layerProps["visible"] = layerItem.legend.visible;
+  layerProps["radius"] = layerItem.legend.radius || 500;
+  layerProps["extruded"] = layerItem.legend.extruded || true;
+  layerProps["elevationScale"] = layerItem.legend.elevationScale || 50;
+  layerProps["visible"] = layerItem.legend.visible || true;
   return layerProps;
 }
 
