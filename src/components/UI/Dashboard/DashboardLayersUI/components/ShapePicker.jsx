@@ -6,8 +6,8 @@ import {
   getInitialLayerConfig,
 } from "../../../../../data/layerConfig";
 import { updateLayer } from "../../../../../store/mapStore";
+import AttributeWrapper from "../../../../common/AttributeWrapper";
 import useLayerConfig from "../../../../hooks/useLayerConfig";
-import AttributeWrapper from "./common/AttributeWrapper";
 
 export default function ShapePicker({ id }) {
   const dispatch = useDispatch();

@@ -25,8 +25,8 @@ import { allowedFiles, getFileExt } from "../../../../../utils/fileUploadFuncs";
 import { getNameFromString } from "../../../../../utils/legendUtils";
 import geoWorker from "../../../../../workers/geoWorker";
 import { METHOD_NAMES } from "../../../../../workers/geoWorker/methods/methodUtils";
+import ValueSelector from "../../../../common/ValueSelector";
 import useFileUpload from "../../../../hooks/useFileUpload";
-import ValueSelector from "./common/ValueSelector";
 
 export default function AddLayerModal({ open, onClose }) {
   const [selectedTab, setSelectedTab] = useState("existing");

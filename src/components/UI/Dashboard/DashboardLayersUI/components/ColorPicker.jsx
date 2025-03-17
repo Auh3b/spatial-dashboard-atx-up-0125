@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { ATTRIBUTES } from "../../../../../data/layerConfig";
 import { getLayers, updateLayer } from "../../../../../store/mapStore";
 import { rgbaToDeckColor } from "../../../../../utils/colorUtils";
+import AttributeWrapper from "../../../../common/AttributeWrapper";
+import SingularColorPicker from "../../../../common/SingularColorPicker";
 import useAllowedAttributes from "../hooks/useAllowedAttributes";
-import AttributeWrapper from "./common/AttributeWrapper";
-import SingularColorPicker from "./common/SingularColorPicker";
 
 function RampColoPicker({ onColorChange, value }) {
   return <Box></Box>;

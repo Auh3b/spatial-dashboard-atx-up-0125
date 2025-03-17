@@ -4,10 +4,10 @@ import React, { useCallback, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { ATTRIBUTES } from "../../../../../data/layerConfig";
 import { updateLayer } from "../../../../../store/mapStore";
+import AttributeWrapper from "../../../../common/AttributeWrapper";
+import ValueSelector from "../../../../common/ValueSelector";
 import useLayerConfig from "../../../../hooks/useLayerConfig";
 import useAllowedAttributes from "../hooks/useAllowedAttributes";
-import AttributeWrapper from "./common/AttributeWrapper";
-import ValueSelector from "./common/ValueSelector";
 
 const attributeId = ATTRIBUTES.COORDINATES;
 

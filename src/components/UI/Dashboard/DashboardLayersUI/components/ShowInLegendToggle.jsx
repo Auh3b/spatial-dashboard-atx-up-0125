@@ -2,8 +2,8 @@ import { produce } from "immer";
 import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { updateLayer } from "../../../../../store/mapStore";
+import BooleanInput from "../../../../common/BooleanInput";
 import useLayerConfig from "../../../../hooks/useLayerConfig";
-import BooleanInput from "./common/BooleanInput";
 
 export default function ShowInLegendToggle({ id }) {
   const dispatch = useDispatch();

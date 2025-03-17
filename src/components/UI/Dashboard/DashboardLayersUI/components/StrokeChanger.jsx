@@ -5,11 +5,11 @@ import { useDispatch } from "react-redux";
 import { ATTRIBUTES } from "../../../../../data/layerConfig";
 import { updateLayer } from "../../../../../store/mapStore";
 import { rgbaToDeckColor } from "../../../../../utils/colorUtils";
+import AttributeWrapper from "../../../../common/AttributeWrapper";
+import NumberInput from "../../../../common/NumberInput";
+import SingularColorPicker from "../../../../common/SingularColorPicker";
 import useLayerConfig from "../../../../hooks/useLayerConfig";
 import useAllowedAttributes from "../hooks/useAllowedAttributes";
-import AttributeWrapper from "./common/AttributeWrapper";
-import NumberInput from "./common/NumberInput";
-import SingularColorPicker from "./common/SingularColorPicker";
 
 const attributeId = ATTRIBUTES.STROKE;
 

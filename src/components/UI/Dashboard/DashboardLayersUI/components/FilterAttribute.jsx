@@ -16,10 +16,10 @@ import { updateLayer } from "../../../../../store/mapStore";
 import { getUniqueId } from "../../../../../utils/axillaryUtils";
 import { FILTER_TYPES } from "../../../../../utils/filterFuncs";
 import { METHOD_NAMES } from "../../../../../workers/geoWorker/methods/methodUtils";
+import AttributeWrapper from "../../../../common/AttributeWrapper";
+import ValueSelector from "../../../../common/ValueSelector";
 import useGeoWorker from "../../../../hooks/useGeoWorker";
 import useLayerConfig from "../../../../hooks/useLayerConfig";
-import AttributeWrapper from "./common/AttributeWrapper";
-import ValueSelector from "./common/ValueSelector";
 
 const filterOptions = Object.values(FILTER_TYPES).map((d) => ({
   label: d,

@@ -9,11 +9,11 @@ import {
   iconToDataUrl,
   seperateCamelCase,
 } from "../../../../../utils/axillaryUtils";
+import AttributeWrapper from "../../../../common/AttributeWrapper";
+import NumberInput from "../../../../common/NumberInput";
+import TextInput from "../../../../common/TextInput";
 import useLayerConfig from "../../../../hooks/useLayerConfig";
 import useAllowedAttributes from "../hooks/useAllowedAttributes";
-import AttributeWrapper from "./common/AttributeWrapper";
-import NumberInput from "./common/NumberInput";
-import TextInput from "./common/TextInput";
 
 const attributeId = ATTRIBUTES.ICON;
 export default function IconAttrChanger({ id, type }) {
