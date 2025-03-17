@@ -1,95 +1,42 @@
 import { PolygonLayer, ScatterplotLayer } from "deck.gl";
+import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { STATIC_LAYER_NAMES } from "../../data/layerConfig";
 import {
   getDrawingProps,
   getIsDrawing,
   removePopup,
   setPopup,
 } from "../../store/mapStore";
-
-// class CustomDrawLayer extends CompositeLayer {
-//   getPickingInfo({ info, sourceLayer }) {
-//     // override info.object
-//     return info;
-//   }
-//   renderLayers() {
-//     const { data, dispatch, setPopup, removePopup, isDrawing } = this.props;
-//     return [
-//       new PolygonLayer({
-//         id: "draw-layer-polygon",
-//         data: [data.feature],
-//         getPolygon: (d) => {
-//           return d;
-//         },
-//         getFillColor: [252, 94, 3, 50],
-//         getLineColor: [252, 94, 3],
-//         getLineWidth: 1,
-//         pickable: true,
-//         lineWidthUnits: "pixels",
-//         // onDrag: isDrawing
-//         //   ? undefined
-//         //   : () => {
-//         //       dispatch(removePopup());
-//         //     },
-//         onClick: (e) => console.log(e),
-//         onHover: (e) => console.log(e),
-//         // onClick: isDrawing
-//         //   ? undefined
-//         //   : ({ x, y, coordinate, object }, e) => {
-//         //       if (e.leftButton) dispatch(removePopup());
-//         //       if (
-//         //         e.rightButton ||
-//         //         (e.leftButton && e.changedPointers[0].ctrlKey)
-//         //       ) {
-//         //         const [longitude, latitude] = coordinate;
-//         //         dispatch(
-//         //           setPopup({
-//         //             feature: object,
-//         //             type: "drawing",
-//         //             content: `center ${longitude}, ${latitude}`,
-//         //           }),
-//         //         );
-//         //       }
-//         //     },
-//         // updateTriggers: {
-//         //   onClick: isDrawing,
-//         //   onDrag: isDrawing,
-//         // },
-//       }),
-//       new ScatterplotLayer({
-//         id: "draw-layer-point",
-//         data: data.feature,
-//         getPosition: (d) => d,
-//         getRadius: 5,
-//         getFillColor: [252, 94, 3],
-//         getLineColor: [255, 255, 255],
-//         getLineWidth: 10,
-//         pickable: true,
-//         radiusUnits: "pixels",
-//         lineWidthUnits: "pixels",
-//         onClick: (e) => console.log(e),
-//       }),
-//     ];
-//   }
-// }
-
+import { getLayerProps } from "../../utils/layerUtils";
+import useLayerConfig from "../hooks/useLayerConfig";
+const id = STATIC_LAYER_NAMES.DRAWING_LAYER;
+const source = {
+  type: "json",
+};
 export default function DrawLayer() {
   const dispatch = useDispatch();
   const data = useSelector((state) => getDrawingProps(state));
+  const { layer } = useLayerConfig(id);
+  const layerProps = useMemo(() => {
+    if (!layer) return null;
+    return getLayerProps({ ...layer, source });
+  }, [layer]);
   const isDrawing = useSelector((state) => getIsDrawing(state));
-  if (data)
+  if (data && layerProps)
     return [
       new PolygonLayer({
-        id: "draw-layer-polygon",
+        ...layerProps,
+        id,
         data: [data.feature],
         getPolygon: (d) => {
           return d;
         },
-        getFillColor: [252, 94, 3, 50],
-        getLineColor: [252, 94, 3],
-        getLineWidth: 1,
+        // getFillColor: [252, 94, 3, 50],
+        // getLineColor: [252, 94, 3],
+        // getLineWidth: 1,
+        // lineWidthUnits: "pixels",
         pickable: true,
-        lineWidthUnits: "pixels",
         onDrag: isDrawing
           ? undefined
           : () => {
@@ -125,24 +72,17 @@ export default function DrawLayer() {
         },
       }),
       new ScatterplotLayer({
+        ...layerProps,
         id: "draw-layer-point",
         data: data.feature,
         getPosition: (d) => d,
         getRadius: 3,
-        getFillColor: [252, 94, 3],
-        getLineColor: [255, 255, 255],
-        // getLineWidth: 10,
+        getFillColor: layerProps.getLineColor,
+        // getLineColor: [255, 255, 255],
         pickable: true,
         radiusUnits: "pixels",
         lineWidthUnits: "pixels",
         onClick: (e) => console.log(e),
       }),
     ];
-  //   return new CustomDrawLayer({
-  // data,
-  //     dispatch,
-  //     removePopup,
-  //     isDrawing,
-  //     setPopup,
-  //   });
 }
