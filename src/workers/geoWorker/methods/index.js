@@ -142,7 +142,7 @@ function applyPropertyFilter(data, params) {
 }
 
 function applySpatialFilter(params) {
-  const { source, feature } = params;
+  const { source, feature, legend = {}, id } = params;
   const { type, name } = source;
   let overlay;
 
@@ -157,8 +157,13 @@ function applySpatialFilter(params) {
   if (type !== LOADER_TYPE.GEOJSON || type === LOADER_TYPE.KML) {
     target = featureCollection(
       target.map((d) => {
-        if (d.lat && d.lng) {
-          return makePoint([d.lng, d.lat], { ...d });
+        if (legend?.coordinates) {
+          return makePoint(d[legend.coordinates], { ...d });
+        }
+        if (d[legend?.latitude] && d[legend?.longitude]) {
+          return makePoint([d[legend?.longitude], d[legend?.latitude]], {
+            ...d,
+          });
         }
       }),
     );
@@ -178,6 +183,7 @@ function applySpatialFilter(params) {
 
   if (type === LOADER_TYPE.GEOJSON || type === LOADER_TYPE.KML) {
     return {
+      requestor: id,
       count,
       data: featureCollection(_output),
     };
@@ -185,6 +191,7 @@ function applySpatialFilter(params) {
 
   const output = _output.map((d) => d.properties);
   return {
+    requestor: id,
     count,
     data: output,
   };

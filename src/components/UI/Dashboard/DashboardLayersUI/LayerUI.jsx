@@ -16,10 +16,8 @@ import { zip } from "d3";
 import React, { useCallback, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import {
-  removeFilteredData,
   removeLayer,
   removeSelectedLayer,
-  setDrawingProps,
   setSelectedLayer,
 } from "../../../../store/mapStore";
 import ColorPicker from "./components/ColorPicker";
@@ -41,9 +39,9 @@ export default function LayerUI({ id, selected, type, sourceType, source }) {
       dispatch(setSelectedLayer(id));
       return;
     }
-    dispatch(removeFilteredData());
-    dispatch(setDrawingProps(null));
     dispatch(removeSelectedLayer());
+    // dispatch(removeFilteredData());
+    // dispatch(setDrawingProps(null));
   }, [selected]);
 
   const handleDelete = () => {

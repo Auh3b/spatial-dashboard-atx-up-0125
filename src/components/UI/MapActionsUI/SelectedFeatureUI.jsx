@@ -12,35 +12,34 @@ export default function SelectedFeatureUI() {
   const filteredData = useSelector((state) => getFilteredData(state));
   const filteredParams = useSelector((state) => getFilteredParams(state));
   const dataTableProps = useMemo(() => {
-    if (filteredData && filteredParams) {
-      const { count, data } = filteredData;
-      const { title, type, schema } = filteredParams.source;
-      const columns = schema.map((d) => ({
-        field: d,
-        fieldName: d,
-        width: 100,
-      }));
-      const rows = tabulationHandlers[type](data);
-      const tableProps = {
-        density: "compact",
-        initialState: {
-          pagination: {
-            paginationModel: { page: 0, pageSize: 10 },
-          },
+    if (!filteredData || !filteredParams) return null;
+    if (filteredData?.requestor !== filteredParams?.id) return null;
+    const { count, data } = filteredData;
+    const { title, type, schema } = filteredParams.source;
+    const columns = schema.map((d) => ({
+      field: d,
+      fieldName: d,
+      width: 100,
+    }));
+    const rows = tabulationHandlers[type](data);
+    const tableProps = {
+      density: "compact",
+      initialState: {
+        pagination: {
+          paginationModel: { page: 0, pageSize: 10 },
         },
-      };
-      return {
-        count,
-        title,
-        columns,
-        rows,
-        columns,
-        tableProps,
-      };
-    }
-    return null;
+      },
+    };
+    return {
+      count,
+      title,
+      columns,
+      rows,
+      columns,
+      tableProps,
+    };
   }, [filteredData, filteredParams]);
-  // console.log(filteredParams);
+  console.log(filteredParams, filteredData);
 
   const handleOpen = () => {
     setModelOpen(true);

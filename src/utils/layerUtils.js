@@ -115,7 +115,7 @@ function getPointLayerProps(layerItem) {
   layerProps["getLineColor"] = layerItem.legend.stroke;
   layerProps["getLineWidth"] = layerItem.legend.strokeWidth;
   layerProps["getRadius"] = layerItem.legend.radius;
-  layerProps["pointRadiusUnits"] = "pixels";
+  layerProps["radiusUnits"] = "pixels";
   layerProps["stroked"] = true;
   layerProps["lineWidthUnits"] = "pixels";
   layerProps["visible"] = layerItem.legend.visible;

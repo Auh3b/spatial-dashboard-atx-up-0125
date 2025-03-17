@@ -18,8 +18,8 @@ export const getFilteredParams = (state) => {
   const layerId = getSelectedLayer(state);
   const isDrawing = getIsDrawing(state);
   const coords = getDrawingProps(state);
-  if (!layerId || !coords) return null;
   const layer = getLayers(state)[layerId];
+  if (!layer || !coords) return null;
   return {
     ...layer,
     isDrawing,

@@ -17,22 +17,24 @@ export default function SpatialFilterResultsLayer() {
   const _data = useSelector((state) => getFilteredData(state));
   const targetLayer = useSelector((state) => getFilteredParams(state));
   const layer = useMemo(() => {
-    if (!_data || !targetLayer) return null;
-    const layerItem = getInitialLayerConfig(
-      id,
-      targetLayer.source,
-      targetLayer.type,
-    );
-    const layerProps = getLayerProps(layerItem);
-    const data = ["geojson", "kml"].includes(targetLayer.source.type)
-      ? processGeojson(_data.data)
-      : _data.data;
+    if (_data && targetLayer && _data.requestor === targetLayer.id) {
+      const layerItem = getInitialLayerConfig(
+        id,
+        targetLayer.source,
+        targetLayer.type,
+      );
+      const layerProps = getLayerProps(layerItem);
+      const data = ["geojson", "kml"].includes(targetLayer.source.type)
+        ? processGeojson(_data.data)
+        : _data.data;
 
-    const layer = getLayerClass(targetLayer.type, data, layerProps);
-    return layer;
+      const layer = getLayerClass(targetLayer.type, data, layerProps);
+      return layer;
+    }
+    return null;
   }, [_data, targetLayer]);
 
-  // console.log(layer);
+  console.log(targetLayer, _data, layer);
 
   if (layer) return layer;
   // return new GeoJsonLayer({

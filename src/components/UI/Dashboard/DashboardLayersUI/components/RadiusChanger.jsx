@@ -33,9 +33,9 @@ export default function RadiusChanger({ id, type }) {
         <AttributeWrapper title={attributeId}>
           <NumberInput
             title={"Radius"}
-            min={5}
+            min={1}
             labelFormat=".0f"
-            step={5}
+            step={1}
             max={Infinity}
             value={layer.legend.radius}
             onChange={handleChange}

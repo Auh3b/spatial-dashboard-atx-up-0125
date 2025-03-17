@@ -1,7 +1,7 @@
 import { dequal } from "dequal";
 import { useDispatch, useSelector } from "react-redux";
 import { getFilteredParams } from "../../store";
-import { setFilteredData } from "../../store/mapStore";
+import { removeFilteredData, setFilteredData } from "../../store/mapStore";
 import geoWorker from "../../workers/geoWorker";
 import { METHOD_NAMES } from "../../workers/geoWorker/methods/methodUtils";
 import useCompareEffect from "./useCompareEffect";
@@ -22,6 +22,9 @@ export default function useMapActionContext() {
           })
           .catch((e) => {});
       }
+      return () => {
+        dispatch(removeFilteredData());
+      };
     },
     [params],
     dequal,
