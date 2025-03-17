@@ -8,10 +8,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { RgbaColorPicker } from "react-colorful";
-import {
-  deckColorToRgba,
-  deckColorToRgbaString,
-} from "../../../../../../utils/colorUtils";
+import { deckColorToRgba, deckColorToRgbaString } from "../../utils/colorUtils";
 
 export default function SingularColorPicker({ onColorChange, value }) {
   const [anchorEl, setAnchorEl] = useState(null);

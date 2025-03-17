@@ -2,7 +2,7 @@ import { Box, Divider, Grid2, Typography } from "@mui/material";
 
 export default function AttributeWrapper({ title, children, action = null }) {
   return (
-    <Box sx={{ my: 1 }}>
+    <Box>
       <Grid2 container alignItems={"center"} justifyContent={"space-between"}>
         <Typography variant="overline" sx={{ fontSize: 10, mb: 1 }}>
           {title}
