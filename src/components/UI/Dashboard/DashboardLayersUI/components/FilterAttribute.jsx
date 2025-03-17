@@ -101,7 +101,6 @@ export default function FilterAttribute({ id }) {
     [layer, id],
   );
 
-  console.log(layer.filters);
   return (
     <AttributeWrapper
       title={"Filters"}

@@ -13,7 +13,7 @@ import useAllowedAttributes from "../hooks/useAllowedAttributes";
 
 const attributeId = ATTRIBUTES.STROKE;
 
-export default function StrokeChanger({ id, type }) {
+export default function StrokeChanger({ id, type, wrapperProps = {} }) {
   const isAllowed = useAllowedAttributes(type, attributeId);
   const dispatch = useDispatch();
   const { layer } = useLayerConfig(id);
@@ -45,7 +45,7 @@ export default function StrokeChanger({ id, type }) {
   return (
     <>
       {isAllowed && (
-        <AttributeWrapper title={attributeId}>
+        <AttributeWrapper title={attributeId} {...wrapperProps}>
           <Box>
             <StrokeColor
               onColorChange={handleColorChange}
@@ -62,7 +62,7 @@ export default function StrokeChanger({ id, type }) {
   );
 }
 
-function StrokeWidth({ onChange, value }) {
+function StrokeWidth({ onChange, value = 1 }) {
   return (
     <Box>
       <NumberInput

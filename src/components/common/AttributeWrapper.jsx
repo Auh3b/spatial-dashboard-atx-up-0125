@@ -1,6 +1,11 @@
 import { Box, Divider, Grid2, Typography } from "@mui/material";
 
-export default function AttributeWrapper({ title, children, action = null }) {
+export default function AttributeWrapper({
+  title,
+  children,
+  action = null,
+  divider = true,
+}) {
   return (
     <Box>
       <Grid2 container alignItems={"center"} justifyContent={"space-between"}>
@@ -10,7 +15,7 @@ export default function AttributeWrapper({ title, children, action = null }) {
         {action}
       </Grid2>
       <Box sx={{ pl: 1 }}>{children}</Box>
-      <Divider sx={{ my: 1, borderStyle: "dashed" }} />
+      {divider && <Divider sx={{ my: 1, borderStyle: "dashed" }} />}
     </Box>
   );
 }

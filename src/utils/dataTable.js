@@ -1,7 +1,6 @@
 import { LOADER_TYPE } from "../workers/geoWorker/methods/methodUtils";
 
 function tabulateGeoJSON(value) {
-  console.log(value);
   return value.features.map((d) => d.properties);
 }
 

@@ -37,7 +37,7 @@ export default function RadiusChanger({ id, type }) {
             labelFormat=".0f"
             step={1}
             max={Infinity}
-            value={layer.legend.radius}
+            value={layer?.legend?.radius || 5}
             onChange={handleChange}
           />
         </AttributeWrapper>

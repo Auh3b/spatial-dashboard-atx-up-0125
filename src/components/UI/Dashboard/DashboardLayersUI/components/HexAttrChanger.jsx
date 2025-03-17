@@ -39,7 +39,7 @@ export default function HexAttrChanger({ id, type }) {
             step={5}
             max={Infinity}
             labelFormat=".0f"
-            value={layer.legend.elevationScale}
+            value={layer.legend.elevationScale || 1}
             onChange={handleNumberChange("elevationScale")}
           />
           <NumberInput
@@ -48,7 +48,7 @@ export default function HexAttrChanger({ id, type }) {
             step={50}
             max={Infinity}
             labelFormat=".0f"
-            value={layer.legend.radius}
+            value={layer.legend.radius || 500}
             onChange={handleNumberChange("radius")}
           />
         </AttributeWrapper>

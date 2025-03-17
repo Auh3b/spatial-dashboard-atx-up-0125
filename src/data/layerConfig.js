@@ -138,7 +138,7 @@ export const allowedShapes = [
 const getConfig = (type) => initialLayerConfig[type];
 
 export const getInitialLayerConfig = (id, source, type) => {
-  const { name, type: sourceType } = source;
+  const { name } = source;
 
   const deckId = `${type}-${id}-${source.name}`;
 
@@ -147,7 +147,6 @@ export const getInitialLayerConfig = (id, source, type) => {
     deckId,
     name,
     source,
-    sourceType,
     type,
     ...getConfig(type),
   };
@@ -209,12 +208,25 @@ export const drawingConfig = {
   name: "Drawing Layer",
   type: LAYER_TYPE.POLYGON_LAYER,
   dynamic: false,
+  system: true,
   showInLegend: false,
   legend: {
     visible: true,
-    color: [],
+    color: [252, 94, 3, 50],
     strokeWidth: 1,
-    stroke: [],
+    stroke: [252, 94, 3, 255],
+  },
+};
+export const resultsConfig = {
+  id: STATIC_LAYER_NAMES.OVERLAY_RESULTS_LAYER,
+  name: "Results Layer",
+  dynamic: false,
+  system: true,
+  showInLegend: false,
+  legend: {
+    visible: true,
+    color: [52, 110, 235, 100],
+    stroke: [52, 110, 235, 255],
   },
 };
 

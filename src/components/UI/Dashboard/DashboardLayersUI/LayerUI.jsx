@@ -10,16 +10,8 @@ import {
   Divider,
   Grid2,
   IconButton,
-  Typography,
 } from "@mui/material";
-import { zip } from "d3";
-import React, { useCallback, useMemo } from "react";
-import { useDispatch } from "react-redux";
-import {
-  removeLayer,
-  removeSelectedLayer,
-  setSelectedLayer,
-} from "../../../../store/mapStore";
+import React from "react";
 import ColorPicker from "./components/ColorPicker";
 import CoordinateSelector from "./components/CoordinateSelector";
 import FilterAttribute from "./components/FilterAttribute";
@@ -32,23 +24,18 @@ import ShapePicker from "./components/ShapePicker";
 import ShowInLegendToggle from "./components/ShowInLegendToggle";
 import StrokeChanger from "./components/StrokeChanger";
 
-export default function LayerUI({ id, selected, type, sourceType, source }) {
-  const dispatch = useDispatch();
-
-  const handleClick = useCallback(() => {
-    if (selected !== id) {
-      dispatch(setSelectedLayer(id));
-      return;
-    }
-    dispatch(removeSelectedLayer());
-    // dispatch(removeFilteredData());
-    // dispatch(setDrawingProps(null));
-  }, [selected]);
-
-  const handleDelete = () => {
-    dispatch(removeLayer({ id }));
-  };
-
+export default function LayerUI({
+  id,
+  selected,
+  type,
+  sourceType,
+  source,
+  onDelete,
+  onClick,
+  noHeader = false,
+  divider = true,
+  allowedAttributes = undefined,
+}) {
   const isSelected = selected === id;
 
   return (
@@ -58,6 +45,7 @@ export default function LayerUI({ id, selected, type, sourceType, source }) {
           container
           alignItems={"center"}
           sx={{
+            display: noHeader ? "none" : "flex",
             backgroundColor: (theme) =>
               isSelected ? theme.palette.action.hover : "unset",
             py: 0.5,
@@ -65,11 +53,11 @@ export default function LayerUI({ id, selected, type, sourceType, source }) {
           <Box sx={{ flexGrow: 1 }}>
             <NameChanger id={id} />
           </Box>
-          <IconButton disableRipple onClick={handleClick}>
+          <IconButton disableRipple onClick={onClick}>
             {isSelected ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
         </Grid2>
-        <Collapse in={isSelected}>
+        <Collapse in={noHeader ? true : isSelected}>
           <Grid2 sx={{ p: 1 }}>
             <FilterAttribute id={id} />
             <ShapePicker id={id} />
@@ -87,72 +75,72 @@ export default function LayerUI({ id, selected, type, sourceType, source }) {
             <IconAttrChanger id={id} type={type} />
             <ShowInLegendToggle id={id} />
             <Button
-              onClick={handleDelete}
+              onClick={onDelete}
               size="small"
               variant="contained"
               color="error"
               startIcon={<Delete />}
-              sx={{ mb: 1 }}>
+              sx={{ mb: 1, display: noHeader ? "none" : "inline-block" }}>
               Delete Layer
             </Button>
           </Grid2>
         </Collapse>
       </Grid2>
-      <Divider variant="vertical" />
+      {divider && <Divider variant="vertical" />}
     </Box>
   );
 }
 
-const LegendTypeUI = {
-  category: CategoryLegend,
-  ramp: RampLegend,
-};
+// const LegendTypeUI = {
+//   category: CategoryLegend,
+//   ramp: RampLegend,
+// };
 
-function Legend({ type, colors, labels }) {
-  const LegendVisual = useMemo(() => LegendTypeUI[type], [type]);
-  return (
-    <Box px={1}>
-      <LegendVisual type={type} colors={colors} labels={labels} />
-    </Box>
-  );
-}
+// function Legend({ type, colors, labels }) {
+//   const LegendVisual = useMemo(() => LegendTypeUI[type], [type]);
+//   return (
+//     <Box px={1}>
+//       <LegendVisual type={type} colors={colors} labels={labels} />
+//     </Box>
+//   );
+// }
 
-function CategoryLegend({ colors, labels }) {
-  const values = zip(labels, colors);
-  return (
-    <Grid2 container direction={"column"}>
-      {values.map(([label, color]) => (
-        <Grid2 container gap={2} key={label} alignItems={"center"}>
-          <Box
-            sx={{
-              backgroundColor: color,
-              width: "10px",
-              height: "10px",
-              borderRadius: "50%",
-            }}></Box>
-          <Typography variant="caption">{label}</Typography>
-        </Grid2>
-      ))}
-    </Grid2>
-  );
-}
+// function CategoryLegend({ colors, labels }) {
+//   const values = zip(labels, colors);
+//   return (
+//     <Grid2 container direction={"column"}>
+//       {values.map(([label, color]) => (
+//         <Grid2 container gap={2} key={label} alignItems={"center"}>
+//           <Box
+//             sx={{
+//               backgroundColor: color,
+//               width: "10px",
+//               height: "10px",
+//               borderRadius: "50%",
+//             }}></Box>
+//           <Typography variant="caption">{label}</Typography>
+//         </Grid2>
+//       ))}
+//     </Grid2>
+//   );
+// }
 
-function RampLegend({ colors, labels }) {
-  return (
-    <Grid2 container direction={"column"}>
-      <Grid2 container justifyContent={"space-between"}>
-        {labels.map((d) => (
-          <Typography key={d} variant="caption">
-            {d}
-          </Typography>
-        ))}
-      </Grid2>
-      <Box
-        width={"100%"}
-        height={"10px"}
-        sx={{
-          background: `linear-gradient(to right, ${colors[0]}, ${colors[1]})`,
-        }}></Box>
-    </Grid2>
-  );
-}
+// function RampLegend({ colors, labels }) {
+//   return (
+//     <Grid2 container direction={"column"}>
+//       <Grid2 container justifyContent={"space-between"}>
+//         {labels.map((d) => (
+//           <Typography key={d} variant="caption">
+//             {d}
+//           </Typography>
+//         ))}
+//       </Grid2>
+//       <Box
+//         width={"100%"}
+//         height={"10px"}
+//         sx={{
+//           background: `linear-gradient(to right, ${colors[0]}, ${colors[1]})`,
+//         }}></Box>
+//     </Grid2>
+//   );
+// }
