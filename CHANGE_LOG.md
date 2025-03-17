@@ -79,3 +79,14 @@
 ### Layers (Breaking Changes)
 
 - The nature in which layers are add to the map has changed, and does not use individual files. Layers are generated based on a source, and the source can be taken from a existing source, from HTTPS/URL, or uploaded by a local file. Data is stored locally and will disappear when application is closed.
+
+## 17/03/2024
+
+### New Features
+
+- Improved in-memory layers:
+  - Extended costumisation of layers for in-app changes.
+  - Multiple layers can be generated from one source. Filtering allows for categorisation of data items.
+  - MaterialUI Icons can be used in Icon Layer.
+- Circle geofence shows radius in kilometers when popup is lauched
+- Selected features through geofence can copied to clipboard.
