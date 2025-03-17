@@ -1,5 +1,6 @@
 import { parse } from "@loaders.gl/core";
 import { booleanIntersects, featureCollection } from "@turf/turf";
+import { ascending } from "d3";
 import { v4 } from "uuid";
 import { DRAW_MODES, featureHandler } from "../../../utils/drawingUtils";
 import { FILTER_FUNCTIONS } from "../../../utils/filterFuncs";
@@ -49,11 +50,12 @@ async function processLoad(queue, data) {
 }
 
 export function getData(params) {
-  const { name } = params;
-  if (datasets[name]) {
-    return new Promise((resolve) => resolve(datasets[name].data));
-  }
-  throw Error("Data not loaded");
+  console.log(params);
+  const { source } = params;
+  if (!datasets[source.name]) throw Error("Data not loaded");
+  const data = datasets[source.name].data;
+  const filteredData = applyPropertyFilter(data, params);
+  return new Promise((resolve) => resolve(filteredData));
 }
 
 export async function getFilteredData(params) {
@@ -128,10 +130,12 @@ function getDataSchema(data, type) {
 }
 
 function applyPropertyFilter(data, params) {
-  const { fileType, type, value, column } = params;
+  const { source, filter = undefined } = params;
+  if (!filter) return data;
+  const { type, column, value } = filter;
   const filterFn = FILTER_FUNCTIONS[type](value, column);
 
-  if (fileType === LOADER_TYPE.GEOJSON || fileType === LOADER_TYPE.KML) {
+  if (source.type === LOADER_TYPE.GEOJSON || source.type === LOADER_TYPE.KML) {
     return {
       ...data,
       features: data.features.filter((d) => filterFn(d["properties"])),
@@ -195,4 +199,20 @@ function applySpatialFilter(params) {
     count,
     data: output,
   };
+}
+
+export async function getUniqueColumnValues(params) {
+  const { source, column } = params;
+  const { type, name } = source;
+  const data = datasets[name].data;
+  if (!data) throw name + " is not available.";
+  let columnValue = [];
+  if (type === LOADER_TYPE.GEOJSON || type === LOADER_TYPE.KML) {
+    columnValue = data.features.map(({ properties }) => properties[column]);
+  } else {
+    columnValue = data.map((d) => d[column]);
+  }
+
+  let output = Array.from(new Set(columnValue)).sort((a, b) => ascending(a, b));
+  return new Promise((resolve) => resolve(output));
 }

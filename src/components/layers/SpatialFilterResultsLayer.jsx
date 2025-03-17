@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { getInitialLayerConfig } from "../../data/layerConfig";
 import { getFilteredParams } from "../../store";
 import { getFilteredData } from "../../store/mapStore";
 import {
@@ -10,7 +9,7 @@ import {
 } from "../../utils/layerUtils";
 
 const color = [52, 110, 235, 100];
-const strokeColor = [52, 110, 235, 255];
+const stroke = [52, 110, 235, 255];
 const id = "selected-results-layer";
 
 export default function SpatialFilterResultsLayer() {
@@ -18,12 +17,20 @@ export default function SpatialFilterResultsLayer() {
   const targetLayer = useSelector((state) => getFilteredParams(state));
   const layer = useMemo(() => {
     if (_data && targetLayer && _data.requestor === targetLayer.id) {
-      const layerItem = getInitialLayerConfig(
-        id,
-        targetLayer.source,
-        targetLayer.type,
-      );
-      const layerProps = getLayerProps(layerItem);
+      // const layerItem = getInitialLayerConfig(
+      //   id,
+      //   targetLayer.source,
+      //   targetLayer.type,
+      // );
+      const layerProps = getLayerProps({
+        ...targetLayer,
+        deckId: id,
+        legend: {
+          ...targetLayer.legend,
+          color,
+          stroke,
+        },
+      });
       const data = ["geojson", "kml"].includes(targetLayer.source.type)
         ? processGeojson(_data.data)
         : _data.data;

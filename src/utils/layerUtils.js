@@ -62,7 +62,7 @@ export async function derivedLayers({ layerData = {} }) {
 }
 
 function getPositionProp(layerItem) {
-  if (layerItem.sourceType === "geojson" || layerItem.sourceType === "kml") {
+  if (layerItem.source.type === "geojson" || layerItem.source.type === "kml") {
     return (feature) => feature.geometry.coordinates;
   }
   if (layerItem.legend.coordinate) {
@@ -77,10 +77,10 @@ function getPositionProp(layerItem) {
 async function getDataProp(layerItem) {
   const data = await geoWorker({
     name: METHOD_NAMES.GET_DATA,
-    params: layerItem.source,
+    params: layerItem,
   });
 
-  if (!["geojson", "kml"].includes(layerItem.sourceType)) return data;
+  if (!["geojson", "kml"].includes(layerItem.source.type)) return data;
 
   const output = processGeojson(data);
   return output;

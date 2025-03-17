@@ -14,7 +14,7 @@ export default function Admin2Layer() {
   const isDrawing = useSelector((state) => getIsDrawing(state));
   const { data } = useGeoWorker({
     name: METHOD_NAMES.GET_DATA,
-    params: layer?.source || {},
+    params: layer || {},
   });
 
   if (data && layer)

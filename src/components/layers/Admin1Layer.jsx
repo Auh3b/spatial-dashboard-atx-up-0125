@@ -14,7 +14,7 @@ export default function Admin1Layer() {
   const { layer } = useLayerConfig(id);
   const { data } = useGeoWorker({
     name: METHOD_NAMES.GET_DATA,
-    params: layer?.source || {},
+    params: layer || {},
   });
 
   if (data && layer)

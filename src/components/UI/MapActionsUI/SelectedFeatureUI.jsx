@@ -39,7 +39,7 @@ export default function SelectedFeatureUI() {
       tableProps,
     };
   }, [filteredData, filteredParams]);
-  console.log(filteredParams, filteredData);
+  // console.log(filteredParams, filteredData);
 
   const handleOpen = () => {
     setModelOpen(true);

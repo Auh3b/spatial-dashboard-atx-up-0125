@@ -1,5 +1,11 @@
 import { expose } from "comlink";
-import { fetchData, getData, getFilteredData, setLocalData } from "./methods";
+import {
+  fetchData,
+  getData,
+  getFilteredData,
+  getUniqueColumnValues,
+  setLocalData,
+} from "./methods";
 import { METHOD_NAMES } from "./methods/methodUtils";
 
 const METHODS = {
@@ -7,6 +13,7 @@ const METHODS = {
   [METHOD_NAMES.GET_DATA]: getData,
   [METHOD_NAMES.GET_FILTERED_DATA]: getFilteredData,
   [METHOD_NAMES.SET_DATA]: setLocalData,
+  [METHOD_NAMES.GET_UNIQUE_COLUMN_VALUES]: getUniqueColumnValues,
 };
 
 const executeMethod = async (methodName, params) => {

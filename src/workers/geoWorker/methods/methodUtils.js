@@ -7,6 +7,7 @@ export const METHOD_NAMES = {
   GET_DATA: "getData",
   GET_FILTERED_DATA: "getFilteredData",
   SET_DATA: "setData",
+  GET_UNIQUE_COLUMN_VALUES: "getUniqueColumnValues",
 };
 
 export const LOADER_TYPE = {
