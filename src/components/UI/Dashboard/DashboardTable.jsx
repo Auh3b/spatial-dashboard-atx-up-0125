@@ -1,25 +1,25 @@
-import {
-  Box,
-  Typography,
-  Modal,
-  Grid2,
-  IconButton,
-  CircularProgress,
-  Paper,
-  Link,
-  Divider,
-} from "@mui/material";
-import React, { Fragment, useMemo, useState } from "react";
 import ArrowOutwardIcon from "@mui/icons-material/ArrowOutward";
 import CloseIcon from "@mui/icons-material/Close";
-import { useSelector } from "react-redux";
-import { getAllData } from "../../../store/appStore";
-import { isEmpty } from "lodash";
-import useGeoWorker from "../../hooks/useGeoWorker";
-import { METHOD_NAMES } from "../../../workers/geoWorker/methods/methodUtils";
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  Grid2,
+  IconButton,
+  Link,
+  Modal,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { format } from "d3";
+import { isEmpty } from "lodash";
+import React, { Fragment, useMemo, useState } from "react";
+import { useSelector } from "react-redux";
+import { getAllData } from "../../../store/appStore";
 import { tabulationHandlers } from "../../../utils/dataTable";
+import { METHOD_NAMES } from "../../../workers/geoWorker/methods/methodUtils";
+import useGeoWorker from "../../hooks/useGeoWorker";
 
 export default function DashboardTable({ selected, index }) {
   const [selectedSource, setSelectedSource] = useState(null);
@@ -80,17 +80,18 @@ function DataViewModel({ source, dataset, onClose }) {
             </IconButton>
           </Grid2>
           <Divider sx={{ mb: 2 }} />
-          <DataView source={source} type={d.type} schema={d.schema} />
+          <DataView {...d} />
         </Paper>
       </Grid2>
     </Modal>
   );
 }
 
-function DataView({ source, type, schema }) {
+function DataView(props) {
+  const { type, schema } = props;
   const { isLoading, data } = useGeoWorker({
     name: METHOD_NAMES.GET_DATA,
-    params: { name: source },
+    params: { source: props },
   });
   const handler = tabulationHandlers[type];
   const columns = schema.map((d) => ({ field: d, fieldName: d, width: 100 }));

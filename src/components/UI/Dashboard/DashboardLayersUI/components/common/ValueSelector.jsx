@@ -1,17 +1,19 @@
-import { FormControl, MenuItem, Select } from "@mui/material";
+import { FormControl, MenuItem, Select, Typography } from "@mui/material";
 import React from "react";
 
 export default function ValueSelector({
   disabled = false,
-  options,
-  value,
-  onChange,
+  label = undefined,
+  options = [],
+  value = "",
+  onChange = undefined,
 }) {
   return (
-    <FormControl fullWidth size="small">
+    <FormControl fullWidth>
+      <Typography variant="caption">{label}</Typography>
       <Select
-        disabled={disabled}
         size="small"
+        disabled={disabled}
         onChange={onChange}
         value={value}>
         <MenuItem value={""}>Select Option</MenuItem>

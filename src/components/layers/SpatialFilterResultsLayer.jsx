@@ -41,8 +41,6 @@ export default function SpatialFilterResultsLayer() {
     return null;
   }, [_data, targetLayer]);
 
-  console.log(targetLayer, _data, layer);
-
   if (layer) return layer;
   // return new GeoJsonLayer({
   //   data: _data.data,

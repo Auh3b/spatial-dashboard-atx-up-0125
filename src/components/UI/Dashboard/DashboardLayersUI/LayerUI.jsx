@@ -22,6 +22,7 @@ import {
 } from "../../../../store/mapStore";
 import ColorPicker from "./components/ColorPicker";
 import CoordinateSelector from "./components/CoordinateSelector";
+import FilterAttribute from "./components/FilterAttribute";
 import HeatMapAttrChanger from "./components/HeatMapAttrChanger";
 import HexAttrChanger from "./components/HexAttrChanger";
 import IconAttrChanger from "./components/IconAttrChanger";
@@ -70,6 +71,7 @@ export default function LayerUI({ id, selected, type, sourceType, source }) {
         </Grid2>
         <Collapse in={isSelected}>
           <Grid2 sx={{ p: 1 }}>
+            <FilterAttribute id={id} />
             <ShapePicker id={id} />
             <ColorPicker id={id} type={type} />
             <StrokeChanger id={id} type={type} />

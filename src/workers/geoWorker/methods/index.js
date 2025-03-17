@@ -130,19 +130,28 @@ function getDataSchema(data, type) {
 }
 
 function applyPropertyFilter(data, params) {
-  const { source, filter = undefined } = params;
-  if (!filter) return data;
-  const { type, column, value } = filter;
-  const filterFn = FILTER_FUNCTIONS[type](value, column);
+  const { source, filters = undefined } = params;
+  if (!filters) return data;
+  if (!filters.length) return data;
+  let filtered = data;
+  for (let i = 0; i < filters.length; i++) {
+    const { column, type, value } = filters[i];
 
-  if (source.type === LOADER_TYPE.GEOJSON || source.type === LOADER_TYPE.KML) {
-    return {
-      ...data,
-      features: data.features.filter((d) => filterFn(d["properties"])),
-    };
+    const filterFn = FILTER_FUNCTIONS[type](value, column);
+
+    if (
+      source.type === LOADER_TYPE.GEOJSON ||
+      source.type === LOADER_TYPE.KML
+    ) {
+      filtered = {
+        ...filtered,
+        features: filtered.features.filter((d) => filterFn(d["properties"])),
+      };
+    } else {
+      filtered = filtered.filter((d) => filterFn(d));
+    }
   }
-
-  return data.filter((d) => filterFn(d));
+  return filtered;
 }
 
 function applySpatialFilter(params) {
