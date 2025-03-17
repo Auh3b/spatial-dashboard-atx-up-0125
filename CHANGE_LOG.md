@@ -84,9 +84,12 @@
 
 ### New Features
 
-- Improved in-memory layers:
-  - Extended costumisation of layers for in-app changes.
-  - Multiple layers can be generated from one source. Filtering allows for categorisation of data items.
-  - MaterialUI Icons can be used in Icon Layer.
-- Circle geofence shows radius in kilometers when popup is lauched
-- Selected features through geofence can copied to clipboard.
+- Enhanced In-Memory Layers:
+
+  - Expanded customization options for in-app layer modifications.
+  - Enabled generation of multiple layers from a single source, with filtering for better data categorization.
+  - Integrated Material UI icons for use in the Icon Layer.
+
+- Geofence Enhancements:
+  - Circle geofence now displays radius in kilometers when a popup is launched.
+  - Selected features within a geofence can be copied to the clipboard.
