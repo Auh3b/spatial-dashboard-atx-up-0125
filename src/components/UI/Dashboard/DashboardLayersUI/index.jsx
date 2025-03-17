@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getLayers,
   getSelectedLayer,
+  removeLayer,
   removeSelectedLayer,
   setSelectedLayer,
 } from "../../../../store/mapStore";

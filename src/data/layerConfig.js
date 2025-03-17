@@ -75,11 +75,10 @@ const initialLayerConfig = {
       visible: true,
       latitude: "",
       size: "",
-      iconAtlas: "",
-      iconMapping: "",
       longitude: "",
       color: getRandomColor(),
-      icon: "",
+      iconPreset:
+        "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iaW5oZXJpdCIgY2xhc3M9Ik11aVN2Z0ljb24tcm9vdCBNdWlTdmdJY29uLWNvbG9yUHJpbWFyeSBNdWlTdmdJY29uLWZvbnRTaXplTWVkaXVtIGNzcy0xd3RwNm8wLU11aVN2Z0ljb24tcm9vdCIgZm9jdXNhYmxlPSJmYWxzZSIgYXJpYS1oaWRkZW49InRydWUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZGF0YS10ZXN0aWQ9IkFjY2Vzc1RpbWVJY29uIj48cGF0aCBmaWxsPSJpbmhlcml0IiBkPSJNMTEuOTkgMkM2LjQ3IDIgMiA2LjQ4IDIgMTJzNC40NyAxMCA5Ljk5IDEwQzE3LjUyIDIyIDIyIDE3LjUyIDIyIDEyUzE3LjUyIDIgMTEuOTkgMk0xMiAyMGMtNC40MiAwLTgtMy41OC04LThzMy41OC04IDgtOCA4IDMuNTggOCA4LTMuNTggOC04IDgiPjwvcGF0aD48cGF0aCBkPSJNMTIuNSA3SDExdjZsNS4yNSAzLjE1Ljc1LTEuMjMtNC41LTIuNjd6Ij48L3BhdGg+PC9zdmc+",
     },
   },
   [LAYER_TYPE.HEX_LAYER]: {
@@ -223,11 +222,11 @@ export const resultsConfig = {
   dynamic: false,
   system: true,
   showInLegend: false,
-  legend: {
-    visible: true,
-    color: [52, 110, 235, 100],
-    stroke: [52, 110, 235, 255],
-  },
+  // legend: {
+  //   visible: true,
+  //   color: [52, 110, 235, 100],
+  //   stroke: [52, 110, 235, 255],
+  // },
 };
 
 export const exploreLayers = [admin0Config, admin1Config, admin2Config];

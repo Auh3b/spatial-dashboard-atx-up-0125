@@ -11,6 +11,6 @@ export const getExplorationLayers = () => [
 ];
 
 export const getDrawingLayers = () => [
-  SpatialFilterResultsLayer(),
   DrawLayer(),
+  SpatialFilterResultsLayer(),
 ];

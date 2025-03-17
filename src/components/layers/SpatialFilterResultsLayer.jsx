@@ -1,52 +1,45 @@
-import { useMemo } from "react";
-import { useSelector } from "react-redux";
-import { getFilteredParams } from "../../store";
-import { getFilteredData } from "../../store/mapStore";
+import { dequal } from "dequal";
+import { useState } from "react";
+import { STATIC_LAYER_NAMES } from "../../data/layerConfig";
 import {
   getLayerClass,
   getLayerProps,
   processGeojson,
 } from "../../utils/layerUtils";
+import geoWorker from "../../workers/geoWorker";
+import { METHOD_NAMES } from "../../workers/geoWorker/methods/methodUtils";
+import useCompareEffect from "../hooks/useCompareEffect";
+import useLayerConfig from "../hooks/useLayerConfig";
 
-const color = [52, 110, 235, 100];
-const stroke = [52, 110, 235, 255];
-const id = "selected-results-layer";
+const id = STATIC_LAYER_NAMES.OVERLAY_RESULTS_LAYER;
 
 export default function SpatialFilterResultsLayer() {
-  const _data = useSelector((state) => getFilteredData(state));
-  const targetLayer = useSelector((state) => getFilteredParams(state));
-  const layer = useMemo(() => {
-    if (_data && targetLayer && _data.requestor === targetLayer.id) {
-      // const layerItem = getInitialLayerConfig(
-      //   id,
-      //   targetLayer.source,
-      //   targetLayer.type,
-      // );
-      const layerProps = getLayerProps({
-        ...targetLayer,
-        deckId: id,
-        legend: {
-          ...targetLayer.legend,
-          color,
-          stroke,
-        },
-      });
-      const data = ["geojson", "kml"].includes(targetLayer.source.type)
-        ? processGeojson(_data.data)
-        : _data.data;
+  const [layerClass, setLayerClass] = useState(null);
+  const { layer: layerItem } = useLayerConfig(id);
 
-      const layer = getLayerClass(targetLayer.type, data, layerProps);
-      return layer;
-    }
-    return null;
-  }, [_data, targetLayer]);
+  useCompareEffect(
+    () => {
+      (async function () {
+        if (layerItem) {
+          const layerProps = getLayerProps(layerItem);
+          const { data: _data } = await geoWorker({
+            name: METHOD_NAMES.GET_FILTERED_DATA,
+            params: layerItem,
+          });
 
-  if (layer) return layer;
-  // return new GeoJsonLayer({
-  //   data: _data.data,
-  //   getFillColor: [52, 110, 235, 100],
-  //   getLineColor: [52, 110, 235],
-  //   getLineWidth: 2,
-  //   lineWidthUnits: "pixels",
-  // });
+          const data = ["geojson", "kml"].includes(layerItem.source.type)
+            ? processGeojson(_data)
+            : _data;
+          const layer = getLayerClass(layerItem.type, data, layerProps);
+          setLayerClass(layer);
+        }
+      })();
+
+      return setLayerClass(null);
+    },
+    [layerItem],
+    dequal,
+  );
+
+  if (layerClass) return layerClass;
 }

@@ -50,10 +50,11 @@ async function processLoad(queue, data) {
 }
 
 export function getData(params) {
-  console.log(params);
+  // console.log(params);
   const { source } = params;
   if (!datasets[source.name]) throw Error("Data not loaded");
   const data = datasets[source.name].data;
+  // const filtered = applySpatialFilter(params);
   const filteredData = applyPropertyFilter(data, params);
   return new Promise((resolve) => resolve(filteredData));
 }
@@ -64,8 +65,11 @@ export async function getFilteredData(params) {
   if (!datasets[source.name]) throw Error("Invalid selection");
   if (isDrawing) throw Error("Please finish drawing");
   if (!feature) throw Error("Please draw point or spatial boundary");
-  const filtered = applySpatialFilter(params);
-  return new Promise((resolve) => resolve(filtered));
+  const { data, ...rest } = applySpatialFilter(params);
+  const _withFilterProperties = applyPropertyFilter(data, params);
+  return new Promise((resolve) =>
+    resolve({ data: _withFilterProperties, ...rest }),
+  );
 }
 
 function setData(params) {
@@ -157,6 +161,8 @@ function applyPropertyFilter(data, params) {
 function applySpatialFilter(params) {
   const { source, feature, legend = {}, id } = params;
   const { type, name } = source;
+  let target = datasets[name].data;
+  if (!feature) return target;
   let overlay;
 
   if (feature.type === DRAW_MODES.POINT) {
@@ -164,8 +170,6 @@ function applySpatialFilter(params) {
   } else {
     overlay = featureHandler[feature.type]([feature.feature]);
   }
-
-  let target = datasets[name].data;
 
   if (type !== LOADER_TYPE.GEOJSON || type === LOADER_TYPE.KML) {
     target = featureCollection(

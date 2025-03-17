@@ -74,7 +74,7 @@ function getPositionProp(layerItem) {
   return null;
 }
 
-async function getDataProp(layerItem) {
+export async function getDataProp(layerItem) {
   const data = await geoWorker({
     name: METHOD_NAMES.GET_DATA,
     params: layerItem,
@@ -118,7 +118,7 @@ function getPointLayerProps(layerItem) {
   layerProps["radiusUnits"] = "pixels";
   layerProps["stroked"] = true;
   layerProps["lineWidthUnits"] = "pixels";
-  layerProps["visible"] = layerItem.legend.visible || true;
+  layerProps["visible"] = layerItem.legend.visible;
 
   return layerProps;
 }
@@ -132,7 +132,7 @@ function getPolygonLayerProps(layerItem) {
   layerProps["getLineWidth"] = layerItem.legend.strokeWidth || 2;
   layerProps["lineWidthUnits"] = "pixels";
   layerProps["stroked"] = true;
-  layerProps["visible"] = layerItem.legend.visible || true;
+  layerProps["visible"] = layerItem.legend.visible;
   return layerProps;
 }
 
@@ -142,7 +142,7 @@ function getLineLayerProps(layerItem) {
   layerProps["getPosition"] = getPositionProp(layerItem);
   layerProps["getLineColor"] = layerItem.legend.stroke || [52, 100, 235, 255];
   layerProps["lineWidthUnits"] = "pixels";
-  layerProps["visible"] = layerItem.legend.visible || true;
+  layerProps["visible"] = layerItem.legend.visible;
   layerProps["stroked"] = true;
   return layerProps;
 }
@@ -151,7 +151,7 @@ function getIconLayerProps(layerItem) {
   const layerProps = {};
   layerProps["id"] = layerItem.deckId;
   layerProps["getPosition"] = getPositionProp(layerItem);
-  layerProps["visible"] = layerItem.legend.visible || true;
+  layerProps["visible"] = layerItem.legend.visible;
   layerProps["getSize"] = layerItem.legend.size || 50;
   layerProps["getColor"] = layerItem.legend.color || [52, 100, 235, 100];
   layerProps["getIcon"] = getAutoPackedIconAtlas(layerItem);
@@ -162,7 +162,7 @@ function getHeatMapLayerProps(layerItem) {
   const layerProps = {};
   layerProps["id"] = layerItem.deckId;
   layerProps["getPosition"] = getPositionProp(layerItem);
-  layerProps["visible"] = layerItem.legend.visible || true;
+  layerProps["visible"] = layerItem.legend.visible;
   layerProps["intensity"] = layerItem.legend.intensity;
   layerProps["threshold"] = layerItem.legend.threshold;
   layerProps["radiusPixels"] = layerItem.legend.radiusPixels;
@@ -176,7 +176,7 @@ function getHexLayerProps(layerItem) {
   layerProps["radius"] = layerItem.legend.radius || 500;
   layerProps["extruded"] = layerItem.legend.extruded || true;
   layerProps["elevationScale"] = layerItem.legend.elevationScale || 50;
-  layerProps["visible"] = layerItem.legend.visible || true;
+  layerProps["visible"] = layerItem.legend.visible;
   return layerProps;
 }
 
