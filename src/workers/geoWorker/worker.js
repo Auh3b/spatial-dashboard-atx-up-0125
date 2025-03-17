@@ -22,9 +22,7 @@ const executeMethod = async (methodName, params) => {
     if (!method) throw new Error("Something went wrong");
     const result = await method(params);
     return result;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 expose({ executeMethod });

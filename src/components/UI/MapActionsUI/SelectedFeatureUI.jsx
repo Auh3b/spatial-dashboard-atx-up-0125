@@ -1,13 +1,15 @@
 import { CopyAllRounded, TableChart } from "@mui/icons-material";
 import { Grid2, IconButton, Tooltip, Typography } from "@mui/material";
 import React, { Fragment, useCallback, useMemo, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getFilteredParams } from "../../../store";
+import { setFeedback } from "../../../store/appStore";
 import { getFilteredData } from "../../../store/mapStore";
 import { tabulationHandlers } from "../../../utils/dataTable";
 import DataTableModal from "../Modals/DataTableModal";
 
 export default function SelectedFeatureUI() {
+  const dispatch = useDispatch();
   const [modelOpen, setModelOpen] = useState(false);
   const filteredData = useSelector((state) => getFilteredData(state));
   const filteredParams = useSelector((state) => getFilteredParams(state));
@@ -39,7 +41,6 @@ export default function SelectedFeatureUI() {
       tableProps,
     };
   }, [filteredData, filteredParams]);
-  // console.log(filteredParams, filteredData);
 
   const handleOpen = () => {
     setModelOpen(true);
@@ -50,6 +51,7 @@ export default function SelectedFeatureUI() {
 
   const handleCopy = useCallback(() => {
     navigator.clipboard.writeText(JSON.stringify(filteredData.data));
+    dispatch(setFeedback({ message: "Saved to clipboard", status: "info" }));
   }, [filteredData]);
 
   return (

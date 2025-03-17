@@ -48,7 +48,7 @@ function MapWrapper() {
       );
     }
   }, [mapWrapperContainerRef.current]);
-  // console.log(layers);
+
   return (
     <div style={{ flexGrow: 1 }} ref={mapWrapperContainerRef}>
       <Map

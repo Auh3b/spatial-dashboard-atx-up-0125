@@ -65,9 +65,7 @@ export default function ExploreMenu({}) {
         );
         flyToFeature(feature);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
     dispatch(removePopup());
   }, [popup]);
 

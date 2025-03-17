@@ -12,7 +12,7 @@ export default function useMapLayers() {
     () => {
       derivedLayers({ layerData })
         .then((data) => setLayers(data))
-        .catch((error) => console.log(error));
+        .catch((error) => null);
     },
     [layerData],
     dequal,

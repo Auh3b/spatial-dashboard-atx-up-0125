@@ -56,9 +56,7 @@ export async function derivedLayers({ layerData = {} }) {
     }
 
     return layers;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 }
 
 function getPositionProp(layerItem) {

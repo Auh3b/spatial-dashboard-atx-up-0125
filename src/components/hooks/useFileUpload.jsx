@@ -21,7 +21,6 @@ export default function useFileUpload() {
       const name = getNameFromString(upload.name);
       setFile({ name, data, type });
     } catch (error) {
-      console.log(error);
       dispatch(
         setFeedback({
           status: "error",

@@ -79,10 +79,9 @@ export default function DrawLayer() {
         getRadius: 3,
         getFillColor: layerProps.getLineColor,
         // getLineColor: [255, 255, 255],
-        pickable: true,
+
         radiusUnits: "pixels",
         lineWidthUnits: "pixels",
-        onClick: (e) => console.log(e),
       }),
     ];
 }

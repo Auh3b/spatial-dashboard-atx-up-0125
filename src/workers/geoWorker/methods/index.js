@@ -50,11 +50,10 @@ async function processLoad(queue, data) {
 }
 
 export function getData(params) {
-  // console.log(params);
   const { source } = params;
   if (!datasets[source.name]) throw Error("Data not loaded");
   const data = datasets[source.name].data;
-  // const filtered = applySpatialFilter(params);
+
   const filteredData = applyPropertyFilter(data, params);
   return new Promise((resolve) => resolve(filteredData));
 }

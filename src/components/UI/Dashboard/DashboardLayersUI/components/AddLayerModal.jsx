@@ -187,9 +187,7 @@ function NewLocalSource({ tab, onClose }) {
         }),
       );
       onClose();
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }, [file, selectedLayerType]);
 
   return (
@@ -302,7 +300,6 @@ function NewURLSource({ tab, onClose }) {
           queue,
         },
       });
-      console.log(queue);
 
       if (!result) throw "Something went happened.";
       dispatch(setBatchData(result));
@@ -310,9 +307,7 @@ function NewURLSource({ tab, onClose }) {
       const value = getInitialLayerConfig(id, result[0], selectedLayerType);
       dispatch(addLayer({ id, value }));
       onClose();
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   }, [selectedLayerType, url]);
 
   return (

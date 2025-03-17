@@ -23,7 +23,6 @@ export default function useMapActionContext() {
       if (params) {
         geoWorker({ name, params })
           .then((e) => {
-            // console.log(e);
             if (!e) throw Error("Something went wrong");
             dispatch(setFilteredData(e));
             dispatch(
@@ -37,9 +36,7 @@ export default function useMapActionContext() {
               }),
             );
           })
-          .catch((e) => {
-            // console.log(e);
-          });
+          .catch((e) => {});
       }
       return () => {
         dispatch(removeLayer({ id: STATIC_LAYER_NAMES.OVERLAY_RESULTS_LAYER }));
@@ -49,5 +46,4 @@ export default function useMapActionContext() {
     [params],
     dequal,
   );
-  // console.log(params);
 }
