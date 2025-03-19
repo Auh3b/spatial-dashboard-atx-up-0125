@@ -6,12 +6,13 @@ import {
 import {
   Box,
   Button,
+  Checkbox,
   Collapse,
   Divider,
   Grid2,
   IconButton,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import ColorPicker from "./components/ColorPicker";
 import CoordinateSelector from "./components/CoordinateSelector";
 import FilterAttribute from "./components/FilterAttribute";
@@ -37,6 +38,8 @@ export default function LayerUI({
   allowedAttributes = undefined,
 }) {
   const isSelected = selected === id;
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen((prev) => !prev);
 
   return (
     <Box>
@@ -44,20 +47,27 @@ export default function LayerUI({
         <Grid2
           container
           alignItems={"center"}
+          wrap="nowrap"
           sx={{
             display: noHeader ? "none" : "flex",
             backgroundColor: (theme) =>
               isSelected ? theme.palette.action.hover : "unset",
             py: 0.5,
           }}>
+          <Checkbox
+            size="small"
+            checked={isSelected}
+            disableRipple
+            onClick={onClick}
+          />
           <Box sx={{ flexGrow: 1 }}>
             <NameChanger id={id} />
           </Box>
-          <IconButton disableRipple onClick={onClick}>
-            {isSelected ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
+          <IconButton disableRipple onClick={handleOpen}>
+            {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
           </IconButton>
         </Grid2>
-        <Collapse in={noHeader ? true : isSelected}>
+        <Collapse in={noHeader ? true : open}>
           <Grid2 sx={{ p: 1 }}>
             <FilterAttribute id={id} />
             <ShapePicker id={id} />

@@ -3,7 +3,7 @@ import {
   HeatmapLayer,
   HexagonLayer,
   IconLayer,
-  LineLayer,
+  PathLayer,
   PolygonLayer,
   ScatterplotLayer,
 } from "deck.gl";
@@ -22,7 +22,7 @@ export const LAYER_TYPE = {
 
 const LAYERS = {
   [LAYER_TYPE.POINT_LAYER]: ScatterplotLayer,
-  [LAYER_TYPE.LINE_LAYER]: LineLayer,
+  [LAYER_TYPE.LINE_LAYER]: PathLayer,
   [LAYER_TYPE.POLYGON_LAYER]: PolygonLayer,
   [LAYER_TYPE.HEX_LAYER]: HexagonLayer,
   [LAYER_TYPE.HEATMAP_LAYER]: HeatmapLayer,
@@ -137,11 +137,11 @@ function getPolygonLayerProps(layerItem) {
 function getLineLayerProps(layerItem) {
   const layerProps = {};
   layerProps["id"] = layerItem.deckId;
-  layerProps["getPosition"] = getPositionProp(layerItem);
-  layerProps["getLineColor"] = layerItem.legend.stroke || [52, 100, 235, 255];
-  layerProps["lineWidthUnits"] = "pixels";
+  layerProps["getPath"] = getPositionProp(layerItem);
+  layerProps["getColor"] = layerItem.legend.stroke || [52, 100, 235, 255];
+  layerProps["getWidth"] = layerItem.legend.strokeWidth || 1;
+  layerProps["widthUnits"] = "pixels";
   layerProps["visible"] = layerItem.legend.visible;
-  layerProps["stroked"] = true;
   return layerProps;
 }
 

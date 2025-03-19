@@ -4,7 +4,11 @@ import React, { Fragment, useCallback, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getFilteredParams } from "../../../store";
 import { setFeedback } from "../../../store/appStore";
-import { getFilteredData } from "../../../store/mapStore";
+import {
+  getDrawingProps,
+  getFilteredData,
+  getIsDrawing,
+} from "../../../store/mapStore";
 import { tabulationHandlers } from "../../../utils/dataTable";
 import DataTableModal from "../Modals/DataTableModal";
 
@@ -13,6 +17,7 @@ export default function SelectedFeatureUI() {
   const [modelOpen, setModelOpen] = useState(false);
   const filteredData = useSelector((state) => getFilteredData(state));
   const filteredParams = useSelector((state) => getFilteredParams(state));
+
   const dataTableProps = useMemo(() => {
     if (!filteredData || !filteredParams) return null;
     if (filteredData?.requestor !== filteredParams?.id) return null;
@@ -55,35 +60,47 @@ export default function SelectedFeatureUI() {
   }, [filteredData]);
 
   return (
-    <Fragment>
-      {Boolean(dataTableProps) && (
+    <Grid2 container alignItems={"center"} gap={1} wrap="nowrap">
+      {Boolean(dataTableProps) ? (
         <Fragment>
-          <Grid2 container alignItems={"center"} gap={1} wrap="nowrap">
-            <Typography variant="caption" noWrap>
-              {dataTableProps.count} selected features
-            </Typography>
-            <Tooltip title="See properties">
-              <IconButton disableRipple onClick={handleOpen} size="small">
-                <TableChart fontSize="small" />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Copy features">
-              <IconButton
-                disableFocusRipple
-                size="small"
-                onClick={handleCopy}
-                disabled={!filteredData}>
-                <CopyAllRounded />
-              </IconButton>
-            </Tooltip>
-          </Grid2>
-          <DataTableModal
-            {...dataTableProps}
-            open={modelOpen}
-            onClose={handleClose}
-          />
+          <Typography variant="caption" noWrap>
+            {dataTableProps.count} selected features
+          </Typography>
+          <Tooltip title="See properties">
+            <IconButton disableRipple onClick={handleOpen} size="small">
+              <TableChart fontSize="small" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Copy features">
+            <IconButton
+              disableFocusRipple
+              size="small"
+              onClick={handleCopy}
+              disabled={!filteredData}>
+              <CopyAllRounded />
+            </IconButton>
+          </Tooltip>
         </Fragment>
+      ) : (
+        <NoSelectedLayerFeedback />
       )}
+      <DataTableModal
+        {...dataTableProps}
+        open={modelOpen}
+        onClose={handleClose}
+      />
+    </Grid2>
+  );
+}
+
+function NoSelectedLayerFeedback() {
+  const drawingProps = useSelector((state) => getDrawingProps(state));
+  const isDrawing = useSelector((state) => getIsDrawing(state));
+  return (
+    <Fragment>
+      {drawingProps && !isDrawing ? (
+        <Typography variant="caption">No layer selected</Typography>
+      ) : null}
     </Fragment>
   );
 }

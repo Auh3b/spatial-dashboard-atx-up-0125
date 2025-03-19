@@ -68,9 +68,9 @@ function StrokeWidth({ onChange, value = 1 }) {
       <NumberInput
         title={"Size"}
         min={0}
-        labelFormat=".2f"
+        labelFormat=".1f"
         step={0.5}
-        max={10}
+        max={Infinity}
         value={value}
         onChange={onChange}
       />

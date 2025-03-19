@@ -47,14 +47,14 @@ export default function NumberInput({
             sx={{ p: 0 }}
             size="small"
             onClick={handleIncrement}>
-            <KeyboardArrowUp />
+            <KeyboardArrowUp sx={{ fontSize: 16 }} />
           </IconButton>
           <IconButton
             disableRipple
             sx={{ p: 0 }}
             size="small"
             onClick={handleDecrement}>
-            <KeyboardArrowDown />
+            <KeyboardArrowDown sx={{ fontSize: 16 }} />
           </IconButton>
         </Grid2>
       </Grid2>

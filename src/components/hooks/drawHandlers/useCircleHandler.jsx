@@ -1,16 +1,17 @@
-import React, { useCallback, useState } from "react";
-import {
-  extractCoordinate,
-  getDistance,
-  makeCircle,
-} from "../../../utils/geoFunc";
+import { useCallback, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
   setDrawingProps,
   setDrawMode,
   setIsDrawing,
+  setPopup,
 } from "../../../store/mapStore";
 import { DRAW_MODES } from "../../../utils/drawingUtils";
+import {
+  extractCoordinate,
+  getDistance,
+  makeCircle,
+} from "../../../utils/geoFunc";
 
 export default function useCircleHandler() {
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ export default function useCircleHandler() {
     onMouseUp: useCallback(
       (e) => {
         if (!center) return;
+        const { x, y } = e.point;
         const { lng, lat } = e.lngLat;
         const end = [lng, lat];
         const radius = getDistance(center, end);
@@ -50,6 +52,16 @@ export default function useCircleHandler() {
         );
         dispatch(setIsDrawing(false));
         dispatch(setDrawMode(DRAW_MODES.FREE));
+        dispatch(
+          setPopup({
+            x,
+            y,
+            geometry: "circle",
+            show: true,
+            feature: raw_coord,
+            type: "drawing",
+          }),
+        );
       },
       [center],
     ),
