@@ -1,4 +1,4 @@
-import { polygon } from "@turf/turf";
+import { lineString, point, polygon } from "@turf/turf";
 import {
   HeatmapLayer,
   HexagonLayer,
@@ -80,11 +80,18 @@ export async function getDataProp(layerItem) {
 
   if (!["geojson", "kml"].includes(layerItem.source.type)) return data;
 
-  const output = processGeojson(data);
+  const output = processGeojson(data, layerItem.type);
   return output;
 }
 
-export function processGeojson(value) {
+function getGeometryGenerator(type) {
+  if (type === LAYER_TYPE.POLYGON_LAYER) return polygon;
+  if (type === LAYER_TYPE.LINE_LAYER) return lineString;
+  return point;
+}
+
+export function processGeojson(value, type) {
+  const geometryGenerator = getGeometryGenerator(type);
   return value.features.reduce((acc, current) => {
     if (current.geometry.type.search(/^(Multi).*/gm) === -1)
       return [...acc, current];
@@ -92,7 +99,8 @@ export function processGeojson(value) {
 
     for (let i = 0; i < current.geometry.coordinates.length; i++) {
       const coordinate = current.geometry.coordinates[i];
-      const feature = polygon(coordinate, current.properties);
+
+      const feature = geometryGenerator(coordinate, current.properties);
       output = [...output, feature];
     }
     return [...acc, ...output];

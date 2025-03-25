@@ -28,8 +28,15 @@ import { METHOD_NAMES } from "../../../../../workers/geoWorker/methods/methodUti
 import ValueSelector from "../../../../common/ValueSelector";
 import useFileUpload from "../../../../hooks/useFileUpload";
 
-export default function AddLayerModal({ open, onClose }) {
-  const [selectedTab, setSelectedTab] = useState("existing");
+export default function AddLayerModal({
+  open,
+  onClose,
+  type = "layer",
+  defaultValue,
+  disabledSections = [],
+  actionCallback = () => null,
+}) {
+  const [selectedTab, setSelectedTab] = useState(defaultValue);
   const handleChange = (_e, value) => {
     setSelectedTab(value);
   };
@@ -39,27 +46,44 @@ export default function AddLayerModal({ open, onClose }) {
         container
         alignItems={"center"}
         justifyContent={"center"}
-        sx={{ height: "100%", width: "100%" }}>
+        sx={{ height: "100%", width: "100%" }}
+      >
         <Paper sx={{ width: "50%", p: 2 }}>
           <IconButton
-            size="small"
+            size='small'
             disableRipple
             onClick={onClose}
-            sx={{ display: "block", ml: "auto" }}>
+            sx={{ display: "block", ml: "auto" }}
+          >
             <Close />
           </IconButton>
           <Tabs
             value={selectedTab}
             onChange={handleChange}
-            sx={{ width: "100%" }}>
-            <Tab label={"From Existing Source"} value="existing" />
-            <Tab label={"From URL"} value="url" />
-            <Tab label={"Upload File"} value="local" />
+            sx={{ width: "100%" }}
+          >
+            {!disabledSections.includes("existing") && (
+              <Tab label={"Existing Source"} value='existing' />
+            )}
+            {!disabledSections.includes("url") && (
+              <Tab label={"URL"} value='url' />
+            )}
+            {!disabledSections.includes("local") && (
+              <Tab label={"Upload File"} value='local' />
+            )}
           </Tabs>
-          <Divider orientation="horizontal" />
-          <FromSourceTab tab={selectedTab} onClose={onClose} />
-          <NewLocalSource tab={selectedTab} onClose={onClose} />
-          <NewURLSource tab={selectedTab} onClose={onClose} />
+          <Divider orientation='horizontal' />
+          <FromSourceTab
+            tab={selectedTab}
+            actionType={type}
+            onClose={onClose}
+          />
+          <NewLocalSource
+            tab={selectedTab}
+            actionType={type}
+            onClose={onClose}
+          />
+          <NewURLSource tab={selectedTab} actionType={type} onClose={onClose} />
         </Paper>
       </Grid2>
     </Modal>
@@ -96,9 +120,9 @@ function FromSourceTab({ tab, onClose }) {
         value: getInitialLayerConfig(
           id,
           sources[selectedSource],
-          selectedLayerType,
+          selectedLayerType
         ),
-      }),
+      })
     );
     onClose();
   }, [sources, selectedSource, selectedLayerType]);
@@ -115,11 +139,12 @@ function FromSourceTab({ tab, onClose }) {
           <Grid2
             container
             alignItems={"flex-start"}
-            wrap="nowrap"
+            wrap='nowrap'
             gap={2}
-            sx={{ my: 2 }}>
+            sx={{ my: 2 }}
+          >
             <Grid2 size={4}>
-              <Typography variant="overline">Source</Typography>
+              <Typography variant='overline'>Source</Typography>
             </Grid2>
             <ValueSelector
               options={sourceOptions}
@@ -130,11 +155,12 @@ function FromSourceTab({ tab, onClose }) {
           <Grid2
             container
             alignItems={"flex-start"}
-            wrap="nowrap"
+            wrap='nowrap'
             gap={2}
-            sx={{ my: 2 }}>
+            sx={{ my: 2 }}
+          >
             <Grid2 size={4}>
-              <Typography variant="overline">Layer</Typography>
+              <Typography variant='overline'>Layer</Typography>
             </Grid2>
 
             <ValueSelector
@@ -149,9 +175,10 @@ function FromSourceTab({ tab, onClose }) {
           <Button
             sx={{}}
             onClick={handleAdd}
-            variant="contained"
+            variant='contained'
             startIcon={<Add />}
-            disabled={!selectedLayerType || !selectedSource}>
+            disabled={!selectedLayerType || !selectedSource}
+          >
             Add Layer
           </Button>
         </Box>
@@ -160,7 +187,7 @@ function FromSourceTab({ tab, onClose }) {
   );
 }
 
-function NewLocalSource({ tab, onClose }) {
+function NewLocalSource({ tab, onClose, actionType }) {
   const dispatch = useDispatch();
   const [selectedLayerType, setSelectedLayerType] = useState("");
   const { file, handleFileUpload } = useFileUpload();
@@ -178,18 +205,22 @@ function NewLocalSource({ tab, onClose }) {
       const params = file;
       const source = await geoWorker({ name, params });
       dispatch(setBatchData([source]));
+      if (actionType === "source") return onClose();
+
       const id = crypto.randomUUID().toString();
       const value = getInitialLayerConfig(id, source, selectedLayerType);
       dispatch(
         addLayer({
           id,
           value,
-        }),
+        })
       );
+
       onClose();
     } catch (error) {}
-  }, [file, selectedLayerType]);
-
+  }, [file, selectedLayerType, actionType]);
+  const disabled =
+    actionType === "source" ? !file : !selectedLayerType || !file;
   return (
     <>
       {selected && (
@@ -205,11 +236,12 @@ function NewLocalSource({ tab, onClose }) {
             container
             alignItems={"flex-start"}
             justifyContent={"space-between"}
-            wrap="nowrap"
+            wrap='nowrap'
             gap={2}
-            sx={{ my: 2 }}>
+            sx={{ my: 2 }}
+          >
             <Grid2 size={4}>
-              <Typography variant="overline">Upload Source</Typography>
+              <Typography variant='overline'>Upload Source</Typography>
             </Grid2>
             <Tooltip>
               <Typography noWrap={true} sx={{ flexGrow: 1 }}>
@@ -218,46 +250,51 @@ function NewLocalSource({ tab, onClose }) {
             </Tooltip>
             <Grid2 size={3}>
               <Button
-                size="small"
+                size='small'
                 fullWidth
-                variant="outlined"
-                component="label">
+                variant='outlined'
+                component='label'
+              >
                 Select File
                 <input
-                  type="file"
-                  accept=".json,.geojson,.csv"
+                  type='file'
+                  accept='.json,.geojson,.csv'
                   hidden
                   onChange={handleFileUpload}
                 />
               </Button>
             </Grid2>
           </Grid2>
-          <Grid2
-            container
-            alignItems={"flex-start"}
-            wrap="nowrap"
-            gap={2}
-            sx={{ my: 2 }}>
-            <Grid2 size={4}>
-              <Typography variant="overline">Layer</Typography>
-            </Grid2>
+          {actionType === "source" ? null : (
+            <Grid2
+              container
+              alignItems={"flex-start"}
+              wrap='nowrap'
+              gap={2}
+              sx={{ my: 2 }}
+            >
+              <Grid2 size={4}>
+                <Typography variant='overline'>Layer</Typography>
+              </Grid2>
 
-            <ValueSelector
-              options={allowedShapes.map(({ label, value }) => ({
-                label,
-                option: value,
-              }))}
-              value={selectedLayerType}
-              onChange={handleChange}
-            />
-          </Grid2>
+              <ValueSelector
+                options={allowedShapes.map(({ label, value }) => ({
+                  label,
+                  option: value,
+                }))}
+                value={selectedLayerType}
+                onChange={handleChange}
+              />
+            </Grid2>
+          )}
           <Button
             sx={{}}
             onClick={handleAdd}
-            variant="contained"
+            variant='contained'
             startIcon={<Add />}
-            disabled={!selectedLayerType || !file}>
-            Add Layer
+            disabled={disabled}
+          >
+            Add {actionType}
           </Button>
         </Box>
       )}
@@ -265,7 +302,7 @@ function NewLocalSource({ tab, onClose }) {
   );
 }
 
-function NewURLSource({ tab, onClose }) {
+function NewURLSource({ tab, onClose, actionType }) {
   const dispatch = useDispatch();
   const [selectedLayerType, setSelectedLayerType] = useState("");
   const [url, setUrl] = useState("");
@@ -303,12 +340,17 @@ function NewURLSource({ tab, onClose }) {
 
       if (!result) throw "Something went happened.";
       dispatch(setBatchData(result));
+
+      if (actionType === "source") return onClose();
       const id = crypto.randomUUID().toString();
       const value = getInitialLayerConfig(id, result[0], selectedLayerType);
       dispatch(addLayer({ id, value }));
+
       onClose();
     } catch (error) {}
-  }, [selectedLayerType, url]);
+  }, [selectedLayerType, url, actionType]);
+
+  const disabled = actionType === "source" ? !url : !selectedLayerType || !url;
 
   return (
     <>
@@ -321,45 +363,50 @@ function NewURLSource({ tab, onClose }) {
           <Grid2
             container
             alignItems={"flex-start"}
-            wrap="nowrap"
+            wrap='nowrap'
             gap={2}
-            sx={{ my: 2 }}>
+            sx={{ my: 2 }}
+          >
             <Grid2 size={4}>
-              <Typography variant="overline">Source Url</Typography>
+              <Typography variant='overline'>Source Url</Typography>
             </Grid2>
             <TextField
               value={url}
-              size="small"
+              size='small'
               fullWidth
               onChange={handleChange("url")}
             />
           </Grid2>
-          <Grid2
-            container
-            alignItems={"flex-start"}
-            wrap="nowrap"
-            gap={2}
-            sx={{ my: 2 }}>
-            <Grid2 size={4}>
-              <Typography variant="overline">Layer</Typography>
-            </Grid2>
+          {actionType === "source" ? null : (
+            <Grid2
+              container
+              alignItems={"flex-start"}
+              wrap='nowrap'
+              gap={2}
+              sx={{ my: 2 }}
+            >
+              <Grid2 size={4}>
+                <Typography variant='overline'>Layer</Typography>
+              </Grid2>
 
-            <ValueSelector
-              options={allowedShapes.map(({ label, value }) => ({
-                label,
-                option: value,
-              }))}
-              value={selectedLayerType}
-              onChange={handleChange("layer")}
-            />
-          </Grid2>
+              <ValueSelector
+                options={allowedShapes.map(({ label, value }) => ({
+                  label,
+                  option: value,
+                }))}
+                value={selectedLayerType}
+                onChange={handleChange("layer")}
+              />
+            </Grid2>
+          )}
           <Button
             sx={{}}
             onClick={handleAdd}
-            variant="contained"
+            variant='contained'
             startIcon={<Add />}
-            disabled={!selectedLayerType || !url}>
-            Add Layer
+            disabled={disabled}
+          >
+            Add {actionType}
           </Button>
         </Box>
       )}

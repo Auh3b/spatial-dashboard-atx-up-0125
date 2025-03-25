@@ -27,10 +27,10 @@ export default function useCircleHandler() {
         const circleFeature = makeCircle(center, radius);
         const raw_coord = extractCoordinate(circleFeature);
         dispatch(
-          setDrawingProps({ feature: raw_coord, type: DRAW_MODES.CIRCLE }),
+          setDrawingProps({ feature: raw_coord, type: DRAW_MODES.CIRCLE })
         );
       },
-      [center],
+      [center]
     ),
     onMouseDown: (e) => {
       const { lng, lat } = e.lngLat;
@@ -48,22 +48,23 @@ export default function useCircleHandler() {
         const raw_coord = extractCoordinate(circleFeature);
         setCenter(null);
         dispatch(
-          setDrawingProps({ feature: raw_coord, type: DRAW_MODES.CIRCLE }),
+          setDrawingProps({ feature: raw_coord, type: DRAW_MODES.CIRCLE })
         );
         dispatch(setIsDrawing(false));
         dispatch(setDrawMode(DRAW_MODES.FREE));
         dispatch(
           setPopup({
+            disableClickAway: true,
             x,
             y,
             geometry: "circle",
             show: true,
             feature: raw_coord,
             type: "drawing",
-          }),
+          })
         );
       },
-      [center],
+      [center]
     ),
     onMouseEnter: (e) => {},
   };

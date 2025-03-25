@@ -72,7 +72,7 @@ export async function getFilteredData(params) {
   const { data, ...rest } = applySpatialFilter(params);
   const _withFilterProperties = applyPropertyFilter(data, params);
   return new Promise((resolve) =>
-    resolve({ data: _withFilterProperties, ...rest }),
+    resolve({ data: _withFilterProperties, ...rest })
   );
 }
 
@@ -187,7 +187,7 @@ function applySpatialFilter(params) {
             ...d,
           });
         }
-      }),
+      })
     );
   }
 
@@ -236,7 +236,6 @@ export async function getUniqueColumnValues(params) {
 }
 
 function processFixes(data, fixes = []) {
-  console.log(fixes);
   if (!fixes.length) return data;
 
   let fixedData = data;
@@ -257,7 +256,7 @@ function kmlFix(data) {
     const feature = data.features[i];
 
     let fixed_coords = [];
-    console.log(feature);
+
     for (let j = 0; j < feature.geometry.coordinates.length; j++) {
       const coord = feature.geometry.coordinates[j];
       if (typeof coord === "number") {

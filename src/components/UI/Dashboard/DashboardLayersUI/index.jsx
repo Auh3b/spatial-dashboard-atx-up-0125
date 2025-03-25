@@ -15,7 +15,7 @@ export default function DashboardLayersUI({ selected, index }) {
   const _layers = useSelector((state) => getLayers(state));
   const layers = useMemo(
     () => Object.values(_layers).filter((d) => !d?.system),
-    [_layers],
+    [_layers]
   );
   const selectedLayer = useSelector((state) => getSelectedLayer(state));
   const dispatch = useDispatch();
@@ -28,11 +28,9 @@ export default function DashboardLayersUI({ selected, index }) {
           return;
         }
         dispatch(removeSelectedLayer());
-        // dispatch(removeFilteredData());
-        // dispatch(setDrawingProps(null));
       };
     },
-    [selectedLayer],
+    [selectedLayer]
   );
 
   const handleDelete = (id) => {
@@ -71,14 +69,14 @@ function AddLayerButton() {
   };
   return (
     <Box sx={{ p: 1 }}>
-      <Button
-        variant="outlined"
-        onClick={handleOpen}
-        size="small"
-        sx={{ display: "block", ml: "auto" }}>
+      <Button variant='outlined' onClick={handleOpen} fullWidth>
         Add Layer
       </Button>
-      <AddLayerModal open={open} onClose={handleClose} />
+      <AddLayerModal
+        open={open}
+        onClose={handleClose}
+        defaultValue={"existing"}
+      />
     </Box>
   );
 }

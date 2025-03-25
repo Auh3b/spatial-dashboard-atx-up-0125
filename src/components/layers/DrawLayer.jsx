@@ -46,7 +46,7 @@ export default function DrawLayer() {
         onClick: isDrawing
           ? undefined
           : ({ x, y, coordinate, object }, e) => {
-              if (e.leftButton) dispatch(removePopup());
+              // if (e.leftButton) dispatch(removePopup());
               if (
                 e.rightButton ||
                 (e.leftButton && e.changedPointers[0].ctrlKey)
@@ -62,7 +62,7 @@ export default function DrawLayer() {
                     feature: object,
                     type: "drawing",
                     content: `center ${longitude}, ${latitude}`,
-                  }),
+                  })
                 );
               }
             },

@@ -16,20 +16,21 @@ import { getDrawingLayers, getExplorationLayers } from "./layers";
 import CustomPopupContextMenu from "./UI/CustomPopupContextMenu/index.jsx";
 import Legend from "./UI/Legend";
 import MapNav from "./UI/MapNav";
+import DrawToolGuideUI from "./UI/MapActionsUI/DrawToolGuideUI.jsx";
 
 const ACCESS_TOKEN = import.meta.env.VITE_MAPBOX_API_TOKEN;
 
 const INITIAL_VIEW_STATE = {
-  longitude: -122.46940656246574,
-  latitude: 37.7723322256912,
-  zoom: 5,
+  longitude: 33.7741195,
+  latitude: -13.9626121,
+  zoom: 1,
   pitch: 0,
 };
 
 function MapWrapper() {
   const dispatch = useDispatch();
   const basemapUrl = useSelector(
-    (state) => `mapbox://styles/mapbox/${getBasemapUrl(state)}`,
+    (state) => `mapbox://styles/mapbox/${getBasemapUrl(state)}`
   );
   const interactivity = useSelector((state) => getInteractivity(state));
   const { cursor, mode, handlers } = useDrawing();
@@ -44,7 +45,7 @@ function MapWrapper() {
   useEffect(() => {
     if (mapWrapperContainerRef.current) {
       mapWrapperContainerRef.current.addEventListener("contextmenu", (e) =>
-        e.preventDefault(),
+        e.preventDefault()
       );
     }
   }, [mapWrapperContainerRef.current]);
@@ -58,7 +59,9 @@ function MapWrapper() {
         {...eventHandlers}
         onMove={handleViewStateChange}
         mapStyle={basemapUrl}
-        mapboxAccessToken={ACCESS_TOKEN}>
+        mapboxAccessToken={ACCESS_TOKEN}
+      >
+        <DrawToolGuideUI />
         <MapNav />
         <DeckGLOverlay
           getCursor={() => cursor}

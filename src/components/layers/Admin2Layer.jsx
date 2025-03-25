@@ -48,14 +48,14 @@ export default function Admin2Layer() {
                   show: true,
                   longitude,
                   type: "explore",
-                  feature,
+                  feature: object,
                   p_code: object.properties["GUI_" + 2],
                   level: 2,
                   latitude,
                   content:
                     object.properties["NAME_1"] ||
                     "If your seeing this, change the field value 😉",
-                }),
+                })
               );
             }
           },
